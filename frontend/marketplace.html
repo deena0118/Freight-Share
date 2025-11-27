@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FreightShare – Marketplace</title>
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+ <div class="fs-root">
+<header class="fs-header">
+  <div class="fs-header-left">
+    <div class="ww">
+      <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+    </div>
+    <div class="fs-logo-text">
+      <div class="fs-logo-title">FreightShare</div>
+      <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+    </div>
+  </div>
+
+  <div class="fs-header-right">
+    <span class="fs-header-tagline">Connecting freight space worldwide</span>
+
+    <div class="fs-profile">
+      <button type="button" class="fs-profile-icon">
+        <span id="fsProfileInitials">U</span>
+      </button>
+
+      <div class="fs-profile-card">
+        <div class="fs-profile-name" id="fsProfileName">User Name</div>
+        <div class="fs-profile-company" id="fsProfileCompany">Company Name</div>
+        <button type="button" class="fs-profile-logout" id="fsProfileLogout">
+          Sign out
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+
+<nav class="fs-main-nav">
+
+<a href="marketplace.html" class="fs-nav-item fs-nav-item--active">
+        <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Marketplace</span>
+    </a>
+
+    <a href="list-empty-space.html" class="fs-nav-item">
+        <img src="assets/icons/truck.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">List Empty Space</span>
+    </a>
+
+    <a href="find-shipment.html" class="fs-nav-item">
+        <img src="assets/icons/search.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Find Shipment</span>
+    </a>
+
+    <a href="my-bookings.html" class="fs-nav-item">
+        <img src="assets/icons/box.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">My Bookings</span>
+    </a>
+
+</nav>
+
+
+    <main class="fs-page-wrapper">
+      <div class="fs-page">
+        <section class="fs-page-row fs-page-row--hero">
+          <button class="fs-hero-btn fs-hero-btn--primary" onclick="location.href='list-empty-space.html'">
+            <span class="fs-hero-btn-icon">↗</span>
+            <span>List Empty Space</span>
+          </button>
+          <button class="fs-hero-btn fs-hero-btn--accent" onclick="location.href='find-shipment.html'">
+            <span class="fs-hero-btn-icon">📍</span>
+            <span>Find Shipment Space</span>
+          </button>
+        </section>
+
+        <section class="fs-page-row fs-stats-row">
+
+          <div class="fs-stat-card">
+            <div class="fs-stat-label">
+              <span class="fs-stat-icon">📦</span>
+              Available Space
+            </div>
+            <div class="fs-stat-value">1,245 tons</div>
+            <div class="fs-stat-sub">Across all routes</div>
+          </div>
+
+          <div class="fs-stat-card">
+            <div class="fs-stat-label">
+              <span class="fs-stat-icon">🌍</span>
+              Markets
+            </div>
+            <div class="fs-stat-value">42</div>
+            <div class="fs-stat-sub">Countries served</div>
+          </div>
+        </section>
+
+        <section class="fs-page-row fs-dashboard-row">
+
+
+          <aside class="fs-panel fs-panel--feed">
+            <header class="fs-panel-header fs-panel-header--split">
+              <div>
+                <h2>Live Feed</h2>
+                <span class="fs-panel-subtitle">New listings</span>
+              </div>
+            </header>
+
+            <div class="fs-feed-list">
+              <div class="fs-feed-item">
+                <div class="fs-feed-item-header">
+                  <span class="fs-badge fs-badge--truck">Truck</span>
+                  <span class="fs-feed-price">$850</span>
+                </div>
+                <div class="fs-feed-body">
+                  <div class="fs-feed-location">
+                    <span>📍</span>
+                    <div>
+                      <div>Los Angeles, CA</div>
+                      <div class="fs-feed-arrow">↓</div>
+                      <div>Phoenix, AZ</div>
+                    </div>
+                  </div>
+                  <div class="fs-feed-meta">
+                    <span>5 tons</span>
+                    <span>2025-11-22</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fs-feed-item">
+                <div class="fs-feed-item-header">
+                  <span class="fs-badge fs-badge--ship">Ship</span>
+                  <span class="fs-feed-price">$12,500</span>
+                </div>
+                <div class="fs-feed-body">
+                  <div class="fs-feed-location">
+                    <span>📍</span>
+                    <div>
+                      <div>Shanghai</div>
+                      <div class="fs-feed-arrow">↓</div>
+                      <div>Long Beach</div>
+                    </div>
+                  </div>
+                  <div class="fs-feed-meta">
+                    <span>150 CBM</span>
+                    <span>2025-11-28</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fs-feed-item">
+                <div class="fs-feed-item-header">
+                  <span class="fs-badge fs-badge--plane">Plane</span>
+                  <span class="fs-feed-price">$8,900</span>
+                </div>
+                <div class="fs-feed-body">
+                  <div class="fs-feed-location">
+                    <span>📍</span>
+                    <div>
+                      <div>Dubai</div>
+                      <div class="fs-feed-arrow">↓</div>
+                      <div>Frankfurt</div>
+                    </div>
+                  </div>
+                  <div class="fs-feed-meta">
+                    <span>2.5 tons</span>
+                    <span>2025-11-20</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fs-feed-item">
+                <div class="fs-feed-item-header">
+                  <span class="fs-badge fs-badge--truck">Truck</span>
+                  <span class="fs-feed-price">$1,200</span>
+                </div>
+                <div class="fs-feed-body">
+                  <div class="fs-feed-location">
+                    <span>📍</span>
+                    <div>
+                      <div>Chicago, IL</div>
+                      <div class="fs-feed-arrow">↓</div>
+                      <div>New York, NY</div>
+                    </div>
+                  </div>
+                  <div class="fs-feed-meta">
+                    <span>7 tons</span>
+                    <span>2025-11-26</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/marketplace.js"></script>
+</body>
+</html>

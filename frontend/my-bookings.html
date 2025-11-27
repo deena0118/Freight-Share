@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FreightShare – My Bookings</title>
+  
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+   <div class="fs-root">
+    <header class="fs-header">
+      <div class="fs-header-left">
+
+        <div class="ww">
+                  <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+        </div>
+        <div class="fs-logo-text">
+          <div class="fs-logo-title">FreightShare</div>
+          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+        </div>
+      </div>
+
+      <div class="fs-header-right">
+        Connecting freight space worldwide
+      </div>
+    </header>
+
+
+<nav class="fs-main-nav">
+
+<a href="marketplace.html" class="fs-nav-item ">
+        <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Marketplace</span>
+    </a>
+
+    <a href="list-empty-space.html" class="fs-nav-item ">
+        <img src="assets/icons/truck.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">List Empty Space</span>
+    </a>
+
+    <a href="find-shipment.html" class="fs-nav-item">
+        <img src="assets/icons/search.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Find Shipment</span>
+    </a>
+
+    <a href="my-bookings.html" class="fs-nav-item fs-nav-item--active">
+        <img src="assets/icons/box.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">My Bookings</span>
+    </a>
+
+</nav>
+
+
+
+
+    <main class="fs-page-wrapper">
+      <div class="fs-page">
+        <section class="fs-section-header">
+          <h1>My Bookings</h1>
+          <p>Manage your shipment bookings and listings</p>
+        </section>
+
+        <section class="fs-toggle-tabs">
+          <button class="fs-toggle-tab fs-toggle-tab--active">
+            All Bookings (5)
+          </button>
+          <button class="fs-toggle-tab">As Buyer (3)</button>
+          <button class="fs-toggle-tab">As Seller (2)</button>
+        </section>
+
+        <section class="fs-stats-row">
+          <div class="fs-stat-card fs-stat-card--compact">
+            <div class="fs-stat-label">Total Bookings</div>
+            <div class="fs-stat-value">5</div>
+          </div>
+
+          <div class="fs-stat-card fs-stat-card--compact">
+            <div class="fs-stat-label">Pending</div>
+            <div class="fs-stat-value">1</div>
+          </div>
+
+          <div class="fs-stat-card fs-stat-card--compact">
+            <div class="fs-stat-label">Confirmed</div>
+            <div class="fs-stat-value">2</div>
+          </div>
+
+          <div class="fs-stat-card fs-stat-card--compact">
+            <div class="fs-stat-label">Completed</div>
+            <div class="fs-stat-value">1</div>
+          </div>
+        </section>
+
+        <section class="fs-card-grid fs-card-grid--bookings">
+          <article class="fs-card fs-card--booking">
+            <div class="fs-card-header fs-card-header--booking">
+              <div class="fs-card-badges">
+                <span class="fs-badge fs-badge--truck">Truck</span>
+                <span class="fs-status-pill fs-status-pill--blue">Confirmed</span>
+              </div>
+              <div class="fs-booking-id">Booking ID B001</div>
+            </div>
+
+            <div class="fs-card-body">
+              <div class="fs-card-location">
+                <span>📍</span>
+                <div>
+                  <div>Los Angeles, CA</div>
+                  <div class="fs-feed-arrow">→</div>
+                  <div>Phoenix, AZ</div>
+                </div>
+              </div>
+
+              <div class="fs-card-meta">
+                <span>📦 Space: 5 tons</span>
+                <span>📅 Date: 2025-11-22</span>
+                <span class="fs-booking-price">Price $850</span>
+              </div>
+            </div>
+
+            <footer class="fs-card-footer fs-card-footer--booking">
+              <span>Swift Logistics</span>
+              <button class="fs-btn fs-btn--outline" type="button">
+                View Details
+              </button>
+            </footer>
+          </article>
+
+          <article class="fs-card fs-card--booking">
+            <div class="fs-card-header fs-card-header--booking">
+              <div class="fs-card-badges">
+                <span class="fs-badge fs-badge--ship">Ship</span>
+                <span class="fs-status-pill fs-status-pill--yellow">Pending</span>
+              </div>
+              <div class="fs-booking-id">Booking ID S001</div>
+            </div>
+
+            <div class="fs-card-body">
+              <div class="fs-card-location">
+                <span>📍</span>
+                <div>
+                  <div>Long Beach</div>
+                  <div class="fs-feed-arrow">→</div>
+                  <div>Tokyo</div>
+                </div>
+              </div>
+
+              <div class="fs-card-meta">
+                <span>📦 Space: 120 CBM</span>
+                <span>📅 Date: 2025-11-25</span>
+                <span class="fs-booking-price">Price $18,000</span>
+              </div>
+            </div>
+
+            <footer class="fs-card-footer fs-card-footer--booking">
+              <span>Global Freight Inc.</span>
+              <button class="fs-btn fs-btn--outline" type="button">
+                View Details
+              </button>
+            </footer>
+          </article>
+
+          <article class="fs-card fs-card--booking">
+            <div class="fs-card-header fs-card-header--booking">
+              <div class="fs-card-badges">
+                <span class="fs-badge fs-badge--plane">Plane</span>
+                <span class="fs-status-pill fs-status-pill--green">Completed</span>
+              </div>
+              <div class="fs-booking-id">Booking ID B002</div>
+            </div>
+
+            <div class="fs-card-body">
+              <div class="fs-card-location">
+                <span>📍</span>
+                <div>
+                  <div>New York, NY</div>
+                  <div class="fs-feed-arrow">→</div>
+                  <div>London</div>
+                </div>
+              </div>
+
+              <div class="fs-card-meta">
+                <span>📦 Space: 1.5 tons</span>
+                <span>📅 Date: 2025-11-15</span>
+                <span class="fs-booking-price">Price $5,200</span>
+              </div>
+            </div>
+
+            <footer class="fs-card-footer fs-card-footer--booking">
+              <span>SkyFreight Express</span>
+              <button class="fs-btn fs-btn--outline" type="button">
+                View Details
+              </button>
+            </footer>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/bookings.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FreightShare – Find Shipment</title>
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+  <div class="fs-root">
+    <header class="fs-header">
+      <div class="fs-header-left">
+        <div class="ww">
+          <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+        </div>
+        <div class="fs-logo-text">
+          <div class="fs-logo-title">FreightShare</div>
+          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+        </div>
+      </div>
+
+      <div class="fs-header-right">
+        Connecting freight space worldwide
+      </div>
+    </header>
+
+    <nav class="fs-main-nav">
+      <a href="marketplace.html" class="fs-nav-item">
+        <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Marketplace</span>
+      </a>
+
+      <a href="list-empty-space.html" class="fs-nav-item">
+        <img src="assets/icons/truck.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">List Empty Space</span>
+      </a>
+
+      <a href="find-shipment.html" class="fs-nav-item fs-nav-item--active">
+        <img src="assets/icons/search.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">Find Shipment</span>
+      </a>
+
+      <a href="my-bookings.html" class="fs-nav-item">
+        <img src="assets/icons/box.svg" class="fs-nav-icon" />
+        <span class="fs-nav-label">My Bookings</span>
+      </a>
+    </nav>
+
+    <main class="fs-page-wrapper">
+      <div class="fs-page">
+        <section class="fs-filter-bar">
+          <div class="fs-filter-group">
+            <label class="fs-field">
+              <span class="fs-field-label">Origin</span>
+              <input id="filterOrigin" class="fs-input" placeholder="From..." />
+            </label>
+
+            <label class="fs-field">
+              <span class="fs-field-label">Destination</span>
+              <input id="filterDestination" class="fs-input" placeholder="To..." />
+            </label>
+
+            <label class="fs-field">
+              <span class="fs-field-label">Freight Type</span>
+              <select id="filterType" class="fs-input">
+                <option value="all">All Types</option>
+                <option value="Truck">Truck</option>
+                <option value="Ship">Ship</option>
+                <option value="Plane">Plane</option>
+              </select>
+            </label>
+
+            <button id="applyFilters" class="fs-btn fs-btn--outline" type="button">
+              Filters
+            </button>
+          </div>
+
+
+        </section>
+
+       <section class="fs-results-header">
+  
+  <div class="fs-results-left" style="margin-bottom:3%;">
+    <h2>Search Results</h2>
+    <p id="resultsCount">Loading shipments…</p>
+  </div>
+
+  <div class="fs-filter-sort">
+    <span>Sort by:</span>
+    <select id="sortSelect" class="fs-input fs-input--compact">
+      <option value="priceLow">Price: Low to High</option>
+      <option value="priceHigh">Price: High to Low</option>
+      <option value="date">Earliest Departure</option>
+    </select>
+  </div>
+
+</section>
+
+
+        <section id="fsResultsGrid" class="fs-results-grid">
+
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/find-shipment.js"></script>
+</body>
+</html>
