@@ -45,7 +45,7 @@
       </a>
     </nav>
 
-    <main class="fs-page-wrapper">
+       <main class="fs-page-wrapper">
       <div class="fs-page">
         <section class="fs-filter-bar">
           <div class="fs-filter-group">
@@ -73,35 +73,126 @@
               Filters
             </button>
           </div>
-
-
         </section>
 
-       <section class="fs-results-header">
-  
-  <div class="fs-results-left" style="margin-bottom:3%;">
-    <h2>Search Results</h2>
-    <p id="resultsCount">Loading shipments…</p>
-  </div>
+        <section class="fs-results-header">
+          <div class="fs-results-left" style="margin-bottom:3%;">
+            <h2>Search Results</h2>
+            <p id="resultsCount">Loading shipments…</p>
+          </div>
 
-  <div class="fs-filter-sort">
-    <span>Sort by:</span>
-    <select id="sortSelect" class="fs-input fs-input--compact">
-      <option value="priceLow">Price: Low to High</option>
-      <option value="priceHigh">Price: High to Low</option>
-      <option value="date">Earliest Departure</option>
-    </select>
-  </div>
-
-</section>
-
+          <div class="fs-filter-sort">
+            <span>Sort by:</span>
+            <select id="sortSelect" class="fs-input fs-input--compact">
+              <option value="priceLow">Price: Low to High</option>
+              <option value="priceHigh">Price: High to Low</option>
+              <option value="date">Earliest Departure</option>
+            </select>
+          </div>
+        </section>
 
         <section id="fsResultsGrid" class="fs-results-grid">
-
         </section>
-
       </div>
     </main>
+
+    <!-- Shipment Details Modal -->
+    <div id="fsShipmentModal" class="fs-modal fs-modal--hidden">
+      <div class="fs-modal-backdrop"></div>
+      <div class="fs-modal-dialog">
+        <button id="fsModalClose" class="fs-modal-close" type="button">&times;</button>
+
+        <div class="fs-modal-header">
+          <div>
+            <h2>Shipment Details</h2>
+            <p class="fs-modal-subtitle">Review listing details and book space</p>
+          </div>
+<span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px;">Ship</span>
+        </div>
+
+        <div class="fs-modal-section">
+          <h3 class="fs-modal-section-title">Route</h3>
+          <div class="fs-modal-route">
+            <div class="fs-modal-route-point">
+              <div class="fs-modal-dot fs-modal-dot--origin"></div>
+              <div>
+                <div id="fsModalOrigin" class="fs-modal-city">—</div>
+                <div class="fs-modal-muted">Origin</div>
+              </div>
+            </div>
+
+            <div class="fs-modal-route-line"></div>
+
+            <div class="fs-modal-route-point">
+              <div class="fs-modal-dot fs-modal-dot--dest"></div>
+              <div>
+                <div id="fsModalDestination" class="fs-modal-city">—</div>
+                <div class="fs-modal-muted">Destination</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section fs-modal-section--two-cols">
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Available Space</div>
+            <div id="fsModalAvailableSpace" class="fs-modal-card-value">—</div>
+          </div>
+
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Departure Date</div>
+            <div id="fsModalDepartureDate" class="fs-modal-card-value">—</div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section">
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Allowed Cargo Types</div>
+            <div id="fsModalCargo" class="fs-modal-pill">All containerized goods</div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section">
+          <h3 class="fs-modal-section-title">Seller Information</h3>
+          <div class="fs-modal-seller">
+            <div class="fs-modal-seller-left">
+              <div class="fs-modal-seller-avatar">
+                <img src="assets/icons/profile.svg" alt="" />
+              </div>
+              <div>
+                <div id="fsModalCompanyName" class="fs-modal-company">—</div>
+                <div class="fs-modal-muted">
+                  <span class="fs-modal-star">★</span> 4.9 · Verified Seller
+                </div>
+              </div>
+            </div>
+            <div class="fs-modal-muted fs-modal-seller-text">
+              Professional logistics provider with successful shipments worldwide.
+            </div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section">
+          <div class="fs-modal-price-row">
+            <div>
+              <div class="fs-modal-card-label">Total Price</div>
+              <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
+            </div>
+            <span id="fsModalStatusBadge" class="fs-modal-status-badge">Available Now</span>
+          </div>
+        </div>
+
+        <div class="fs-modal-section fs-modal-section--footer">
+          <button type="button" class="fs-btn fs-btn--primary fs-modal-book-btn">
+            ✓ Book Now
+          </button>
+          <p class="fs-modal-disclaimer">
+            By booking, you agree to the terms and conditions
+          </p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script src="js/find-shipment.js"></script>

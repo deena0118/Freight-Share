@@ -12,8 +12,10 @@ router.post("/list", (req, res) => {
         Destination,
         DepDate,
         DepTime,
-        EmptySpace,
-        Unit,
+        EmptySpaceW,
+        UnitW,
+        EmptySpaceA,
+        UnitA,
         Restriction,
         PriceType,
         Price
@@ -27,8 +29,10 @@ router.post("/list", (req, res) => {
         !Destination ||
         !DepDate ||
         !DepTime ||
-        !EmptySpace ||
-        !Unit ||
+        !EmptySpaceW ||
+        !UnitW ||
+        !EmptySpaceA ||
+        !UnitA ||
         !PriceType
     ) {
         return res
@@ -36,12 +40,21 @@ router.post("/list", (req, res) => {
             .json({ error: "Missing required listing fields in the request body." });
     }
 
-    const emptySpaceNum = parseInt(EmptySpace, 10);
-    if (isNaN(emptySpaceNum) || emptySpaceNum <= 0) {
+    const emptySpaceNumW = parseFloat(EmptySpaceW);
+    const emptySpaceNumA = parseFloat(EmptySpaceA);
+
+    if (isNaN(emptySpaceNumW) || emptySpaceNumW <= 0) {
         return res
             .status(400)
-            .json({ error: "Empty space must be a positive number." });
+            .json({ error: "Weight empty space must be a positive number." });
     }
+
+    if (isNaN(emptySpaceNumA) || emptySpaceNumA <= 0) {
+        return res
+            .status(400)
+            .json({ error: "Area empty space must be a positive number." });
+    }
+
 
     let finalPrice = null;
     if (PriceType === "fixed") {
@@ -83,8 +96,8 @@ router.post("/list", (req, res) => {
 
         const insertSql = `
             INSERT INTO Space
-            (CompID, UserID, Type, Origin, Destination, DepDate, DepTime, EmptySpace, Unit, Restriction, PriceType, Price, Status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (CompID, UserID, Type, Origin, Destination, DepDate, DepTime, EmptySpaceW, UnitW, EmptySpaceA, UnitA, Restriction, PriceType, Price, Status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -95,8 +108,10 @@ router.post("/list", (req, res) => {
             Destination,
             DepDate,
             DepTime,
-            emptySpaceNum,
-            Unit,
+            emptySpaceNumW,
+            UnitW,
+             emptySpaceNumA,
+            UnitA,
             Restriction || null,
             PriceType,
             finalPrice,

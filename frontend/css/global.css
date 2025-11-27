@@ -372,21 +372,26 @@ padding-right:10%;
   overflow-y: auto;
   padding-right: 4px;
   margin-top: 4px;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
 .fs-feed-item {
   border-radius: 14px;
   border: 1px solid var(--fs-border);
   padding: 12px 14px;
-  margin-bottom: 10px;
   background: #ffffff;
+  margin: 0; 
 }
+
 
 .fs-feed-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .fs-feed-price {
@@ -1542,4 +1547,256 @@ font-size: 12px;
 .fs-card-icon {
   width: 17px;
   height: 17px;
+}
+
+
+.fs-feed-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fs-feed-type-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.fs-feed-loc-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.85;
+}
+
+.fs-feed-location {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.fs-feed-arrow {
+  margin: 2px 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+
+
+
+
+.fs-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.fs-modal--hidden {
+  display: none;
+}
+
+.fs-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.fs-modal-dialog {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 24px 20px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  z-index: 1;
+}
+
+.fs-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.fs-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.fs-modal-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.fs-modal-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.fs-modal-section {
+  margin-bottom: 18px;
+}
+
+.fs-modal-section--two-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fs-modal-section-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.fs-modal-route {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fs-modal-route-point {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fs-modal-route-line {
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.fs-modal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.fs-modal-dot--origin {
+  background: #16a34a;
+}
+
+.fs-modal-dot--dest {
+  background: #ef4444;
+}
+
+.fs-modal-city {
+  font-weight: 500;
+}
+
+.fs-modal-muted {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.fs-modal-card {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  background: #f9fafb;
+}
+
+.fs-modal-card-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.fs-modal-card-value {
+  font-weight: 600;
+}
+
+.fs-modal-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  font-size: 12px;
+}
+
+.fs-modal-seller {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fs-modal-seller-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fs-modal-seller-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fs-modal-seller-avatar img {
+  width: 18px;
+  height: 18px;
+}
+
+.fs-modal-company {
+  font-weight: 600;
+}
+
+.fs-modal-star {
+  color: #facc15;
+  margin-right: 2px;
+}
+
+.fs-modal-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fs-modal-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.fs-modal-status-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.fs-modal-section--footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fs-modal-book-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.fs-modal-disclaimer {
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: center;
 }

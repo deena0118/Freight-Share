@@ -156,19 +156,34 @@
               <div class="fs-card fs-card--padded">
                 <div class="fs-form-grid fs-form-grid--align-top">
                   <label class="fs-field">
-                    <span class="fs-field-label">Available Space</span>
-                    <input id="availableSpace" name="availableSpace" class="fs-input" placeholder="e.g., 5" />
-                    <span class="fs-help-text">Enter the amount of space available for cargo</span>
-                  </label>
+  <span class="fs-field-label">Available Weight</span>
+  <input id="availableSpaceW" name="availableSpaceW" class="fs-input" placeholder="e.g., 5" />
+  <span class="fs-help-text">Enter the weight of the space available for cargo</span>
+</label>
 
                   <label class="fs-field fs-field--shrink">
                     <span class="fs-field-label">Unit</span>
                     <div class="fs-select-wrapper">
-                      <select id="spaceUnit" name="spaceUnit" class="fs-input fs-select">
+                      <select id="spaceUnitW" name="spaceUnit" class="fs-input fs-select">
                         <option value="">Unit</option>
                         <option value="tons">Tons</option>
                         <option value="cbm" selected>CBM</option>
                         <option value="pallets">Pallets</option>
+                      </select>
+                    </div>
+                  </label>
+                 <label class="fs-field">
+  <span class="fs-field-label">Available Area</span>
+  <input id="availableSpaceA" name="availableSpaceA" class="fs-input" placeholder="e.g., 10" />
+  <span class="fs-help-text">Enter the area of the space available for cargo</span>
+</label>
+                    <label class="fs-field fs-field--shrink">
+                    <span class="fs-field-label">Unit</span>
+                    <div class="fs-select-wrapper">
+                      <select id="spaceUnitA" name="spaceUnit" class="fs-input fs-select">
+                        <option value="">Unit</option>
+                        <option value="m2">Square Meter</option>
+
                       </select>
                     </div>
                   </label>
@@ -249,19 +264,22 @@
         <div class="fs-summary-header">Listing Summary</div>
         <div class="fs-summary-grid">
             <div class="fs-summary-labels">
-                <div>Freight Type:</div>
-                <div>Route:</div>
-                <div>Date:</div>
-                <div>Available Space:</div>
-                <div>Price:</div>
-            </div>
-            <div class="fs-summary-values">
-                <div id="summaryFreight">Truck</div>
-                <div id="summaryRoute">dg → dg</div>
-                <div id="summaryDate">2002-12-10 at 12:12</div>
-                <div id="summarySpace">3 cbm</div>
-                <div id="summaryPrice" style="color: var(--fs-green); font-weight: 500;">$</div> 
-            </div>
+  <div>Freight Type:</div>
+  <div>Route:</div>
+  <div>Date:</div>
+  <div>Available Weight:</div>
+  <div>Available Area:</div>
+  <div>Price:</div>
+</div>
+<div class="fs-summary-values">
+  <div id="summaryFreight">Truck</div>
+  <div id="summaryRoute">dg → dg</div>
+  <div id="summaryDate">2002-12-10 at 12:12</div>
+  <div id="summarySpaceW">—</div>
+  <div id="summarySpaceA">—</div>
+  <div id="summaryPrice" style="color: var(--fs-green); font-weight: 500;">$</div>
+</div>
+
         </div>
     </div>
 </div>

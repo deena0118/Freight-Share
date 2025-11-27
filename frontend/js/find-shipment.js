@@ -7,11 +7,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultsGrid = document.getElementById("fsResultsGrid");
     const resultsCount = document.getElementById("resultsCount");
 
+    // modal elements
+    const modal = document.getElementById("fsShipmentModal");
+    const modalClose = document.getElementById("fsModalClose");
+    const modalTypeChip = document.getElementById("fsModalTypeChip");
+    const modalOrigin = document.getElementById("fsModalOrigin");
+    const modalDestination = document.getElementById("fsModalDestination");
+    const modalAvailableSpace = document.getElementById("fsModalAvailableSpace");
+    const modalDepartureDate = document.getElementById("fsModalDepartureDate");
+    const modalCargo = document.getElementById("fsModalCargo");
+    const modalCompanyName = document.getElementById("fsModalCompanyName");
+    const modalTotalPrice = document.getElementById("fsModalTotalPrice");
+    const modalStatusBadge = document.getElementById("fsModalStatusBadge");
+
     let allSpaces = [];
 
     async function loadSpaces() {
         try {
-            const res = await fetch("/shipments");   
+            const res = await fetch("/shipments");
             if (!res.ok) throw new Error("Failed to load shipments");
 
             const data = await res.json();
@@ -97,42 +110,48 @@ document.addEventListener("DOMContentLoaded", function () {
             list.length === 1 ? "1 shipment found" : `${list.length} shipments found`;
     }
 
-  function buildCard(space) {
-    const rawType = (space.Type || "truck").toString();
-    const typeLower = rawType.toLowerCase();
+    function buildCard(space) {
+        const rawType = (space.Type || "truck").toString();
+        const typeLower = rawType.toLowerCase();
 
-    let typeClass = "fs-badge--type-truck";
-    if (typeLower === "ship") typeClass = "fs-badge--type-ship";
-    else if (typeLower === "plane" || typeLower === "air") typeClass = "fs-badge--type-plane";
+        let typeClass = "fs-badge--type-truck";
+        if (typeLower === "ship") typeClass = "fs-badge--type-ship";
+        else if (typeLower === "plane" || typeLower === "air") typeClass = "fs-badge--type-plane";
 
-    const origin = space.Origin || space.Origion || "";
-    const destination = space.Destination || "";
-    const depDate = space.DepDate || "";
+        const origin = space.Origin || space.Origion || "";
+        const destination = space.Destination || "";
+        const depDate = space.DepDate || "";
 
-    const emptySpace = space.EmptySpace;
-    const unit = space.Unit || "cbm";
-    const availableText = emptySpace
-        ? `Available Space: ${emptySpace} ${unit}`
-        : "Available Space";
+        const emptySpaceW = space.EmptySpaceW;
+        const unitW = space.UnitW || "";
+        const emptySpaceA = space.EmptySpaceA;
+        const unitA = space.UnitA || "";
 
-    const priceType = (space.PriceType || "").toLowerCase();
-    const priceValue = space.Price;
+        const hasSpace =
+            (!!emptySpaceW && !!unitW) || (!!emptySpaceA && !!unitA);
 
-    let priceHtml;
-    if (priceType === "fixed") {
-        priceHtml = `<span class="fs-card-price">$${escapeHtml(priceValue)}</span>`;
-    } else if (priceType === "bids") {
-        priceHtml = `<span class="fs-card-price fs-card-price--bid">Bid</span>`;
-    } else {
-        priceHtml = `<span class="fs-card-price fs-card-price--na">N/A</span>`;
-    }
+        const availableText = hasSpace
+            ? `Available Space: ${emptySpaceW || ""} ${unitW} ${emptySpaceA || ""} ${unitA}`
+            : "Available Space";
 
-    const companyName = space.CompName || "Swift Logistics";
+        const priceType = (space.PriceType || "").toLowerCase();
+        const priceValue = space.Price;
 
-    const card = document.createElement("article");
-    card.className = "fs-result-card";
+        let priceHtml;
+        if (priceType === "fixed") {
+            priceHtml = `<span class="fs-card-price">$${escapeHtml(priceValue)}</span>`;
+        } else if (priceType === "bids") {
+            priceHtml = `<span class="fs-card-price fs-card-price--bid">Bid</span>`;
+        } else {
+            priceHtml = `<span class="fs-card-price fs-card-price--na">N/A</span>`;
+        }
 
-    card.innerHTML = `
+        const companyName = space.CompName || "Swift Logistics";
+
+        const card = document.createElement("article");
+        card.className = "fs-result-card";
+
+        card.innerHTML = `
       <div class="fs-card-top">
         <div class="fs-card-badges">
           <span class="fs-badge ${typeClass}">${escapeHtml(rawType)}</span>
@@ -143,7 +162,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       <div class="fs-card-route">
         <div class="fs-card-route-icon">
-          <!-- make sure this file exists in /assets/icons/ -->
           <img src="assets/icons/location.svg" class="fs-card-icon" alt="" />
         </div>
         <div class="fs-card-route-text">
@@ -151,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ${escapeHtml(origin)}
           </div>
           <div class="fs-card-city fs-card-route-text">
-            <span >→ ${escapeHtml(destination)}</span>
+            <span>→ ${escapeHtml(destination)}</span>
           </div>
         </div>
       </div>
@@ -159,14 +177,13 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="fs-card-meta">
         <div class="fs-card-meta-row">
           <img src="assets/icons/box.svg" class="fs-card-icon" alt="" />
-          <span >${escapeHtml(availableText)}</span>
+          <span>${escapeHtml(availableText)}</span>
         </div>
         <div class="fs-card-meta-row" style="margin-top:3%;">
           <img src="assets/icons/calendar.svg" class="fs-card-icon" alt="" />
           <span>${escapeHtml(depDate)}</span>
         </div>
       </div>
-
 
       <div class="fs-card-footer">
         <span class="fs-card-company">${escapeHtml(companyName)}</span>
@@ -177,9 +194,86 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
-    return card;
-}
+        // open details modal on click
+        card.addEventListener("click", function () {
+            openDetailsModal(space);
+        });
 
+        return card;
+    }
+
+    function openDetailsModal(space) {
+        if (!modal) return;
+
+        const rawType = (space.Type || "truck").toString();
+        const origin = space.Origin || space.Origion || "";
+        const destination = space.Destination || "";
+        const depDate = space.DepDate || "";
+
+        const emptySpaceW = space.EmptySpaceW;
+        const unitW = space.UnitW || "";
+        const emptySpaceA = space.EmptySpaceA;
+        const unitA = space.UnitA || "";
+
+        const hasSpace =
+            (!!emptySpaceW && !!unitW) || (!!emptySpaceA && !!unitA);
+
+        const availableText = hasSpace
+            ? `${emptySpaceW || ""} ${unitW} ${emptySpaceA || ""} ${unitA}`.trim()
+            : "—";
+
+        const priceType = (space.PriceType || "").toLowerCase();
+        const priceValue = space.Price;
+        let priceDisplay = "N/A";
+
+        if (priceType === "fixed" && priceValue != null) {
+            priceDisplay = `$${priceValue}`;
+        } else if (priceType === "bids") {
+            priceDisplay = "Bid";
+        }
+
+        const companyName = space.CompName || "Swift Logistics";
+        const cargoText = space.Restriction || "All containerized goods";
+
+// Reset old classes
+modalTypeChip.className = "fs-badge";
+
+// Add correct color badge
+const typeLower = rawType.toLowerCase();
+if (typeLower === "truck") modalTypeChip.classList.add("fs-badge--type-truck");
+else if (typeLower === "ship") modalTypeChip.classList.add("fs-badge--type-ship");
+else if (typeLower === "plane" || typeLower === "air") modalTypeChip.classList.add("fs-badge--type-plane");
+
+// Set badge text
+modalTypeChip.textContent = rawType;
+        if (modalOrigin) modalOrigin.textContent = origin || "—";
+        if (modalDestination) modalDestination.textContent = destination || "—";
+        if (modalAvailableSpace) modalAvailableSpace.textContent = availableText;
+        if (modalDepartureDate) modalDepartureDate.textContent = depDate || "—";
+        if (modalCargo) modalCargo.textContent = cargoText;
+        if (modalCompanyName) modalCompanyName.textContent = companyName;
+        if (modalTotalPrice) modalTotalPrice.textContent = priceDisplay;
+        if (modalStatusBadge) modalStatusBadge.textContent = "Available Now";
+
+        modal.classList.remove("fs-modal--hidden");
+    }
+
+    function closeModal() {
+        if (modal) modal.classList.add("fs-modal--hidden");
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener("click", closeModal);
+    }
+
+    if (modal) {
+        // close when clicking backdrop
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
 
     function escapeHtml(str) {
         if (str == null) return "";

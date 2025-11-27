@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     var inputsStep2 = [
-        document.getElementById("availableSpace"),
-        document.getElementById("spaceUnit"),
+        document.getElementById("availableSpaceW"),
+        document.getElementById("spaceUnitW"),
+        document.getElementById("availableSpaceA"),
+        document.getElementById("spaceUnitA"),
         document.getElementById("goodsAllowed")
     ];
 
@@ -107,8 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var destination = document.getElementById("destination");
         var departDate = document.getElementById("departDate");
         var departTime = document.getElementById("departTime");
-        var availableSpace = document.getElementById("availableSpace");
-        var spaceUnit = document.getElementById("spaceUnit");
+        var availableSpaceW = document.getElementById("availableSpaceW");
+        var spaceUnitW = document.getElementById("spaceUnitW");
+        var availableSpaceA = document.getElementById("availableSpaceA");
+        var spaceUnitA = document.getElementById("spaceUnitA");
 
         var freightLabel = "—";
         if (hiddenFreight && hiddenFreight.value) {
@@ -133,10 +137,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 (departTime ? departTime.value : "");
         }
 
-        var spaceText = "—";
-        if (isFilled(availableSpace) && isFilled(spaceUnit)) {
-            var unitLabel = spaceUnit.options[spaceUnit.selectedIndex].text;
-            spaceText = availableSpace.value + " " + unitLabel.toLowerCase();
+        var spaceTextW = "—";
+        if (isFilled(availableSpaceW) && isFilled(spaceUnitW)) {
+            var unitLabelW = spaceUnitW.options[spaceUnitW.selectedIndex].text;
+            spaceTextW = availableSpaceW.value + " " + unitLabelW.toLowerCase();
+        }
+
+        var spaceTextA= "—";
+
+if (isFilled(availableSpaceA) && isFilled(spaceUnitA)) {
+            var unitLabelA = spaceUnitA.options[spaceUnitA.selectedIndex].text;
+            spaceTextA = availableSpaceA.value + " " + unitLabelA.toLowerCase();
         }
 
         var priceText = "—";
@@ -159,16 +170,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        var sFreight = document.getElementById("summaryFreight");
+              var sFreight = document.getElementById("summaryFreight");
         var sRoute = document.getElementById("summaryRoute");
         var sDate = document.getElementById("summaryDate");
-        var sSpace = document.getElementById("summarySpace");
-        
+        var sSpaceW = document.getElementById("summarySpaceW");
+        var sSpaceA = document.getElementById("summarySpaceA");
+
         if (sFreight) sFreight.textContent = freightLabel;
         if (sRoute) sRoute.textContent = route;
         if (sDate) sDate.textContent = dateText;
-        if (sSpace) sSpace.textContent = spaceText;
+        if (sSpaceW) sSpaceW.textContent = spaceTextW;
+        if (sSpaceA) sSpaceA.textContent = spaceTextA;
+
         if (sPrice) sPrice.textContent = priceText;
+
     }
 
     function updatePricingVisuals(selectedOption) {
@@ -219,8 +234,10 @@ document.addEventListener("DOMContentLoaded", function () {
         Destination: document.getElementById("destination").value.trim(),
         DepDate: document.getElementById("departDate").value,
         DepTime: document.getElementById("departTime").value,
-        EmptySpace: document.getElementById("availableSpace").value,
-        Unit: document.getElementById("spaceUnit").value,
+        EmptySpaceW: document.getElementById("availableSpaceW").value,
+        UnitW: document.getElementById("spaceUnitW").value,
+        EmptySpaceA: document.getElementById("availableSpaceA").value,
+        UnitA: document.getElementById("spaceUnitA").value,
         Restriction: document.getElementById("goodsAllowed").value.trim(),
         PriceType: priceType,
         Price: priceType === 'fixed' ? document.getElementById("price").value : null
