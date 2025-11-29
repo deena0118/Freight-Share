@@ -20,4 +20,12 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+
+    import('open').then(openModule => {
+        openModule.default(`http://localhost:${PORT}`).catch(err => {
+            console.error('Failed to open browser:', err);
+        });
+    }).catch(importErr => {
+        console.error('Failed to load open module:', importErr);
+    });
 });
