@@ -11,8 +11,12 @@ app.use("/auth", authRoutes);
 const spaceRoutes = require("./routes/space"); 
 app.use("/space", spaceRoutes); 
 
+
 const shipmentsRoutes = require("./routes/shipments");
 app.use("/shipments", shipmentsRoutes);
+
+const bookingsRoutes = require("./routes/bookings");
+app.use("/bookings", bookingsRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));

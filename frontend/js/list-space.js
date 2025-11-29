@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
         var spaceUnitW = document.getElementById("spaceUnitW");
         var availableSpaceA = document.getElementById("availableSpaceA");
         var spaceUnitA = document.getElementById("spaceUnitA");
+var sSellerRev = document.getElementById("summarySellerRevenue");
+var sServiceFee = document.getElementById("summaryServiceFee");
 
         var freightLabel = "—";
         if (hiddenFreight && hiddenFreight.value) {
@@ -150,39 +152,66 @@ if (isFilled(availableSpaceA) && isFilled(spaceUnitA)) {
             spaceTextA = availableSpaceA.value + " " + unitLabelA.toLowerCase();
         }
 
-        var priceText = "—";
-        var pricingType = document.querySelector('input[name="pricingType"]:checked');
-        var isBids = pricingType && pricingType.value === "bids";
-        var sPrice = document.getElementById("summaryPrice");
+       var priceText = "—";
+var pricingType = document.querySelector('input[name="pricingType"]:checked');
+var isBids = pricingType && pricingType.value === "bids";
+var sPrice = document.getElementById("summaryPrice");
 
-        if (isBids) {
-            priceText = "Request Bids";
-            sPrice.style.color = 'var(--fs-green)';
-            sPrice.style.fontWeight = '500';
-        } else if (isFilled(priceInput)) { 
-            priceText = "$" + priceInput.value;
-            sPrice.style.color = 'var(--fs-text-main, #1f2933)'; 
-            sPrice.style.fontWeight = '600';
+if (isBids) {
+    // Bid mode
+    priceText = "Bid";
+    if (sPrice) {
+        sPrice.style.color = "var(--fs-green)";
+        sPrice.style.fontWeight = "800";
+    }
+    if (sSellerRev) sSellerRev.textContent = "—";
+    if (sServiceFee) sServiceFee.textContent = "—";
+} else {
+    // Fixed price mode
+    if (isFilled(priceInput)) {
+        var total = Number(priceInput.value);
+        if (!isNaN(total)) {
+            priceText = "$" + total.toFixed(2);
+
+            var sellerRevenue = total * 0.95;
+            var serviceFee = total * 0.05;
+
+            if (sSellerRev) sSellerRev.textContent = "$" + sellerRevenue.toFixed(2);
+            if (sServiceFee) sServiceFee.textContent = "$" + serviceFee.toFixed(2);
         } else {
             priceText = "$";
-            sPrice.style.color = 'var(--fs-text-main, #1f2933)'; 
-            sPrice.style.fontWeight = '500';
+            if (sSellerRev) sSellerRev.textContent = "—";
+            if (sServiceFee) sServiceFee.textContent = "—";
         }
 
+        if (sPrice) {
+            sPrice.style.color = "var(--fs-green)";
+            sPrice.style.fontWeight = "800";
+        }
+    } else {
+        priceText = "$";
+        if (sPrice) {
+            sPrice.style.color = "var(--fs-green)";
+            sPrice.style.fontWeight = "800";
+        }
+        if (sSellerRev) sSellerRev.textContent = "—";
+        if (sServiceFee) sServiceFee.textContent = "—";
+    }
+}
 
-              var sFreight = document.getElementById("summaryFreight");
-        var sRoute = document.getElementById("summaryRoute");
-        var sDate = document.getElementById("summaryDate");
-        var sSpaceW = document.getElementById("summarySpaceW");
-        var sSpaceA = document.getElementById("summarySpaceA");
+var sFreight = document.getElementById("summaryFreight");
+var sRoute = document.getElementById("summaryRoute");
+var sDate = document.getElementById("summaryDate");
+var sSpaceW = document.getElementById("summarySpaceW");
+var sSpaceA = document.getElementById("summarySpaceA");
 
-        if (sFreight) sFreight.textContent = freightLabel;
-        if (sRoute) sRoute.textContent = route;
-        if (sDate) sDate.textContent = dateText;
-        if (sSpaceW) sSpaceW.textContent = spaceTextW;
-        if (sSpaceA) sSpaceA.textContent = spaceTextA;
+if (sFreight) sFreight.textContent = freightLabel;
+if (sRoute) sRoute.textContent = route;
+if (sDate) sDate.textContent = dateText;
+if (sSpaceW) sSpaceW.textContent = spaceTextW;
+if (sSpaceA) sSpaceA.textContent = spaceTextA;
 
-        if (sPrice) sPrice.textContent = priceText;
+if (sPrice) sPrice.textContent = priceText;
 
     }
 

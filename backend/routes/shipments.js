@@ -5,14 +5,16 @@ const router = express.Router();
 
 
 router.get("/", (req, res) => {
-    const sql = `
-        SELECT
-            s.*,
-            c.CompName
-        FROM Space AS s
-        LEFT JOIN Company AS c ON s.CompID = c.CompID
-        WHERE s.Status = 'Available'
-    `;
+   const sql = `
+  SELECT
+    s.*,
+    c.CompName,
+    COALESCE(c.CompDesc, '') AS CompDesc
+  FROM Space AS s
+  LEFT JOIN "Company" c ON c.CompID = s.CompID
+  WHERE s.Status = 'Available'
+`;
+
 
     db.all(sql, [], (err, rows) => {
         if (err) {

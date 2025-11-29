@@ -1,68 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>FreightShare – Marketplace</title>
   <link rel="stylesheet" href="css/global.css" />
 </head>
+
 <body>
- <div class="fs-root">
-<header class="fs-header">
-  <div class="fs-header-left">
-    <div class="ww">
-      <img src="assets/icons/box.svg" class="fs-logo-icon2" />
-    </div>
-    <div class="fs-logo-text">
-      <div class="fs-logo-title">FreightShare</div>
-      <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
-    </div>
-  </div>
-
-  <div class="fs-header-right">
-    <span class="fs-header-tagline">Connecting freight space worldwide</span>
-
-    <div class="fs-profile">
-      <button type="button" class="fs-profile-icon">
-        <span id="fsProfileInitials">U</span>
-      </button>
-
-      <div class="fs-profile-card">
-        <div class="fs-profile-name" id="fsProfileName">User Name</div>
-        <div class="fs-profile-company" id="fsProfileCompany">Company Name</div>
-        <button type="button" class="fs-profile-logout" id="fsProfileLogout">
-          Sign out
-        </button>
+  <div class="fs-root">
+    <header class="fs-header">
+      <div class="fs-header-left">
+        <div class="ww">
+          <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
+        </div>
+        <div class="fs-logo-text">
+          <div class="fs-logo-title">FreightShare</div>
+          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
+
+      <div class="fs-header-right">
+        <span class="fs-header-tagline">Connecting freight space worldwide</span>
+
+        <div class="fs-profile">
+          <button type="button" class="fs-profile-icon">
+            <span id="fsProfileInitials">U</span>
+          </button>
+
+          <div class="fs-profile-card">
+            <div class="fs-profile-name" id="fsProfileName">User Name</div>
+            <div class="fs-profile-company" id="fsProfileCompany">Company Name</div>
+            <button type="button" class="fs-profile-logout" id="fsProfileLogout">
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
 
 
 
 
-<nav class="fs-main-nav">
+    <nav class="fs-main-nav">
 
-<a href="marketplace.html" class="fs-nav-item fs-nav-item--active">
+      <a href="marketplace.html" class="fs-nav-item fs-nav-item--active">
         <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
         <span class="fs-nav-label">Marketplace</span>
-    </a>
+      </a>
 
-    <a href="list-empty-space.html" class="fs-nav-item">
+      <a href="list-empty-space.html" class="fs-nav-item">
         <img src="assets/icons/truck.svg" class="fs-nav-icon" />
         <span class="fs-nav-label">List Empty Space</span>
-    </a>
+      </a>
 
-    <a href="find-shipment.html" class="fs-nav-item">
+      <a href="find-shipment.html" class="fs-nav-item">
         <img src="assets/icons/search.svg" class="fs-nav-icon" />
         <span class="fs-nav-label">Find Shipment</span>
-    </a>
+      </a>
 
-    <a href="my-bookings.html" class="fs-nav-item">
+      <a href="my-bookings.html" class="fs-nav-item">
         <img src="assets/icons/box.svg" class="fs-nav-icon" />
         <span class="fs-nav-label">My Bookings</span>
-    </a>
+      </a>
 
-</nav>
+    </nav>
 
 
     <main class="fs-page-wrapper">
@@ -73,7 +75,7 @@
             <span>List Empty Space</span>
           </button>
           <button class="fs-hero-btn fs-hero-btn--accent" onclick="location.href='find-shipment.html'">
-            <span class="fs-hero-btn-icon">📍</span>
+            <img src="assets/icons/location.svg" class="fs-nav-icon" />
             <span>Find Shipment Space</span>
           </button>
         </section>
@@ -82,7 +84,7 @@
 
           <div class="fs-stat-card">
             <div class="fs-stat-label">
-                      <img src="assets/icons/box.svg" class="fs-nav-icon" />
+              <img src="assets/icons/box.svg" class="fs-nav-icon" />
 
               Available Space
             </div>
@@ -92,21 +94,21 @@
 
           <div class="fs-stat-card">
             <div class="fs-stat-label">
-                      <img src="assets/icons/earth.svg" class="fs-nav-icon" />
+              <img src="assets/icons/earth.svg" class="fs-nav-icon" />
               Markets
             </div>
             <div class="fs-stat-value">42</div>
             <div class="fs-stat-sub">Countries served</div>
           </div>
           <div class="fs-stat-card">
-    <div class="fs-stat-label">
-                            <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
+            <div class="fs-stat-label">
+              <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
 
-      Listings
-    </div>
-    <div class="fs-stat-value" id="fsStatListingsCount">0</div>
-    <div class="fs-stat-sub">Total Available Listings</div>
-  </div>
+              Listings
+            </div>
+            <div class="fs-stat-value" id="fsStatListingsCount">0</div>
+            <div class="fs-stat-sub">Total Available Listings</div>
+          </div>
         </section>
 
         <section class="fs-page-row fs-dashboard-row">
@@ -121,7 +123,7 @@
             </header>
 
             <div class="fs-feed-list">
-                          <!--KEEP THE REPEATER UNDER HERE-->
+              <!-- THE REPEATER in HERE-->
 
 
 
@@ -135,4 +137,5 @@
 
   <script src="js/marketplace.js"></script>
 </body>
+
 </html>
