@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>FreightShare – Find Shipment</title>
   <link rel="stylesheet" href="css/global.css" />
 </head>
+
 <body>
   <div class="fs-root">
-    <header class="fs-header">
+    <header class="fs-header" style>
       <div class="fs-header-left">
         <div class="ww">
-          <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+          <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
         </div>
         <div class="fs-logo-text">
           <div class="fs-logo-title">FreightShare</div>
@@ -45,7 +47,7 @@
       </a>
     </nav>
 
-       <main class="fs-page-wrapper">
+    <main class="fs-page-wrapper">
       <div class="fs-page">
         <section class="fs-filter-bar">
           <div class="fs-filter-group">
@@ -69,7 +71,8 @@
               </select>
             </label>
 
-            <button id="applyFilters" class="fs-btn fs-btn--outline" type="button">
+            <button id="applyFilters" class="fs-btn fs-btn--primary" type="button"
+              style="background: #1e3a5f; align-self: self-end; width:250px;    justify-content: space-around;">
               Filters
             </button>
           </div>
@@ -107,7 +110,7 @@
             <h2>Shipment Details</h2>
             <p class="fs-modal-subtitle">Review listing details and book space</p>
           </div>
-<span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px;">Ship</span>
+          <span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px;">Ship</span>
         </div>
 
         <div class="fs-modal-section">
@@ -166,29 +169,99 @@
                 </div>
               </div>
             </div>
-            <div class="fs-modal-muted fs-modal-seller-text">
-              Professional logistics provider with successful shipments worldwide.
-            </div>
+            <div id="fsModalCompanyDesc" class="fs-modal-muted fs-modal-seller-text">—</div>
+
           </div>
         </div>
 
         <div class="fs-modal-section">
           <div class="fs-modal-price-row">
             <div>
-              <div class="fs-modal-card-label">Total Price</div>
-              <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
+
+              <div id="fsModalFixedBlock">
+                <div class="fs-modal-card-label">Total Price</div>
+                <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
+
+               <div class="fs-modal-fee-lines">
+  <div class="fs-modal-fee-line">
+    <span>Seller Revenue:</span>
+    <span id="fsModalSellerRevenue">—</span>
+  </div>
+  <div class="fs-modal-fee-line">
+    <span>Service Fee (5%):</span>
+    <span id="fsModalServiceFee">—</span>
+  </div>
+
+  <button id="fsPartialToggle" type="button" class="fs-link-btn">
+    Request Partial Space
+  </button>
+
+  <div id="fsPartialBox" style="display:none; margin-top:10px;">
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <label class="fs-field" style="margin:0;">
+        <span class="fs-field-label">Partial amount required</span>
+      </label>
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input id="fsPartialPercent" class="fs-input" type="number" min="1" max="99" step="1"
+               placeholder="1-99" style="width:130px;" />
+        <span style="font-weight:600; color:#6b7280;">%</span>
+      </div>
+    </div>
+
+    <div id="fsPartialError" style="display:none; margin-top:6px; font-size:13px; color:#ef4444;">
+      Percentage must be between 1 and 99.
+    </div>
+  </div>
+</div>
+
+              </div>
+
+             <div id="fsModalBidBlock" style="display:none; margin-top:10px;">
+  <div class="fs-card-price fs-card-price--bid" style="display:inline-block; margin-top:6px;">Bid</div>
+
+  <label class="fs-field" style="margin-top:10px; display:block; max-width:360px;">
+    <span class="fs-field-label">Enter your bid amount</span>
+    <input id="fsModalBidAmount" class="fs-input" type="number" min="0" step="0.01" placeholder="e.g., 1200" /> $
+  </label>
+
+
+
+
+
+  <!-- Totals (hidden until bid amount is filled) -->
+<div id="fsBidTotals" style="display:block; margin-top:14px;">
+    <div class="fs-modal-card-label">Total Price</div>
+    <div id="fsBidTotalPrice" class="fs-modal-price">—</div>
+
+    <div class="fs-modal-fee-lines">
+      <div class="fs-modal-fee-line">
+        <span>Seller Revenue:</span>
+        <span id="fsBidSellerRevenue">—</span>
+      </div>
+      <div class="fs-modal-fee-line">
+        <span>Service Fee (5%):</span>
+        <span id="fsBidServiceFee">—</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
             </div>
             <span id="fsModalStatusBadge" class="fs-modal-status-badge">Available Now</span>
           </div>
         </div>
 
         <div class="fs-modal-section fs-modal-section--footer">
-          <button type="button" class="fs-btn fs-btn--primary fs-modal-book-btn">
+          <button type="button" id="fsModalBookBtn" class="fs-btn fs-btn--primary fs-modal-book-btn">
             ✓ Book Now
           </button>
-          <p class="fs-modal-disclaimer">
+          <!-- <p class="fs-modal-disclaimer">
             By booking, you agree to the terms and conditions
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
@@ -197,4 +270,5 @@
 
   <script src="js/find-shipment.js"></script>
 </body>
+
 </html>

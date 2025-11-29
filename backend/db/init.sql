@@ -1,26 +1,43 @@
-INSERT INTO Company (CompID, CompName, StartTime, EndTime, TimeZone, CompDesc)
-VALUES ('Comp001', 'Saih Al Rawl Gas Company', '0800', '1600', 'GMT+4', 'A trusted Omani oil & gas supplier with 20+ years of experience delivering chemicals, equipment, and field services.');
+CREATE TABLE Port(
+    PortID TEXT PRIMARY KEY,
+    Name TEXT NOT NULL,
+    LOCATION TEXT NOT NULL,
+    Country TEXT NOT NULL,
+    Longitude TEXT NOT NULL,
+    Latitude TEXT NOT NULL
+);
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP001', 'Comp001', 'John Doe Admin', 'Admin', 'john@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', '');
+CREATE TABLE Dock(
+    DockID TEXT PRIMARY KEY,
+    Name TEXT NOT NULL,
+    PortID TEXT NOT NULL,
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP002', 'Comp001', 'John Doe Manager', 'SubAdmin', 'johnsub@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', '');
+    FOREIGN KEY (PortID) REFERENCES Port(PortID)
+);
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP003', 'Comp001', 'John Doe Employee 1', 'User', 'johnuser1@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', 'EMP002');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port001', 'Sultan Qaboos Port', 'Muscat, OM', 'Oman', '58.5659182', '23.6286554');
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP004', 'Comp001', 'John Doe Employee 2', 'User', 'johnuse2r@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', 'EMP002');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port002', 'Port of Duqm', 'Duqm, OM', 'Oman', '57.72682229999999', '19.664013');
 
-INSERT INTO Company (CompID, CompName, StartTime, EndTime, TimeZone, CompDesc)
-VALUES ('Comp002', 'Sun Logistics Oman', '0800', '1600', 'GMT+4', 'A logistics operator with over 10 years of experience delivering efficient container transport and freight solutions across Oman');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port003', 'Salalah Port', 'Salalah, OM', 'Oman', '53.9953894', '16.9414873');
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP005', 'Comp002', 'John Doe Sun', 'Admin', 'johnsun@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', '');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port004', 'Sohar Port', 'Sohar, OM', 'Oman', '56.6121145', '24.4848505');
 
-INSERT INTO Company (CompID, CompName, StartTime, EndTime, TimeZone, CompDesc)
-VALUES ('Comp003', 'Evergreen Line', '0800', '1600', 'GMT+4', 'A global shipping carries with a fleet moving millions of containers');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port005', 'Jebel Ali Port', 'Dubai, UAE', 'United Arab Emirates', '55.0515997', '25.0199321');
 
-INSERT INTO User (ID, CompID, Name, Type, Email, PhoneNo, PasswordHash, AdminRef)
-VALUES ('EMP006', 'Comp003', 'John Doe Evergreen', 'Admin', 'johnevergreen@test.com', '12345678', '$2b$10$uviR3CUvgJ7FldrAzUklJut5YdiGMnWG6paTj3qMBC87KUT2T/N/.', '');
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port006', 'Khalifa Port', 'Abu Dhabi, UAE', 'United Arab Emirates', '54.71276470000001', '24.7756568');
+
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port007', 'Khorfakkan Port', 'Sharjah, UAE', 'United Arab Emirates', '56.367736', '25.3526481');
+
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port008', 'Khalid Port', 'Sharjah, UAE', 'United Arab Emirates', '55.3731033', '25.3580548');
+
+INSERT INTO Port (PortID, Name, LOCATION, Country, Longitude, Latitude)
+VALUES ('Port009', 'Port of Fujairah', 'Fujairah, UAE', 'United Arab Emirates', '56.36353219999999', '25.1727756');

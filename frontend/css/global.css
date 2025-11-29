@@ -1,5 +1,5 @@
 :root {
-  --fs-blue: #1e3a5f;
+  --fs-blue: #1e3a5f;;
   --fs-blue-soft: #1e3a5f;
   --fs-green: #1ac26b;
   --fs-light-bg: #f5f7fb;
@@ -33,7 +33,16 @@ body {
   background: #ffffff;
 }
 
-
+.fs-link-btn{
+  color: var(--fs-blue);
+  background: none;
+  border: none;
+  margin-top:15px; 
+  margin-left:none; 
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-align: start;
+}
 
 .fs-header {
   background: #1e3a5f;
@@ -76,6 +85,16 @@ margin-right: 1vw;
   justify-content: center;
 }
 
+.fs-logo-icon3 {
+  width: 130px;
+    filter: brightness(0) invert(1);
+
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .fs-logo-text {
   display: flex;
@@ -722,9 +741,9 @@ font-size: 12px;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
-  border-top: 1px solid #f1f2f7;
-  padding-top: 8px;
-  margin-top: 4px;
+  border-top: 1.5px solid #585D65;
+  padding-top: 20px;
+  margin-top: 20px;
 }
 
 .fs-card-footer--booking {
@@ -794,6 +813,7 @@ font-size: 12px;
   display: flex;
   align-items: center;
   gap: 18px;
+  align-self: self-end;
 }
 
 .fs-filter-group .fs-field {
@@ -801,7 +821,7 @@ font-size: 12px;
 }
 
 .fs-filter-group .fs-input {
-  height: 42px;
+  height: 40px;
   font-size: 14px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
@@ -1799,4 +1819,109 @@ font-size: 12px;
   font-size: 11px;
   color: #9ca3af;
   text-align: center;
+}
+
+  .fs-booking-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+  }
+
+  .fs-booking-id{
+    text-align:right;
+    line-height:1.1;
+  }
+
+  .fs-booking-id-label{
+    font-size:12px;
+    opacity:.7;
+  }
+
+  .fs-booking-id-value{
+    font-size:16px;
+    font-weight:700;
+  }
+
+  .fs-booking-meta{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid rgba(0,0,0,.08);
+    display:flex;
+    gap:14px;
+    justify-content:space-between;
+  }
+
+  .fs-booking-meta-item{
+    flex:1;
+    min-width:0;
+  }
+
+  .fs-booking-meta-label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    opacity:.75;
+    margin-bottom:6px;
+  }
+
+  .fs-booking-meta-value{
+    font-weight:600;
+  }
+
+  .fs-booking-space-lines{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+
+  .fs-booking-footer{
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  .fs-booking-view-btn{
+    border:1px solid rgba(0,0,0,.15);
+    background:#fff;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .fs-badge--booking-status{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.15);
+  }
+
+.fs-badge--status-confirmed { border-color: rgba(65,182,230,.55); }
+.fs-badge--status-pending { border-color: rgba(245,158,11,.55); }
+.fs-badge--status-approval { border-color: rgba(168,85,247,.55); }   /* Pending Admin Approval */
+.fs-badge--status-completed { border-color: rgba(34,197,94,.55); }
+.fs-badge--status-rejected { border-color: rgba(239,68,68,.55); }
+.fs-badge--status-cancelled { border-color: rgba(239,68,68,.55); }
+
+
+.fs-modal-fee-lines{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fs-modal-fee-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size: 14px;
+  color: rgba(17,24,39,.75);
+}
+
+.fs-modal-fee-line span:last-child{
+  font-weight: 600;
+  color: rgba(17,24,39,.95);
 }

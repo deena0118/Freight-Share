@@ -165,24 +165,21 @@
                     <span class="fs-field-label">Unit</span>
                     <div class="fs-select-wrapper">
                       <select id="spaceUnitW" name="spaceUnit" class="fs-input fs-select">
-                        <option value="">Unit</option>
-                        <option value="tons">Tons</option>
-                        <option value="cbm" selected>CBM</option>
-                        <option value="pallets">Pallets</option>
+                        <option value="Tons">Tons</option>
+                        <option value="Kg">Kg</option>
                       </select>
                     </div>
                   </label>
                  <label class="fs-field">
-  <span class="fs-field-label">Available Area</span>
+  <span class="fs-field-label">Available Volume</span>
   <input id="availableSpaceA" name="availableSpaceA" class="fs-input" placeholder="e.g., 10" />
   <span class="fs-help-text">Enter the area of the space available for cargo</span>
 </label>
                     <label class="fs-field fs-field--shrink">
                     <span class="fs-field-label">Unit</span>
                     <div class="fs-select-wrapper">
-                      <select id="spaceUnitA" name="spaceUnit" class="fs-input fs-select">
-                        <option value="">Unit</option>
-                        <option value="m2">Square Meter</option>
+                      <select id="spaceUnitA" name="spaceUnit2" class="fs-input fs-select">
+                        <option value="cbm" selected>CBM</option>
 
                       </select>
                     </div>
@@ -263,13 +260,15 @@
     <div class="fs-summary-card">
         <div class="fs-summary-header">Listing Summary</div>
         <div class="fs-summary-grid">
-            <div class="fs-summary-labels">
+<div class="fs-summary-labels">
   <div>Freight Type:</div>
   <div>Route:</div>
   <div>Date:</div>
   <div>Available Weight:</div>
   <div>Available Area:</div>
-  <div>Price:</div>
+  <div>Total Price:</div>
+  <div>Seller Revenue:</div>
+  <div>Service Fee (5%):</div>
 </div>
 <div class="fs-summary-values">
   <div id="summaryFreight">Truck</div>
@@ -277,8 +276,12 @@
   <div id="summaryDate">2002-12-10 at 12:12</div>
   <div id="summarySpaceW">—</div>
   <div id="summarySpaceA">—</div>
-  <div id="summaryPrice" style="color: var(--fs-green); font-weight: 500;">$</div>
+
+  <div id="summaryPrice" style="color: var(--fs-green); font-weight: 700; ">$0.00</div>
+  <div id="summarySellerRevenue">—</div>
+  <div id="summaryServiceFee">—</div>
 </div>
+
 
         </div>
     </div>
