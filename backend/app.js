@@ -2,7 +2,7 @@ const path = require("path");
 const express = require("express");
 
 const app = express();
-const PORT = 5034;
+const port = 5034;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 const authRoutes = require("./routes/auth");
@@ -18,6 +18,14 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+
+    import('open').then(openModule => {
+        openModule.default(`http://localhost:${port}`).catch(err => {
+            console.error('Failed to open browser:', err);
+        });
+    }).catch(importErr => {
+        console.error('Failed to load open module:', importErr);
+    });
 });
