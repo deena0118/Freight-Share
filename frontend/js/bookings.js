@@ -191,21 +191,34 @@ const scopes = ["all", "buyer", "seller"];
     return card;
   }
 
-  function pickPrice(spacePrice, bidPrice) {
-    const s = normalizeNullable(spacePrice);
-    if (s) return s;
+   function pickPrice(spacePrice, bidPrice) {
+    // Treat 0 / 0.00 / "0" as empty, so we can fall back to BidPrice
+    const s = normalizeNullable(spacePrice, true);
+    if (s !== "") return s;
 
-    const b = normalizeNullable(bidPrice);
-    return b || "";
+    const b = normalizeNullable(bidPrice, true);
+    return b !== "" ? b : "";
   }
 
-  function normalizeNullable(v) {
+  function normalizeNullable(v, treatZeroAsEmpty) {
+    treatZeroAsEmpty = !!treatZeroAsEmpty;
+
     if (v == null) return "";
     const t = String(v).trim();
     if (!t) return "";
     if (t.toLowerCase() === "null") return "";
+
+    if (treatZeroAsEmpty) {
+      const num = Number(t);
+      if (!isNaN(num) && num <= 0) {
+        // Consider 0, 0.0, 0.00, -1, etc. as "empty" for price logic
+        return "";
+      }
+    }
+
     return t;
   }
+
 
   function formatSpaceLine(val, unit) {
     const v = normalizeNullable(val);

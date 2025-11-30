@@ -1,20 +1,18 @@
 const express = require("express");
-const db = require("../db/database"); 
+const db = require("../db/database");
 
 const router = express.Router();
 
-
 router.get("/", (req, res) => {
-   const sql = `
-  SELECT
-    s.*,
-    c.CompName,
-    COALESCE(c.CompDesc, '') AS CompDesc
-  FROM Space AS s
-  LEFT JOIN "Company" c ON c.CompID = s.CompID
-  WHERE s.Status = 'Available'
-`;
-
+    const sql = `
+      SELECT
+        s.*,
+        c.CompName,
+        COALESCE(c.CompDesc, '') AS CompDesc
+      FROM Space AS s
+      LEFT JOIN "Company" c ON c.CompID = s.CompID
+      WHERE s.Status = 'Available'
+    `;
 
     db.all(sql, [], (err, rows) => {
         if (err) {
@@ -24,9 +22,21 @@ router.get("/", (req, res) => {
                 .json({ error: "Failed to load shipments from database." });
         }
 
+        // ⬇️ NEW: split "YYYY-MM-DD HH:MM" into DepDate + DepTime for the API
+        const mappedRows = (rows || []).map((row) => {
+            if (row.DepDate) {
+                const dt = String(row.DepDate);
+                const [datePart, timePart] = dt.split(" ");
+                row.DepDate = datePart || "";
+                // keep only HH:MM even if seconds exist
+                row.DepTime = (timePart || "").slice(0, 5);
+            } else {
+                row.DepTime = "";
+            }
+            return row;
+        });
 
-
-        return res.json({ spaces: rows });
+        return res.json({ spaces: mappedRows });
     });
 });
 

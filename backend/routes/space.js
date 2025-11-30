@@ -7,11 +7,11 @@ router.post("/list", (req, res) => {
     const {
         CompID,
         UserID,
-        Type,         
+        Type,
         Origin,
         Destination,
-        DepDate,
-        DepTime,
+        DepDate,   // still received separately from the front-end
+        DepTime,   // still received separately from the front-end
         EmptySpaceW,
         UnitW,
         EmptySpaceA,
@@ -21,6 +21,7 @@ router.post("/list", (req, res) => {
         Price
     } = req.body;
 
+    // Basic presence validation
     if (
         !CompID ||
         !UserID ||
@@ -40,6 +41,10 @@ router.post("/list", (req, res) => {
             .json({ error: "Missing required listing fields in the request body." });
     }
 
+    // Combine DepDate + DepTime into a single datetime string to save in the DepDate column
+    // Result format: "YYYY-MM-DD HH:MM"
+    const combinedDepDate = `${DepDate} ${DepTime}`;
+
     const emptySpaceNumW = parseFloat(EmptySpaceW);
     const emptySpaceNumA = parseFloat(EmptySpaceA);
 
@@ -54,7 +59,6 @@ router.post("/list", (req, res) => {
             .status(400)
             .json({ error: "Area empty space must be a positive number." });
     }
-
 
     let finalPrice = null;
     if (PriceType === "fixed") {
@@ -94,10 +98,12 @@ router.post("/list", (req, res) => {
                 ? "Pending Admin Confirmation"
                 : "Available";
 
+        // NOTE: DepTime column has been removed from the INSERT.
+        // We insert combinedDepDate into DepDate.
         const insertSql = `
             INSERT INTO Space
-            (CompID, UserID, Type, Origin, Destination, DepDate, DepTime, EmptySpaceW, UnitW, EmptySpaceA, UnitA, Restriction, PriceType, Price, Status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (CompID, UserID, Type, Origin, Destination, DepDate, EmptySpaceW, UnitW, EmptySpaceA, UnitA, Restriction, PriceType, Price, Status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -106,11 +112,10 @@ router.post("/list", (req, res) => {
             Type,
             Origin,
             Destination,
-            DepDate,
-            DepTime,
+            combinedDepDate,      // "YYYY-MM-DD HH:MM"
             emptySpaceNumW,
             UnitW,
-             emptySpaceNumA,
+            emptySpaceNumA,
             UnitA,
             Restriction || null,
             PriceType,

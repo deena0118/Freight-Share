@@ -131,9 +131,9 @@ var sServiceFee = document.getElementById("summaryServiceFee");
 
         var freightLabel = "—";
         if (hiddenFreight && hiddenFreight.value) {
-            if (hiddenFreight.value === "truck") freightLabel = "Truck";
-            else if (hiddenFreight.value === "ship") freightLabel = "Ship";
-            else if (hiddenFreight.value === "air") freightLabel = "Plane";
+            if (hiddenFreight.value === "Truck") freightLabel = "Truck";
+            else if (hiddenFreight.value === "Ship") freightLabel = "Ship";
+            else if (hiddenFreight.value === "Plane") freightLabel = "Plane";
         }
 
         var route = "—";
@@ -439,7 +439,7 @@ async function loadPorts() {
         var cardType = (card.getAttribute("data-freight") || "").toLowerCase();
         card.classList.toggle("fs-freight-card--active", cardType === normalized);
     });
-    if (hiddenFreight) hiddenFreight.value = normalized;
+if (hiddenFreight) hiddenFreight.value = type; // saves Truck/Ship/Plane
     if (markChosen) {
         freightChosenByUser = true;
     }

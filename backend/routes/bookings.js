@@ -33,21 +33,35 @@ router.get("/", (req, res) => {
     LEFT JOIN "Company" c ON c.CompID = s.CompID
   `;
 
-  function run(whereClause, params) {
-    let sql = baseSql;
-    if (whereClause && whereClause.trim().length > 0) {
-      sql += " WHERE " + whereClause;
-    }
-    sql += " ORDER BY datetime(b.CreatedAt) DESC";
-
-    db.all(sql, params || [], (err, rows) => {
-      if (err) {
-        console.error("Select bookings error:", err);
-        return res.status(500).json({ error: "Failed to load bookings" });
-      }
-      return res.json({ bookings: rows });
-    });
+ function run(whereClause, params) {
+  let sql = baseSql;
+  if (whereClause && whereClause.trim().length > 0) {
+    sql += " WHERE " + whereClause;
   }
+  sql += " ORDER BY datetime(b.CreatedAt) DESC";
+
+  db.all(sql, params || [], (err, rows) => {
+    if (err) {
+      console.error("Select bookings error:", err);
+      return res.status(500).json({ error: "Failed to load bookings" });
+    }
+
+    // ⬇️ NEW: split Space.DepDate (combined) into DepDate + DepTime in the API
+    const mappedRows = (rows || []).map((row) => {
+      if (row.DepDate) {
+        const dt = String(row.DepDate);
+        const [datePart, timePart] = dt.split(" ");
+        row.DepDate = datePart || "";
+        row.DepTime = (timePart || "").slice(0, 5);
+      } else {
+        row.DepTime = "";
+      }
+      return row;
+    });
+
+    return res.json({ bookings: mappedRows });
+  });
+}
 
   if (scope === "all") {
     return run("", []);
