@@ -84,13 +84,14 @@
               <div class="fs-card fs-card--padded">
                 <div class="fs-field-group">
                   <span class="fs-field-label" >Freight Type</span>
-                  <div class="fs-freight-type-grid" style="margin-top: 8px;" role="radiogroup" aria-label="Freight type">
-                    <button type="button" class="fs-freight-card fs-freight-card--active" data-freight="Truck">
+<div class="fs-freight-type-grid row gx-4" style="margin-top: 8px;" role="radiogroup" aria-label="Freight type">                   
+<button type="button" class="fs-freight-card fs-freight-card--active" data-freight="Truck">
                       <div class="fs-freight-icon">
                         <img src="assets/icons/truck.svg" class="fs-icon" />
                       </div>
                       <div class="fs-freight-label">Land (Truck)</div>
                     </button>
+ 
 
                     <button type="button" class="fs-freight-card" data-freight="Ship">
                       <div class="fs-freight-icon">
@@ -105,6 +106,8 @@
                       </div>
                       <div class="fs-freight-label">Air (Plane)</div>
                     </button>
+
+
                   </div>
                   <input type="hidden" name="freightType" id="freightType" value="Truck" />
                 </div>
@@ -138,9 +141,6 @@
     </div>
   </label>
 </div>
-
-
-
 
                 <div class="fs-form-grid">
                   <label class="fs-field">

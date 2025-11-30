@@ -533,35 +533,12 @@ padding-right:10%;
   flex-wrap: wrap;
 }
 
-.fs-freight-card {
-  flex: 1;
-  min-width: 180px;
-  min-height: 120px;
-  border-radius: 16px;
-  border: 1px solid var(--fs-border);
-  padding: 20px 18px;
-  background: #ffffff;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition:
-    background 0.16s ease,
-    border-color 0.16s ease,
-    box-shadow 0.16s ease;
-}
 
 .fs-freight-card:hover {
   border-color: #cbd5f5;
 }
 
-.fs-freight-card--active {
-  background: #e8f2ff;
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
-}
+
 
 .fs-freight-icon {
   font-size: 22px;
@@ -1160,17 +1137,33 @@ font-size: 12px;
   max-width: 200px;
 }
 .fs-freight-type-grid {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  justify-content: flex-start;
-  align-items: stretch;
+  width: 100%; 
+display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+gap:5%;
   margin-bottom: 20px;
 }
 
 .fs-freight-card {
-  flex: 1;
-  max-width: 220px;
+  width: 100%; 
+
+  min-height: 120px;
+  border-radius: 16px;
+  border: 1px solid var(--fs-border);
+  padding: 20px 18px;
+  background: #ffffff;
+  cursor: pointer;
+  
+  /* Retain inner content alignment (this is fine as it's a child's internal flex) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
 }
 .fs-freight-card--active {
   background: #e8f2ff;
@@ -1936,6 +1929,8 @@ font-size: 12px;
   box-sizing: border-box;
 }
 
+
+
 .fs-select-wrapper--search {
   position: relative;
 }
@@ -1968,4 +1963,14 @@ font-size: 12px;
 
 .fs-select-option:hover {
   background: #f1f5f9;
+}
+
+
+.fs-error-message{
+  color:red;
+}
+
+.fs-input--error{
+  border:2px solid red;
+
 }

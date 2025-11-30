@@ -50,6 +50,52 @@ if (hiddenFreight) {
 }
 
 
+    function displayError(inputEl, message, isError) {
+        if (!inputEl) return;
+        const parent = inputEl.closest('.fs-field');
+        if (!parent) return;
+
+        let errorEl = parent.querySelector('.fs-error-message');
+
+        if (isError) {
+            inputEl.classList.add('fs-input--error');
+
+            if (!errorEl) {
+                errorEl = document.createElement('span');
+                errorEl.className = 'fs-error-message';
+                const wrapper = inputEl.closest('.fs-select-wrapper--search');
+                if (wrapper) {
+                    parent.insertBefore(errorEl, wrapper.nextSibling);
+                } else {
+                    parent.appendChild(errorEl);
+                }
+            }
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        } else {
+            inputEl.classList.remove('fs-input--error');
+
+            if (errorEl) {
+                errorEl.style.display = 'none';
+            }
+        }
+    }
+
+    function validateLocationInput(inputEl) {
+        var val = inputEl ? inputEl.value.trim() : "";
+        
+        if (!val || allLocations.length === 0) {
+            displayError(inputEl, "", false);
+            return true;
+        }
+
+        var isValid = allLocations.indexOf(val) !== -1;
+        var message = "Please choose a " + (inputEl.id === 'origin' ? 'Origin' : 'Destination') + " from the dropdown";
+        
+        displayError(inputEl, message, !isValid);
+        
+        return isValid;
+    }
 
 
     function isFilled(el) {
@@ -62,9 +108,11 @@ if (hiddenFreight) {
 
     function validateStep(step) {
        if (step === 1) {
-    var hasFreight = freightChosenByUser;
-    return hasFreight && inputsStep1.every(isFilled);
-}
+            var hasFreight = freightChosenByUser;
+            var originValid = validateLocationInput(originInput);
+            var destValid = validateLocationInput(destinationInput);
+            return hasFreight && originValid && destValid && inputsStep1.every(isFilled);
+        }
 
         if (step === 2) {
             return inputsStep2.every(isFilled);
@@ -171,7 +219,6 @@ var isBids = pricingType && pricingType.value === "bids";
 var sPrice = document.getElementById("summaryPrice");
 
 if (isBids) {
-    // Bid mode
     priceText = "Bid";
     if (sPrice) {
         sPrice.style.color = "var(--fs-green)";
@@ -180,7 +227,6 @@ if (isBids) {
     if (sSellerRev) sSellerRev.textContent = "—";
     if (sServiceFee) sServiceFee.textContent = "—";
 } else {
-    // Fixed price mode
     if (isFilled(priceInput)) {
         var total = Number(priceInput.value);
         if (!isNaN(total)) {
@@ -265,6 +311,7 @@ if (sPrice) sPrice.textContent = priceText;
                 e.preventDefault();
                 inputEl.value = loc;
                 dropdownEl.classList.remove("fs-open");
+                validateLocationInput(inputEl);
                 updateSummary();
                 updateButtons();
             });
@@ -284,10 +331,16 @@ if (sPrice) sPrice.textContent = priceText;
 
     inputEl.addEventListener("input", function () {
         renderOptions(inputEl.value);
+        validateLocationInput(inputEl);
     });
 
     inputEl.addEventListener("click", function () {
         renderOptions(inputEl.value);
+    });
+    
+    inputEl.addEventListener("blur", function () {
+        validateLocationInput(inputEl);
+        dropdownEl.classList.remove("fs-open");
     });
 
     document.addEventListener("click", function (e) {
@@ -439,7 +492,7 @@ async function loadPorts() {
         var cardType = (card.getAttribute("data-freight") || "").toLowerCase();
         card.classList.toggle("fs-freight-card--active", cardType === normalized);
     });
-if (hiddenFreight) hiddenFreight.value = type; // saves Truck/Ship/Plane
+if (hiddenFreight) hiddenFreight.value = type;
     if (markChosen) {
         freightChosenByUser = true;
     }
@@ -497,6 +550,27 @@ freightCards.forEach(function (card) {
         });
     });
 
+    originInput.addEventListener("blur", function() {
+        validateLocationInput(originInput);
+        updateButtons();
+    });
+
+    destinationInput.addEventListener("blur", function() {
+        validateLocationInput(destinationInput);
+        updateButtons();
+    });
+
+    originInput.addEventListener("input", function() {
+        validateLocationInput(originInput);
+        updateButtons();
+    });
+
+    destinationInput.addEventListener("input", function() {
+        validateLocationInput(destinationInput);
+        updateButtons();
+    });
+
+
     []
         .concat(inputsStep1)
         .concat(inputsStep2)
@@ -530,22 +604,11 @@ freightCards.forEach(function (card) {
             return;
         }
 
-        var originVal = originInput ? originInput.value.trim() : "";
-        var destVal = destinationInput ? destinationInput.value.trim() : "";
+        var originValid = validateLocationInput(originInput);
+        var destValid = validateLocationInput(destinationInput);
 
-        if (!originVal || !destVal) {
-            if (!validateStep(currentStep)) return;
-        }
+        if (!validateStep(currentStep) || !originValid || !destValid) return; 
 
-        if (allLocations && allLocations.length > 0) {
-            var hasOrigin = allLocations.indexOf(originVal) !== -1;
-            var hasDest = allLocations.indexOf(destVal) !== -1;
-
-            if (!hasOrigin || !hasDest) {
-                alert("Please select a valid origin/destination");
-                return;
-            }
-        }
     }
 
     if (!validateStep(currentStep)) return;
