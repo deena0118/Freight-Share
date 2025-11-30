@@ -33,35 +33,35 @@ router.get("/", (req, res) => {
     LEFT JOIN "Company" c ON c.CompID = s.CompID
   `;
 
- function run(whereClause, params) {
-  let sql = baseSql;
-  if (whereClause && whereClause.trim().length > 0) {
-    sql += " WHERE " + whereClause;
-  }
-  sql += " ORDER BY datetime(b.CreatedAt) DESC";
-
-  db.all(sql, params || [], (err, rows) => {
-    if (err) {
-      console.error("Select bookings error:", err);
-      return res.status(500).json({ error: "Failed to load bookings" });
+  function run(whereClause, params) {
+    let sql = baseSql;
+    if (whereClause && whereClause.trim().length > 0) {
+      sql += " WHERE " + whereClause;
     }
+    sql += " ORDER BY datetime(b.CreatedAt) DESC";
 
-    // ⬇️ NEW: split Space.DepDate (combined) into DepDate + DepTime in the API
-    const mappedRows = (rows || []).map((row) => {
-      if (row.DepDate) {
-        const dt = String(row.DepDate);
-        const [datePart, timePart] = dt.split(" ");
-        row.DepDate = datePart || "";
-        row.DepTime = (timePart || "").slice(0, 5);
-      } else {
-        row.DepTime = "";
+    db.all(sql, params || [], (err, rows) => {
+      if (err) {
+        console.error("Select bookings error:", err);
+        return res.status(500).json({ error: "Failed to load bookings" });
       }
-      return row;
-    });
 
-    return res.json({ bookings: mappedRows });
-  });
-}
+      // ⬇️ NEW: split Space.DepDate (combined) into DepDate + DepTime in the API
+      const mappedRows = (rows || []).map((row) => {
+        if (row.DepDate) {
+          const dt = String(row.DepDate);
+          const [datePart, timePart] = dt.split(" ");
+          row.DepDate = datePart || "";
+          row.DepTime = (timePart || "").slice(0, 5);
+        } else {
+          row.DepTime = "";
+        }
+        return row;
+      });
+
+      return res.json({ bookings: mappedRows });
+    });
+  }
 
   if (scope === "all") {
     return run("", []);
@@ -82,14 +82,18 @@ router.get("/", (req, res) => {
         return res.status(500).json({ error: "Failed to load bookings" });
       }
       if (!row || !row.CompID) {
-        return res.status(404).json({ error: "User not found / missing CompID" });
+        return res
+          .status(404)
+          .json({ error: "User not found / missing CompID" });
       }
       return run("s.CompID = ?", [row.CompID]);
     });
     return;
   }
 
-  return res.status(400).json({ error: "Invalid scope. Use scope=all|buyer|seller" });
+  return res
+    .status(400)
+    .json({ error: "Invalid scope. Use scope=all|buyer|seller" });
 });
 
 router.post("/", (req, res) => {
@@ -102,7 +106,7 @@ router.post("/", (req, res) => {
     BidPrice,
     Partial,
     PartialAmt,
-    CreatedAt
+    CreatedAt,
   } = req.body || {};
 
   if (!BookID || !RefID || !ID) {
@@ -125,7 +129,7 @@ router.post("/", (req, res) => {
     BidPrice || "0",
     Partial || "N",
     PartialAmt || "0",
-    CreatedAt || new Date().toISOString()
+    CreatedAt || new Date().toISOString(),
   ];
 
   db.run(sql, params, function (err) {
@@ -137,7 +141,7 @@ router.post("/", (req, res) => {
     return res.json({
       ok: true,
       BookID,
-      rowsAffected: this.changes
+      rowsAffected: this.changes,
     });
   });
 });

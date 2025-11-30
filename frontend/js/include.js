@@ -3,7 +3,9 @@ function loadComponent(targetId, filePath, callback) {
   if (!container) return;
 
   fetch(filePath)
-    .then(function (res) { return res.text(); })
+    .then(function (res) {
+      return res.text();
+    })
     .then(function (html) {
       container.innerHTML = html;
       if (typeof callback === "function") callback();

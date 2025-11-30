@@ -1,6 +1,5 @@
 :root {
   --fs-blue: #1e3a5f;
-  ;
   --fs-blue-soft: #1e3a5f;
   --fs-green: #1ac26b;
   --fs-light-bg: #f5f7fb;
@@ -112,7 +111,6 @@ body {
   opacity: 0.9;
 }
 
-
 .fs-nav-item:hover {
   color: #111827;
   background: none !important;
@@ -136,7 +134,6 @@ body {
   grid-template-columns: repeat(4, 1fr);
   align-items: flex-end;
   justify-items: center;
-
 }
 
 .fs-nav-item {
@@ -158,18 +155,15 @@ body {
   transition: color 0.16s ease, border-color 0.16s ease;
 }
 
-
 .fs-nav-item--active {
   color: #000;
   filter: brightness(0.78);
 }
 
-
 .fs-nav-label {
   font-size: 15px;
   font-weight: 500;
 }
-
 
 .fs-page {
   max-width: 1200px;
@@ -190,13 +184,11 @@ body {
   align-items: stretch;
 }
 
-
 .fs-icon {
   width: 24px;
   height: 24px;
   object-fit: contain;
 }
-
 
 .fs-stats-row {
   display: grid;
@@ -277,7 +269,6 @@ body {
   align-items: baseline;
 }
 
-
 .fs-map-area {
   position: relative;
   background: #edf3fb;
@@ -353,7 +344,6 @@ body {
   background: var(--fs-green);
 }
 
-
 .fs-feed-list {
   flex: 1;
   overflow-y: auto;
@@ -372,7 +362,6 @@ body {
   background: #ffffff;
   margin: 0;
 }
-
 
 .fs-feed-item-header {
   display: flex;
@@ -402,9 +391,6 @@ body {
   font-size: 12px;
   color: var(--fs-text-muted);
 }
-
-
-
 
 .fs-stepper,
 .fs-form-panel {
@@ -461,7 +447,6 @@ body {
   background: var(--fs-border);
 }
 
-
 .fs-form-panel {
   background: #ffffff;
   border-radius: 20px;
@@ -474,7 +459,6 @@ body {
   margin-bottom: 20px;
 }
 
-
 .fs-form-block {
   margin-bottom: 18px;
 }
@@ -484,19 +468,15 @@ body {
   margin-bottom: 10px;
 }
 
-
 .fs-freight-type-row {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-
 .fs-freight-card:hover {
   border-color: #cbd5f5;
 }
-
-
 
 .fs-freight-icon {
   font-size: 22px;
@@ -511,7 +491,6 @@ body {
   color: #111827;
 }
 
-
 .fs-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -525,7 +504,6 @@ body {
 
   gap: 4px;
 }
-
 
 .fs-field-Unit {
   display: grid;
@@ -572,7 +550,6 @@ body {
   margin-top: 18px;
 }
 
-
 .fs-btn {
   border-radius: 10px;
   border: none;
@@ -606,7 +583,6 @@ body {
   color: var(--fs-text-muted);
 }
 
-
 .fs-hero-btn {
   flex: 1;
   border-radius: 10px;
@@ -629,7 +605,6 @@ body {
 .fs-hero-btn--accent {
   background: var(--fs-green);
 }
-
 
 .fs-card-grid {
   display: grid;
@@ -661,8 +636,6 @@ body {
   align-items: flex-start;
 }
 
-
-
 .fs-booking-id {
   font-size: 13px;
   color: var(--fs-text-muted);
@@ -680,14 +653,12 @@ body {
   gap: 8px;
 }
 
-
-
 .fs-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
-  border-top: 1.5px solid #585D65;
+  border-top: 1.5px solid #585d65;
   padding-top: 20px;
   margin-top: 20px;
 }
@@ -699,7 +670,6 @@ body {
 .fs-booking-price {
   color: var(--fs-green);
 }
-
 
 .fs-section-header {
   margin-bottom: 12px;
@@ -739,11 +709,9 @@ body {
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
 }
 
-
 .fs-filter-bar {
   width: 100%;
   max-width: 1150px;
-
 
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -829,7 +797,6 @@ body {
   font-size: 14px;
 }
 
-
 .fs-results-header h2 {
   font-size: 22px;
   margin-bottom: 4px;
@@ -839,8 +806,6 @@ body {
   font-size: 14px;
   color: #6b7280;
 }
-
-
 
 @media (max-width: 1024px) {
   .fs-page-wrapper {
@@ -863,23 +828,22 @@ body {
   .fs-form-panel {
     max-width: 100%;
   }
-   .fs-form-grid {
+  .fs-form-grid {
     grid-template-columns: 1fr;
   }
 
   .fs-input-unit-group {
     flex-direction: row;
   }
-   .fs-form-grid--units {
+  .fs-form-grid--units {
     grid-template-columns: 2fr 1fr;
     column-gap: 10px;
-
   }
 
   .fs-form-grid.fs-form-grid--units {
     grid-template-columns: 2fr 1fr;
   }
- .fs-filter-bar {
+  .fs-filter-bar {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -910,7 +874,6 @@ body {
     flex: 0 0 auto;
   }
 
-
   .fs-page-wrapper {
     padding: 16px 12px 24px;
   }
@@ -930,7 +893,7 @@ body {
 
   .fs-form-grid {
     grid-template-columns: 1fr;
-    gap: 10%
+    gap: 10%;
   }
 
   .fs-stepper-label {
@@ -951,8 +914,6 @@ body {
     justify-content: flex-start;
   }
 }
-
-
 
 .fs-step-content--hidden {
   display: none;
@@ -1001,7 +962,7 @@ body {
   padding: 2%;
   border: 2px solid #1e3a5f;
   border-radius: 10px;
-  background: #E4E9F1;
+  background: #e4e9f1;
 }
 
 .fs-quick-ref-label {
@@ -1025,8 +986,8 @@ body {
   font-size: 0.8125rem;
   color: var(--fs-muted-text-strong);
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .fs-chip:hover {
@@ -1133,9 +1094,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition:
-    background 0.16s ease,
-    border-color 0.16s ease,
+  transition: background 0.16s ease, border-color 0.16s ease,
     box-shadow 0.16s ease;
 }
 
@@ -1144,7 +1103,6 @@ body {
   border-color: #1d4ed8;
   box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
 }
-
 
 .fs-pricing-option--active {
   border-color: var(--fs-green);
@@ -1182,11 +1140,9 @@ body {
   accent-color: var(--fs-green);
 }
 
-
 .fs-info-banner--hidden {
   display: none !important;
 }
-
 
 .fs-field .fs-help-text {
   color: var(--fs-text-muted, #6c757d);
@@ -1198,12 +1154,6 @@ body {
 #priceInputContainer {
   margin-bottom: 2rem;
 }
-
-
-
-
-
-
 
 .fs-profile-icon {
   width: 36px;
@@ -1244,8 +1194,6 @@ body {
   transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
 }
 
-
-
 .fs-profile-name {
   font-weight: 700;
   color: var(--fs-text-main);
@@ -1274,7 +1222,6 @@ body {
 .fs-btn--sign-out:hover {
   background-color: #18314e;
 }
-
 
 .fs-header-right {
   font-size: 14px;
@@ -1328,13 +1275,12 @@ body {
 
 .fs-profile:hover .fs-profile-card,
 .fs-profile-card:hover,
-.fs-profile-icon:focus+.fs-profile-card {
+.fs-profile-icon:focus + .fs-profile-card {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
   visibility: visible;
 }
-
 
 .fs-profile-name {
   font-weight: 600;
@@ -1368,7 +1314,6 @@ body {
   background-color: #fee2e2;
   color: #b91c1c;
 }
-
 
 .fs-results-grid {
   display: grid;
@@ -1417,17 +1362,17 @@ body {
 }
 
 .fs-badge--type-ship {
-  background: #F4E8DD;
-  border: 1px solid #E07619;
+  background: #f4e8dd;
+  border: 1px solid #e07619;
 
-  color: #E07619;
+  color: #e07619;
 }
 
 .fs-badge--type-plane {
-  background: #F5E1FD;
-  border: 1px solid #8E24B4;
+  background: #f5e1fd;
+  border: 1px solid #8e24b4;
 
-  color: #8E24B4;
+  color: #8e24b4;
 }
 
 .fs-badge--available {
@@ -1471,7 +1416,6 @@ body {
   font-size: 17px;
 }
 
-
 .fs-card-city--dest {
   font-size: 13px;
   color: #6b7280;
@@ -1504,7 +1448,6 @@ body {
   margin: 6px 0 4px;
 }
 
-
 .fs-card-company {
   font-size: 14px;
 }
@@ -1525,7 +1468,6 @@ body {
   width: 17px;
   height: 17px;
 }
-
 
 .fs-feed-type {
   display: flex;
@@ -1788,7 +1730,7 @@ body {
 
 .fs-booking-id-label {
   font-size: 12px;
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .fs-booking-id-value {
@@ -1799,7 +1741,7 @@ body {
 .fs-booking-meta {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, .08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   gap: 14px;
   justify-content: space-between;
@@ -1815,7 +1757,7 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  opacity: .75;
+  opacity: 0.75;
   margin-bottom: 6px;
 }
 
@@ -1838,7 +1780,7 @@ body {
 }
 
 .fs-booking-view-btn {
-  border: 1px solid rgba(0, 0, 0, .15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   background: #fff;
   padding: 10px 14px;
   border-radius: 10px;
@@ -1848,34 +1790,33 @@ body {
 
 .fs-badge--booking-status {
   background: #fff;
-  border: 1px solid rgba(0, 0, 0, .15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .fs-badge--status-confirmed {
-  border-color: rgba(65, 182, 230, .55);
+  border-color: rgba(65, 182, 230, 0.55);
 }
 
 .fs-badge--status-pending {
-  border-color: rgba(245, 158, 11, .55);
+  border-color: rgba(245, 158, 11, 0.55);
 }
 
 .fs-badge--status-approval {
-  border-color: rgba(168, 85, 247, .55);
+  border-color: rgba(168, 85, 247, 0.55);
 }
 
 /* Pending Admin Approval */
 .fs-badge--status-completed {
-  border-color: rgba(34, 197, 94, .55);
+  border-color: rgba(34, 197, 94, 0.55);
 }
 
 .fs-badge--status-rejected {
-  border-color: rgba(239, 68, 68, .55);
+  border-color: rgba(239, 68, 68, 0.55);
 }
 
 .fs-badge--status-cancelled {
-  border-color: rgba(239, 68, 68, .55);
+  border-color: rgba(239, 68, 68, 0.55);
 }
-
 
 .fs-modal-fee-lines {
   margin-top: 10px;
@@ -1889,12 +1830,12 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  color: rgba(17, 24, 39, .75);
+  color: rgba(17, 24, 39, 0.75);
 }
 
 .fs-modal-fee-line span:last-child {
   font-weight: 600;
-  color: rgba(17, 24, 39, .95);
+  color: rgba(17, 24, 39, 0.95);
 }
 
 .fs-select-wrapper--search {
@@ -1907,7 +1848,6 @@ body {
   width: 100%;
   box-sizing: border-box;
 }
-
 
 .fs-select-dropdown {
   position: absolute;

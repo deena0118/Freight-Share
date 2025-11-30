@@ -1,347 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Glass Login UI</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at 20% 0%, #4B6995 0, #1E3A5F 40%, #0F1D2E 100%);
-        }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: radial-gradient(
+          circle at 20% 0%,
+          #4b6995 0,
+          #1e3a5f 40%,
+          #0f1d2e 100%
+        );
+      }
 
+      .login-wrapper {
+        position: relative;
+        width: 90vw;
+        max-width: 360px;
+        padding-top: 55px; /* space for avatar */
+      }
+
+      .login-card {
+        position: relative;
+        padding: 26px 26px 24px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 28px 50px rgba(0, 0, 0, 0.55);
+        color: #f5f5f5;
+        overflow: hidden;
+      }
+
+      /* diagonal highlight like the original */
+      .login-card::before {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -35%;
+        width: 75%;
+        height: 80%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.32),
+          rgba(255, 255, 255, 0.08),
+          transparent 70%
+        );
+        transform: rotate(5deg);
+        pointer-events: none;
+      }
+
+      .login-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Avatar circle */
+      .avatar {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        background: #0f1d2e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.45);
+      }
+
+      .avatar-inner {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+      }
+
+      .avatar-inner::before {
+        /* head */
+        content: "";
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+      }
+
+      .avatar-inner::after {
+        /* shoulders */
+        content: "";
+        position: absolute;
+        bottom: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 12px;
+        border-radius: 12px 12px 0 0;
+        border: 2px solid #ffffff;
+        border-bottom: none;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        background: #e5e3de;
+        border-radius: 2px;
+        overflow: hidden;
+        height: 40px;
+      }
+
+      .icon-box {
+        width: 40px;
+        height: 100%;
+        background: #d3d0c8;
+        border-right: 1px solid #b9b5aa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-email,
+      .icon-lock {
+        position: relative;
+        width: 18px;
+        height: 18px;
+      }
+
+      /* email (envelope) */
+      .icon-email::before {
+        content: "";
+        position: absolute;
+        inset: 1px 0;
+        border-radius: 2px;
+        border: 2px solid #555;
+      }
+
+      .icon-email::after {
+        content: "";
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        top: 6px;
+        border-top: 2px solid #555;
+        transform: skewY(-35deg);
+      }
+
+      /* lock */
+      .icon-lock::before {
+        content: "";
+        position: absolute;
+        bottom: 1px;
+        left: 3px;
+        right: 3px;
+        height: 9px;
+        border-radius: 2px;
+        border: 2px solid #555;
+      }
+
+      .icon-lock::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 8px;
+        height: 10px;
+        border-radius: 8px;
+        border: 2px solid #555;
+        border-bottom: none;
+        transform: translateX(-50%);
+      }
+
+      .input-field {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        padding: 0 10px;
+        font-size: 13px;
+        color: #333;
+      }
+
+      .input-field::placeholder {
+        color: #777;
+      }
+
+      .options-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        margin: 10px 2px 18px;
+        color: rgba(245, 245, 245, 0.8);
+      }
+
+      .remember {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .remember input[type="checkbox"] {
+        width: 12px;
+        height: 12px;
+        accent-color: #243820;
+      }
+
+      .forgot-link {
+        color: rgba(245, 245, 245, 0.75);
+        text-decoration: none;
+        font-style: italic;
+        font-size: 11px;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+
+      .login-btn {
+        width: 100%;
+        border: none;
+        border-radius: 2px;
+        background: #0f1d2e;
+        padding: 11px 0;
+        color: #ffffff;
+        letter-spacing: 2px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+
+      .login-btn:hover {
+        background: #0a131f;
+      }
+
+      @media (min-width: 768px) {
         .login-wrapper {
-            position: relative;
-            width: 90vw;
-            max-width: 360px;
-            padding-top: 55px; /* space for avatar */
+          max-width: 380px;
         }
-
-        .login-card {
-            position: relative;
-            padding: 26px 26px 24px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 28px 50px rgba(0, 0, 0, 0.55);
-            color: #f5f5f5;
-            overflow: hidden;
-        }
-
-        /* diagonal highlight like the original */
-        .login-card::before {
-            content: "";
-            position: absolute;
-            top: -20%;
-            right: -35%;
-            width: 75%;
-            height: 80%;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.32),
-                rgba(255, 255, 255, 0.08),
-                transparent 70%
-            );
-            transform: rotate(5deg);
-            pointer-events: none;
-        }
-
-        .login-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Avatar circle */
-        .avatar {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 78px;
-            height: 78px;
-            border-radius: 50%;
-            background: #0F1D2E;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.45);
-        }
-
-        .avatar-inner {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-        }
-
-        .avatar-inner::before {
-            /* head */
-            content: "";
-            position: absolute;
-            top: 7px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-        }
-
-        .avatar-inner::after {
-            /* shoulders */
-            content: "";
-            position: absolute;
-            bottom: 7px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 12px;
-            border-radius: 12px 12px 0 0;
-            border: 2px solid #ffffff;
-            border-bottom: none;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            background: #e5e3de;
-            border-radius: 2px;
-            overflow: hidden;
-            height: 40px;
-        }
-
-        .icon-box {
-            width: 40px;
-            height: 100%;
-            background: #d3d0c8;
-            border-right: 1px solid #b9b5aa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-email,
-        .icon-lock {
-            position: relative;
-            width: 18px;
-            height: 18px;
-        }
-
-        /* email (envelope) */
-        .icon-email::before {
-            content: "";
-            position: absolute;
-            inset: 1px 0;
-            border-radius: 2px;
-            border: 2px solid #555;
-        }
-
-        .icon-email::after {
-            content: "";
-            position: absolute;
-            left: 2px;
-            right: 2px;
-            top: 6px;
-            border-top: 2px solid #555;
-            transform: skewY(-35deg);
-        }
-
-        /* lock */
-        .icon-lock::before {
-            content: "";
-            position: absolute;
-            bottom: 1px;
-            left: 3px;
-            right: 3px;
-            height: 9px;
-            border-radius: 2px;
-            border: 2px solid #555;
-        }
-
-        .icon-lock::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 8px;
-            height: 10px;
-            border-radius: 8px;
-            border: 2px solid #555;
-            border-bottom: none;
-            transform: translateX(-50%);
-        }
-
-        .input-field {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            padding: 0 10px;
-            font-size: 13px;
-            color: #333;
-        }
-
-        .input-field::placeholder {
-            color: #777;
-        }
-
-        .options-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            margin: 10px 2px 18px;
-            color: rgba(245, 245, 245, 0.8);
-        }
-
-        .remember {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .remember input[type="checkbox"] {
-            width: 12px;
-            height: 12px;
-            accent-color: #243820;
-        }
-
-        .forgot-link {
-            color: rgba(245, 245, 245, 0.75);
-            text-decoration: none;
-            font-style: italic;
-            font-size: 11px;
-        }
-
-        .forgot-link:hover {
-            text-decoration: underline;
-        }
-
-        .login-btn {
-            width: 100%;
-            border: none;
-            border-radius: 2px;
-            background: #0F1D2E;
-            padding: 11px 0;
-            color: #ffffff;
-            letter-spacing: 2px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .login-btn:hover {
-            background: #0A131F;
-        }
-
-        @media (min-width: 768px) {
-            .login-wrapper {
-                max-width: 380px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="login-wrapper">
-        <div class="avatar">
-            <div class="avatar-inner"></div>
-        </div>
+      <div class="avatar">
+        <div class="avatar-inner"></div>
+      </div>
 
-        <div class="login-card">
-<form id="loginForm">
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <div class="icon-box">
-                            <span class="icon-email"></span>
-                        </div>
-                        <input
-                            type="email"
-                            class="input-field"
-                            placeholder="Email ID"
-                            required
-                        />
-                    </div>
-                </div>
+      <div class="login-card">
+        <form id="loginForm">
+          <div class="form-group">
+            <div class="input-wrapper">
+              <div class="icon-box">
+                <span class="icon-email"></span>
+              </div>
+              <input
+                type="email"
+                class="input-field"
+                placeholder="Email ID"
+                required
+              />
+            </div>
+          </div>
 
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <div class="icon-box">
-                            <span class="icon-lock"></span>
-                        </div>
-                        <input
-                            type="password"
-                            class="input-field"
-                            placeholder="Password"
-                            required
-                        />
-                    </div>
-                </div>
+          <div class="form-group">
+            <div class="input-wrapper">
+              <div class="icon-box">
+                <span class="icon-lock"></span>
+              </div>
+              <input
+                type="password"
+                class="input-field"
+                placeholder="Password"
+                required
+              />
+            </div>
+          </div>
 
-                <div class="options-row">
-                    <label class="remember">
-                        <input type="checkbox" />
-                        <span>Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot Password?</a>
-                </div>
+          <div class="options-row">
+            <label class="remember">
+              <input type="checkbox" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
 
-                <button type="submit" class="login-btn">Login</button>
-            </form>
-        </div>
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+      </div>
     </div>
 
-<script>
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-    const email = document.querySelector("input[type='email']").value;
-    const password = document.querySelector("input[type='password']").value;
+          const email = document.querySelector("input[type='email']").value;
+          const password = document.querySelector(
+            "input[type='password']"
+          ).value;
 
-    try {
-        const res = await fetch("/auth/login", {     // you can keep the full URL if you want
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+          try {
+            const res = await fetch("/auth/login", {
+              // you can keep the full URL if you want
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              // ✅ IMPORTANT: save user in localStorage
+              // data.user comes from backend routes/auth.js
+              localStorage.setItem("user", JSON.stringify(data.user));
+
+              // go to marketplace
+              window.location.href = "marketplace.html";
+            } else {
+              alert(data.error || "Login failed");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Network error. Please try again.");
+          }
         });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            // ✅ IMPORTANT: save user in localStorage
-            // data.user comes from backend routes/auth.js
-            localStorage.setItem("user", JSON.stringify(data.user));
-
-            // go to marketplace
-            window.location.href = "marketplace.html";
-        } else {
-            alert(data.error || "Login failed");
-        }
-    } catch (err) {
-        console.error(err);
-        alert("Network error. Please try again.");
-    }
-});
-</script>
-
-
-</body>
+    </script>
+  </body>
 </html>

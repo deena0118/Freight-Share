@@ -1,308 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>FreightShare – List Empty Space</title>
-  <link rel="stylesheet" href="css/global.css" />
-</head>
-<body>
-  <div class="fs-root">
-    <header class="fs-header">
-      <div class="fs-header-left">
-
-        <div class="ww">
-                  <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>FreightShare – List Empty Space</title>
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
+  <body>
+    <div class="fs-root">
+      <header class="fs-header">
+        <div class="fs-header-left">
+          <div class="ww">
+            <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+          </div>
+          <div class="fs-logo-text">
+            <div class="fs-logo-title">FreightShare</div>
+            <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+          </div>
         </div>
-        <div class="fs-logo-text">
-          <div class="fs-logo-title">FreightShare</div>
-          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
-        </div>
-      </div>
 
-      <div class="fs-header-right">
-        Connecting freight space worldwide
-      </div>
-    </header>
+        <div class="fs-header-right">Connecting freight space worldwide</div>
+      </header>
 
-<div id="nav-placeholder"></div>
+      <div id="nav-placeholder"></div>
 
-
-
-
-
-    <main class="fs-page-wrapper">
-  <div class="fs-page">
-    <section class="fs-stepper">
-      <div class="fs-stepper-step fs-stepper-step--active" data-step-index="1">
-        <div class="fs-stepper-circle">1</div>
-        <div class="fs-stepper-label">Route Details</div>
-      </div>
-      <div class="fs-stepper-divider"></div>
-
-      <div class="fs-stepper-step" data-step-index="2">
-        <div class="fs-stepper-circle">2</div>
-        <div class="fs-stepper-label">Load Details</div>
-      </div>
-      <div class="fs-stepper-divider"></div>
-
-      <div class="fs-stepper-step" data-step-index="3">
-        <div class="fs-stepper-circle">3</div>
-        <div class="fs-stepper-label">Pricing</div>
-      </div>
-    </section>
-
-    <section class="fs-form-panel">
-          <form id="fs-listing-form">
-            <div class="fs-step-content" data-step="1">
-              <header class="fs-panel-header" >
-                <h2>Route Details</h2>
-                <p>Enter your freight type and route information</p>
-              </header>
-
-              <div class="fs-card fs-card--padded">
-                <div class="fs-field-group">
-                  <span class="fs-field-label" >Freight Type</span>
-<div class="fs-freight-type-grid row gx-4" style="margin-top: 8px;" role="radiogroup" aria-label="Freight type">                   
-<button type="button" class="fs-freight-card fs-freight-card--active" data-freight="Truck">
-                      <div class="fs-freight-icon">
-                        <img src="assets/icons/truck.svg" class="fs-icon" />
-                      </div>
-                      <div class="fs-freight-label">Land (Truck)</div>
-                    </button>
- 
-
-                    <button type="button" class="fs-freight-card" data-freight="Ship">
-                      <div class="fs-freight-icon">
-                        <img src="assets/icons/ship.svg" class="fs-icon" />
-                      </div>
-                      <div class="fs-freight-label">Sea (Ship)</div>
-                    </button>
-
-                    <button type="button" class="fs-freight-card" data-freight="Plane">
-                      <div class="fs-freight-icon">
-                        <img src="assets/icons/plane.svg" class="fs-icon" />
-                      </div>
-                      <div class="fs-freight-label">Air (Plane)</div>
-                    </button>
-
-
-                  </div>
-                  <input type="hidden" name="freightType" id="freightType" value="Truck" />
-                </div>
-
-<div class="fs-form-grid" style="gap:10px">
-  <label class="fs-field">
-    <span class="fs-field-label">From (Origin)</span>
-    <div class="fs-select-wrapper fs-select-wrapper--search">
-      <input
-        id="origin"
-        name="origin"
-        class="fs-input fs-select-input"
-        placeholder="Select origin"
-        autocomplete="off"
-      />
-      <div class="fs-select-dropdown" id="originDropdown"></div>
-    </div>
-  </label>
-
-  <label class="fs-field">
-    <span class="fs-field-label">To (Destination)</span>
-    <div class="fs-select-wrapper fs-select-wrapper--search">
-      <input
-        id="destination"
-        name="destination"
-        class="fs-input fs-select-input"
-        placeholder="Select destination"
-        autocomplete="off"
-      />
-      <div class="fs-select-dropdown" id="destinationDropdown"></div>
-    </div>
-  </label>
-</div>
-
-                <div class="fs-form-grid" style="gap:10px">
-                  <label class="fs-field">
-                    <span class="fs-field-label">Departure Date</span>
-                    <input
-                      id="departDate"
-                      name="departDate"
-                      type="date"
-                      class="fs-input"
-                      placeholder="mm/dd/yyyy"
-                    />
-                  </label>
-
-                  <label class="fs-field">
-                    <span class="fs-field-label">Departure Time</span>
-                    <input
-                      id="departTime"
-                      name="departTime"
-                      type="time"
-                      class="fs-input"
-                      placeholder="--:--"
-                    />
-                  </label>
-                </div>
-              </div>
+      <main class="fs-page-wrapper">
+        <div class="fs-page">
+          <section class="fs-stepper">
+            <div
+              class="fs-stepper-step fs-stepper-step--active"
+              data-step-index="1"
+            >
+              <div class="fs-stepper-circle">1</div>
+              <div class="fs-stepper-label">Route Details</div>
             </div>
+            <div class="fs-stepper-divider"></div>
 
-            <div class="fs-step-content fs-step-content--hidden" data-step="2">
-              <header class="fs-panel-header">
-                <h2>Load Details</h2>
-                <p>Specify available space and goods allowed</p>
-              </header>
+            <div class="fs-stepper-step" data-step-index="2">
+              <div class="fs-stepper-circle">2</div>
+              <div class="fs-stepper-label">Load Details</div>
+            </div>
+            <div class="fs-stepper-divider"></div>
 
-            <div class="fs-card fs-card--padded">
-  <div class="fs-form-grid fs-form-grid--align-top fs-form-grid--units">
+            <div class="fs-stepper-step" data-step-index="3">
+              <div class="fs-stepper-circle">3</div>
+              <div class="fs-stepper-label">Pricing</div>
+            </div>
+          </section>
 
-                  <label class="fs-field">
-                    <span class="fs-field-label">Available Weight</span>
-                    <input id="availableSpaceW" name="availableSpaceW" class="fs-input" placeholder="e.g., 5" />
-                    <span class="fs-help-text">Enter the weight of the space available for cargo</span>
-                  </label>
-              
-                  <label class="fs-field fs-field--shrink">
-                    <span class="fs-field-label">Unit</span>
-                    <div class="fs-select-wrapper">
-                      <select id="spaceUnitW" name="spaceUnit" class="fs-input fs-select" style="width:100%">
-                        <option value="Tons">Tons</option>
-                        <option value="Kg">Kg</option>
-                      </select>
+          <section class="fs-form-panel">
+            <form id="fs-listing-form">
+              <div class="fs-step-content" data-step="1">
+                <header class="fs-panel-header">
+                  <h2>Route Details</h2>
+                  <p>Enter your freight type and route information</p>
+                </header>
+
+                <div class="fs-card fs-card--padded">
+                  <div class="fs-field-group">
+                    <span class="fs-field-label">Freight Type</span>
+                    <div
+                      class="fs-freight-type-grid row gx-4"
+                      style="margin-top: 8px"
+                      role="radiogroup"
+                      aria-label="Freight type"
+                    >
+                      <button
+                        type="button"
+                        class="fs-freight-card fs-freight-card--active"
+                        data-freight="Truck"
+                      >
+                        <div class="fs-freight-icon">
+                          <img src="assets/icons/truck.svg" class="fs-icon" />
+                        </div>
+                        <div class="fs-freight-label">Land (Truck)</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="fs-freight-card"
+                        data-freight="Ship"
+                      >
+                        <div class="fs-freight-icon">
+                          <img src="assets/icons/ship.svg" class="fs-icon" />
+                        </div>
+                        <div class="fs-freight-label">Sea (Ship)</div>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="fs-freight-card"
+                        data-freight="Plane"
+                      >
+                        <div class="fs-freight-icon">
+                          <img src="assets/icons/plane.svg" class="fs-icon" />
+                        </div>
+                        <div class="fs-freight-label">Air (Plane)</div>
+                      </button>
                     </div>
-                  </label>
-                  <label class="fs-field">
-                    <span class="fs-field-label">Available Volume</span>
-                    <input id="availableSpaceA" name="availableSpaceA" class="fs-input" placeholder="e.g., 10" />
-                    <span class="fs-help-text">Enter the area of the space available for cargo</span>
-                  </label>
-                  <label class="fs-field fs-field--shrink">
-  <span class="fs-field-label">Unit</span>
-  <input
-    id="spaceUnitA"
-    name="spaceUnit2"
-    class="fs-input"
-    value="CBM"
-    readonly
-  />
-</label>
+                    <input
+                      type="hidden"
+                      name="freightType"
+                      id="freightType"
+                      value="Truck"
+                    />
+                  </div>
 
-                </div>
-              
-                <label class="fs-field fs-field--stacked">
-                  <span class="fs-field-label">Types of Goods Allowed</span>
-                  <textarea id="goodsAllowed" name="goodsAllowed" rows="3" class="fs-input fs-textarea"
-                    placeholder="e.g., General cargo, Electronics, Non-hazardous materials"></textarea>
-                  <span class="fs-help-text">Specify what types of cargo you can transport</span>
-                </label>
-              
-                <div class="fs-quick-ref">
-                  <div class="fs-quick-ref-label">Quick Reference</div>
-                  <div class="fs-chip-row">
-                    <button type="button" class="fs-chip">General Cargo</button>
-                    <button type="button" class="fs-chip">Electronics</button>
-                    <button type="button" class="fs-chip">Food Products</button>
-                    <button type="button" class="fs-chip">Textiles</button>
-                    <button type="button" class="fs-chip">Machinery</button>
-                    <button type="button" class="fs-chip">Perishables</button>
+                  <div class="fs-form-grid" style="gap: 10px">
+                    <label class="fs-field">
+                      <span class="fs-field-label">From (Origin)</span>
+                      <div class="fs-select-wrapper fs-select-wrapper--search">
+                        <input
+                          id="origin"
+                          name="origin"
+                          class="fs-input fs-select-input"
+                          placeholder="Select origin"
+                          autocomplete="off"
+                        />
+                        <div
+                          class="fs-select-dropdown"
+                          id="originDropdown"
+                        ></div>
+                      </div>
+                    </label>
+
+                    <label class="fs-field">
+                      <span class="fs-field-label">To (Destination)</span>
+                      <div class="fs-select-wrapper fs-select-wrapper--search">
+                        <input
+                          id="destination"
+                          name="destination"
+                          class="fs-input fs-select-input"
+                          placeholder="Select destination"
+                          autocomplete="off"
+                        />
+                        <div
+                          class="fs-select-dropdown"
+                          id="destinationDropdown"
+                        ></div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="fs-form-grid" style="gap: 10px">
+                    <label class="fs-field">
+                      <span class="fs-field-label">Departure Date</span>
+                      <input
+                        id="departDate"
+                        name="departDate"
+                        type="date"
+                        class="fs-input"
+                        placeholder="mm/dd/yyyy"
+                      />
+                    </label>
+
+                    <label class="fs-field">
+                      <span class="fs-field-label">Departure Time</span>
+                      <input
+                        id="departTime"
+                        name="departTime"
+                        type="time"
+                        class="fs-input"
+                        placeholder="--:--"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
+
+              <div
+                class="fs-step-content fs-step-content--hidden"
+                data-step="2"
+              >
+                <header class="fs-panel-header">
+                  <h2>Load Details</h2>
+                  <p>Specify available space and goods allowed</p>
+                </header>
+
+                <div class="fs-card fs-card--padded">
+                  <div
+                    class="fs-form-grid fs-form-grid--align-top fs-form-grid--units"
+                  >
+                    <label class="fs-field">
+                      <span class="fs-field-label">Available Weight</span>
+                      <input
+                        id="availableSpaceW"
+                        name="availableSpaceW"
+                        class="fs-input"
+                        placeholder="e.g., 5"
+                      />
+                      <span class="fs-help-text"
+                        >Enter the weight of the space available for cargo</span
+                      >
+                    </label>
+
+                    <label class="fs-field fs-field--shrink">
+                      <span class="fs-field-label">Unit</span>
+                      <div class="fs-select-wrapper">
+                        <select
+                          id="spaceUnitW"
+                          name="spaceUnit"
+                          class="fs-input fs-select"
+                          style="width: 100%"
+                        >
+                          <option value="Tons">Tons</option>
+                          <option value="Kg">Kg</option>
+                        </select>
+                      </div>
+                    </label>
+                    <label class="fs-field">
+                      <span class="fs-field-label">Available Volume</span>
+                      <input
+                        id="availableSpaceA"
+                        name="availableSpaceA"
+                        class="fs-input"
+                        placeholder="e.g., 10"
+                      />
+                      <span class="fs-help-text"
+                        >Enter the area of the space available for cargo</span
+                      >
+                    </label>
+                    <label class="fs-field fs-field--shrink">
+                      <span class="fs-field-label">Unit</span>
+                      <input
+                        id="spaceUnitA"
+                        name="spaceUnit2"
+                        class="fs-input"
+                        value="CBM"
+                        readonly
+                      />
+                    </label>
+                  </div>
+
+                  <label class="fs-field fs-field--stacked">
+                    <span class="fs-field-label">Types of Goods Allowed</span>
+                    <textarea
+                      id="goodsAllowed"
+                      name="goodsAllowed"
+                      rows="3"
+                      class="fs-input fs-textarea"
+                      placeholder="e.g., General cargo, Electronics, Non-hazardous materials"
+                    ></textarea>
+                    <span class="fs-help-text"
+                      >Specify what types of cargo you can transport</span
+                    >
+                  </label>
+
+                  <div class="fs-quick-ref">
+                    <div class="fs-quick-ref-label">Quick Reference</div>
+                    <div class="fs-chip-row">
+                      <button type="button" class="fs-chip">
+                        General Cargo
+                      </button>
+                      <button type="button" class="fs-chip">Electronics</button>
+                      <button type="button" class="fs-chip">
+                        Food Products
+                      </button>
+                      <button type="button" class="fs-chip">Textiles</button>
+                      <button type="button" class="fs-chip">Machinery</button>
+                      <button type="button" class="fs-chip">Perishables</button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-            <div class="fs-step-content" data-step="3">
-              <header class="fs-panel-header">
-                <h2>Set Your Price</h2>
-                <p>Set your pricing or request bids</p>
-              </header>
+              <div class="fs-step-content" data-step="3">
+                <header class="fs-panel-header">
+                  <h2>Set Your Price</h2>
+                  <p>Set your pricing or request bids</p>
+                </header>
 
-              <div class="fs-card fs-card--padded">
-    <fieldset class="fs-fieldset">
-        <legend class="fs-field-label">Pricing Type</legend>
-        <div class="fs-pricing-options">
-            <label class="fs-pricing-option fs-pricing-option--active" data-price-option="fixed">
-                <input type="radio" name="pricingType" value="fixed" class="fs-radio" checked />
-                <div class="fs-pricing-body">
-                    <div class="fs-pricing-title">Fixed Price</div>
-                    <div class="fs-pricing-subtitle">
-                        Set a fixed price for your available space
-                    </div>
-                </div>
-            </label>
+                <div class="fs-card fs-card--padded">
+                  <fieldset class="fs-fieldset">
+                    <legend class="fs-field-label">Pricing Type</legend>
+                    <div class="fs-pricing-options">
+                      <label
+                        class="fs-pricing-option fs-pricing-option--active"
+                        data-price-option="fixed"
+                      >
+                        <input
+                          type="radio"
+                          name="pricingType"
+                          value="fixed"
+                          class="fs-radio"
+                          checked
+                        />
+                        <div class="fs-pricing-body">
+                          <div class="fs-pricing-title">Fixed Price</div>
+                          <div class="fs-pricing-subtitle">
+                            Set a fixed price for your available space
+                          </div>
+                        </div>
+                      </label>
 
-            <label class="fs-pricing-option" data-price-option="bids">
-                <input type="radio" name="pricingType" value="bids" class="fs-radio" />
-                <div class="fs-pricing-body">
-                    <div class="fs-pricing-title">Request Bids</div>
-                    <div class="fs-pricing-subtitle">
-                        Allow buyers to submit their offers
+                      <label class="fs-pricing-option" data-price-option="bids">
+                        <input
+                          type="radio"
+                          name="pricingType"
+                          value="bids"
+                          class="fs-radio"
+                        />
+                        <div class="fs-pricing-body">
+                          <div class="fs-pricing-title">Request Bids</div>
+                          <div class="fs-pricing-subtitle">
+                            Allow buyers to submit their offers
+                          </div>
+                        </div>
+                      </label>
                     </div>
+                  </fieldset>
+
+                  <div
+                    class="fs-info-banner fs-info-banner--hidden"
+                    id="infoBanner"
+                  >
+                    Buyers will be able to submit their bids for your available
+                    space. You can review and accept the best offer.
+                  </div>
+
+                  <label
+                    class="fs-field fs-field--stacked"
+                    id="priceInputContainer"
+                  >
+                    <span class="fs-field-label">Price (USD)</span>
+                    <div class="fs-input-with-prefix">
+                      <span class="fs-input-prefix">$</span>
+                      <input
+                        id="price"
+                        name="price"
+                        class="fs-input"
+                        placeholder="e.g., 850"
+                        value=""
+                      />
+                    </div>
+                    <span class="fs-help-text"
+                      >Enter your asking price for the available space</span
+                    >
+                  </label>
+
+                  <div class="fs-summary-card">
+                    <div class="fs-summary-header">Listing Summary</div>
+                    <div class="fs-summary-grid">
+                      <div class="fs-summary-labels">
+                        <div>Freight Type:</div>
+                        <div>Route:</div>
+                        <div>Date:</div>
+                        <div>Available Weight:</div>
+                        <div>Available Area:</div>
+                        <div>Total Price:</div>
+                        <div>Seller Revenue:</div>
+                        <div>Service Fee (5%):</div>
+                      </div>
+                      <div class="fs-summary-values">
+                        <div id="summaryFreight">Truck</div>
+                        <div id="summaryRoute">dg → dg</div>
+                        <div id="summaryDate">2002-12-10 at 12:12</div>
+                        <div id="summarySpaceW">—</div>
+                        <div id="summarySpaceA">—</div>
+
+                        <div
+                          id="summaryPrice"
+                          style="color: var(--fs-green); font-weight: 700"
+                        >
+                          $0.00
+                        </div>
+                        <div id="summarySellerRevenue">—</div>
+                        <div id="summaryServiceFee">—</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </label>
+              </div>
+
+              <div class="fs-form-actions">
+                <button id="fs-back" class="fs-btn fs-btn--ghost" type="button">
+                  ← Back
+                </button>
+                <button
+                  id="fs-next"
+                  class="fs-btn fs-btn--primary"
+                  type="button"
+                  disabled
+                >
+                  Next →
+                </button>
+              </div>
+            </form>
+          </section>
         </div>
-    </fieldset>
-
-    <div class="fs-info-banner fs-info-banner--hidden" id="infoBanner">
-        Buyers will be able to submit their bids for your available space. You can review and accept the best offer.
+      </main>
     </div>
 
-    <label class="fs-field fs-field--stacked" id="priceInputContainer">
-        <span class="fs-field-label">Price (USD)</span>
-        <div class="fs-input-with-prefix">
-            <span class="fs-input-prefix">$</span>
-            <input id="price" name="price" class="fs-input" placeholder="e.g., 850" value="" />
-        </div>
-        <span class="fs-help-text">Enter your asking price for the available space</span>
-    </label>
-
-    <div class="fs-summary-card">
-        <div class="fs-summary-header">Listing Summary</div>
-        <div class="fs-summary-grid">
-<div class="fs-summary-labels">
-  <div>Freight Type:</div>
-  <div>Route:</div>
-  <div>Date:</div>
-  <div>Available Weight:</div>
-  <div>Available Area:</div>
-  <div>Total Price:</div>
-  <div>Seller Revenue:</div>
-  <div>Service Fee (5%):</div>
-</div>
-<div class="fs-summary-values">
-  <div id="summaryFreight">Truck</div>
-  <div id="summaryRoute">dg → dg</div>
-  <div id="summaryDate">2002-12-10 at 12:12</div>
-  <div id="summarySpaceW">—</div>
-  <div id="summarySpaceA">—</div>
-
-  <div id="summaryPrice" style="color: var(--fs-green); font-weight: 700; ">$0.00</div>
-  <div id="summarySellerRevenue">—</div>
-  <div id="summaryServiceFee">—</div>
-</div>
-
-
-        </div>
-    </div>
-</div>
-            </div>
-
-            <div class="fs-form-actions">
-              <button id="fs-back" class="fs-btn fs-btn--ghost" type="button">
-                ← Back
-              </button>
-              <button id="fs-next" class="fs-btn fs-btn--primary" type="button" disabled>
-                Next →
-              </button>
-            </div>
-          </form>
-        </section>
-
-  </div>
-</main>
-
-
-  </div>
-
-  <script src="js/list-space.js"></script>
-  <script src="js/main.js"></script>
-</body>
+    <script src="js/list-space.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

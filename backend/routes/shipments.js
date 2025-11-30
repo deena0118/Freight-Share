@@ -4,7 +4,7 @@ const db = require("../db/database");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    const sql = `
+  const sql = `
       SELECT
         s.*,
         c.CompName,
@@ -14,30 +14,30 @@ router.get("/", (req, res) => {
       WHERE s.Status = 'Available'
     `;
 
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            console.error("--- DB ERROR (SELECT Space + Company) ---", err);
-            return res
-                .status(500)
-                .json({ error: "Failed to load shipments from database." });
-        }
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error("--- DB ERROR (SELECT Space + Company) ---", err);
+      return res
+        .status(500)
+        .json({ error: "Failed to load shipments from database." });
+    }
 
-        // ⬇️ NEW: split "YYYY-MM-DD HH:MM" into DepDate + DepTime for the API
-        const mappedRows = (rows || []).map((row) => {
-            if (row.DepDate) {
-                const dt = String(row.DepDate);
-                const [datePart, timePart] = dt.split(" ");
-                row.DepDate = datePart || "";
-                // keep only HH:MM even if seconds exist
-                row.DepTime = (timePart || "").slice(0, 5);
-            } else {
-                row.DepTime = "";
-            }
-            return row;
-        });
-
-        return res.json({ spaces: mappedRows });
+    // ⬇️ NEW: split "YYYY-MM-DD HH:MM" into DepDate + DepTime for the API
+    const mappedRows = (rows || []).map((row) => {
+      if (row.DepDate) {
+        const dt = String(row.DepDate);
+        const [datePart, timePart] = dt.split(" ");
+        row.DepDate = datePart || "";
+        // keep only HH:MM even if seconds exist
+        row.DepTime = (timePart || "").slice(0, 5);
+      } else {
+        row.DepTime = "";
+      }
+      return row;
     });
+
+    return res.json({ spaces: mappedRows });
+  });
 });
 
 module.exports = router;

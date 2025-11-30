@@ -1,121 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FreightShare – Marketplace</title>
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>FreightShare – Marketplace</title>
-  <link rel="stylesheet" href="css/global.css" />
-</head>
-
-<body>
-  <div class="fs-root">
-    <header class="fs-header">
-      <div class="fs-header-left">
-        <div class="ww">
-          <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
+  <body>
+    <div class="fs-root">
+      <header class="fs-header">
+        <div class="fs-header-left">
+          <div class="ww">
+            <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
+          </div>
+          <div class="fs-logo-text">
+            <div class="fs-logo-title">FreightShare</div>
+            <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+          </div>
         </div>
-        <div class="fs-logo-text">
-          <div class="fs-logo-title">FreightShare</div>
-          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
-        </div>
-      </div>
 
-      <div class="fs-header-right">
-        <span class="fs-header-tagline">Connecting freight space worldwide</span>
+        <div class="fs-header-right">
+          <span class="fs-header-tagline"
+            >Connecting freight space worldwide</span
+          >
 
-        <div class="fs-profile">
-          <button type="button" class="fs-profile-icon">
-            <span id="fsProfileInitials">U</span>
-          </button>
-
-          <div class="fs-profile-card">
-            <div class="fs-profile-name" id="fsProfileName">User Name</div>
-            <div class="fs-profile-company" id="fsProfileCompany">Company Name</div>
-            <button type="button" class="fs-profile-logout" id="fsProfileLogout">
-              Sign out
+          <div class="fs-profile">
+            <button type="button" class="fs-profile-icon">
+              <span id="fsProfileInitials">U</span>
             </button>
+
+            <div class="fs-profile-card">
+              <div class="fs-profile-name" id="fsProfileName">User Name</div>
+              <div class="fs-profile-company" id="fsProfileCompany">
+                Company Name
+              </div>
+              <button
+                type="button"
+                class="fs-profile-logout"
+                id="fsProfileLogout"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
+      <div id="nav-placeholder"></div>
 
+      <main class="fs-page-wrapper">
+        <div class="fs-page">
+          <section class="fs-page-row fs-page-row--hero">
+            <button
+              class="fs-hero-btn fs-hero-btn--primary"
+              onclick="location.href='list-empty-space.html'"
+            >
+              <span class="fs-hero-btn-icon">↗</span>
+              <span>List Empty Space</span>
+            </button>
+            <button
+              class="fs-hero-btn fs-hero-btn--accent"
+              onclick="location.href='find-shipment.html'"
+            >
+              <img src="assets/icons/location.svg" class="fs-nav-icon" />
+              <span>Find Shipment Space</span>
+            </button>
+          </section>
 
-    <div id="nav-placeholder"></div>
+          <section class="fs-page-row fs-stats-row">
+            <div class="fs-stat-card">
+              <div class="fs-stat-label">
+                <img src="assets/icons/box.svg" class="fs-nav-icon" />
 
-
-
-    <main class="fs-page-wrapper">
-      <div class="fs-page">
-        <section class="fs-page-row fs-page-row--hero">
-          <button class="fs-hero-btn fs-hero-btn--primary" onclick="location.href='list-empty-space.html'">
-            <span class="fs-hero-btn-icon">↗</span>
-            <span>List Empty Space</span>
-          </button>
-          <button class="fs-hero-btn fs-hero-btn--accent" onclick="location.href='find-shipment.html'">
-            <img src="assets/icons/location.svg" class="fs-nav-icon" />
-            <span>Find Shipment Space</span>
-          </button>
-        </section>
-
-        <section class="fs-page-row fs-stats-row">
-
-          <div class="fs-stat-card">
-            <div class="fs-stat-label">
-              <img src="assets/icons/box.svg" class="fs-nav-icon" />
-
-              Available Space
-            </div>
-            <div class="fs-stat-value">1,245 tons | 250 CBM</div>
-            <div class="fs-stat-sub">Across all routes</div>
-
-          </div>
-
-          <div class="fs-stat-card">
-            <div class="fs-stat-label">
-              <img src="assets/icons/earth.svg" class="fs-nav-icon" />
-              Markets
-            </div>
-            <div class="fs-stat-value">42</div>
-            <div class="fs-stat-sub">Countries served</div>
-          </div>
-          <div class="fs-stat-card">
-            <div class="fs-stat-label">
-              <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
-
-              Listings
-            </div>
-            <div class="fs-stat-value" id="fsStatListingsCount">0</div>
-            <div class="fs-stat-sub">Total Available Listings</div>
-          </div>
-        </section>
-
-        <section class="fs-page-row fs-dashboard-row">
-
-
-          <aside class="fs-panel fs-panel--feed">
-            <header class="fs-panel-header fs-panel-header--split">
-              <div>
-                <h2>Live Feed</h2>
-                <span class="fs-panel-subtitle">New listings</span>
+                Available Space
               </div>
-            </header>
-
-            <div class="fs-feed-list">
-              <!-- THE REPEATER in HERE-->
-
-
-
-
+              <div class="fs-stat-value">1,245 tons | 250 CBM</div>
+              <div class="fs-stat-sub">Across all routes</div>
             </div>
-          </aside>
-        </section>
-      </div>
-    </main>
-  </div>
 
-  <script src="js/marketplace.js"></script>
-  <script src="js/main.js"></script>
-</body>
+            <div class="fs-stat-card">
+              <div class="fs-stat-label">
+                <img src="assets/icons/earth.svg" class="fs-nav-icon" />
+                Markets
+              </div>
+              <div class="fs-stat-value">42</div>
+              <div class="fs-stat-sub">Countries served</div>
+            </div>
+            <div class="fs-stat-card">
+              <div class="fs-stat-label">
+                <img src="assets/icons/dashboard.svg" class="fs-nav-icon" />
 
+                Listings
+              </div>
+              <div class="fs-stat-value" id="fsStatListingsCount">0</div>
+              <div class="fs-stat-sub">Total Available Listings</div>
+            </div>
+          </section>
+
+          <section class="fs-page-row fs-dashboard-row">
+            <aside class="fs-panel fs-panel--feed">
+              <header class="fs-panel-header fs-panel-header--split">
+                <div>
+                  <h2>Live Feed</h2>
+                  <span class="fs-panel-subtitle">New listings</span>
+                </div>
+              </header>
+
+              <div class="fs-feed-list">
+                <!-- THE REPEATER in HERE-->
+              </div>
+            </aside>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/marketplace.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

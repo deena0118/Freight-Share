@@ -1,88 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>FreightShare – My Bookings</title>
-  
-  <link rel="stylesheet" href="css/global.css" />
-</head>
-<body>
-   <div class="fs-root">
-    <header class="fs-header">
-      <div class="fs-header-left">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FreightShare – My Bookings</title>
 
-        <div class="ww">
-                  <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
+  <body>
+    <div class="fs-root">
+      <header class="fs-header">
+        <div class="fs-header-left">
+          <div class="ww">
+            <img src="assets/icons/box.svg" class="fs-logo-icon2" />
+          </div>
+          <div class="fs-logo-text">
+            <div class="fs-logo-title">FreightShare</div>
+            <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+          </div>
         </div>
-        <div class="fs-logo-text">
-          <div class="fs-logo-title">FreightShare</div>
-          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+
+        <div class="fs-header-right">Connecting freight space worldwide</div>
+      </header>
+
+      <div id="nav-placeholder"></div>
+      <script src="js/main.js"></script>
+
+      <main class="fs-page-wrapper">
+        <div class="fs-page">
+          <section class="fs-section-header">
+            <h1>My Bookings</h1>
+            <p>Manage your shipment bookings and listings</p>
+          </section>
+
+          <section class="fs-toggle-tabs">
+            <button class="fs-toggle-tab fs-toggle-tab--active">
+              All Bookings (5)
+            </button>
+            <button class="fs-toggle-tab">As Buyer (3)</button>
+            <button class="fs-toggle-tab">As Seller (2)</button>
+          </section>
+
+          <section class="fs-stats-row">
+            <div class="fs-stat-card fs-stat-card--compact">
+              <div class="fs-stat-label">Total Bookings</div>
+              <div class="fs-stat-value">5</div>
+            </div>
+
+            <div class="fs-stat-card fs-stat-card--compact">
+              <div class="fs-stat-label">Pending</div>
+              <div class="fs-stat-value">1</div>
+            </div>
+
+            <div class="fs-stat-card fs-stat-card--compact">
+              <div class="fs-stat-label">Confirmed</div>
+              <div class="fs-stat-value">2</div>
+            </div>
+
+            <div class="fs-stat-card fs-stat-card--compact">
+              <div class="fs-stat-label">Completed</div>
+              <div class="fs-stat-value">1</div>
+            </div>
+          </section>
+
+          <section
+            id="fsBookingsGrid"
+            class="fs-card-grid fs-card-grid--bookings"
+          >
+            <!-- THE REPEATER in HERE-->
+          </section>
         </div>
-      </div>
+      </main>
+    </div>
 
-      <div class="fs-header-right">
-        Connecting freight space worldwide
-      </div>
-    </header>
-
-
-<div id="nav-placeholder"></div>
-<script src="js/main.js"></script>
-
-
-
-
-    <main class="fs-page-wrapper">
-      <div class="fs-page">
-        <section class="fs-section-header">
-          <h1>My Bookings</h1>
-          <p>Manage your shipment bookings and listings</p>
-        </section>
-
-        <section class="fs-toggle-tabs">
-          <button class="fs-toggle-tab fs-toggle-tab--active">
-            All Bookings (5)
-          </button>
-          <button class="fs-toggle-tab">As Buyer (3)</button>
-          <button class="fs-toggle-tab">As Seller (2)</button>
-        </section>
-
-        <section class="fs-stats-row">
-          <div class="fs-stat-card fs-stat-card--compact">
-            <div class="fs-stat-label">Total Bookings</div>
-            <div class="fs-stat-value">5</div>
-          </div>
-
-          <div class="fs-stat-card fs-stat-card--compact">
-            <div class="fs-stat-label">Pending</div>
-            <div class="fs-stat-value">1</div>
-          </div>
-
-          <div class="fs-stat-card fs-stat-card--compact">
-            <div class="fs-stat-label">Confirmed</div>
-            <div class="fs-stat-value">2</div>
-          </div>
-
-          <div class="fs-stat-card fs-stat-card--compact">
-            <div class="fs-stat-label">Completed</div>
-            <div class="fs-stat-value">1</div>
-          </div>
-        </section>
-
-<section id="fsBookingsGrid" class="fs-card-grid fs-card-grid--bookings">
-
-          <!-- THE REPEATER in HERE-->
-
-
-
-
-
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <script src="js/bookings.js"></script>
-  
-</body>
+    <script src="js/bookings.js"></script>
+  </body>
 </html>

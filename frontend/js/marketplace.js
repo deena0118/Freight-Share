@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
   // ----------------- AUTH / PROFILE -----------------
   let raw = localStorage.getItem("user");
   if (!raw) {
@@ -27,8 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const companyEl = document.getElementById("fsProfileCompany");
   const logoutBtn = document.getElementById("fsProfileLogout");
 
-  const userName =
-    user.Name || user.name || user.Email || user.email || "User";
+  const userName = user.Name || user.name || user.Email || user.email || "User";
   const companyName =
     user.CompanyName ||
     user.companyName ||
@@ -140,25 +138,39 @@ document.addEventListener("DOMContentLoaded", function () {
       item.innerHTML =
         '<div class="fs-feed-item-header">' +
         '  <div class="fs-feed-type">' +
-        '    <img src="' + badge.icon + '" class="fs-feed-type-icon" />' +
-        '    <span>' + badge.label + '</span>' +
-        '  </div>' +
-        '  <span class="fs-feed-price">' + priceText + '</span>' +
-        '</div>' +
+        '    <img src="' +
+        badge.icon +
+        '" class="fs-feed-type-icon" />' +
+        "    <span>" +
+        badge.label +
+        "</span>" +
+        "  </div>" +
+        '  <span class="fs-feed-price">' +
+        priceText +
+        "</span>" +
+        "</div>" +
         '<div class="fs-feed-body">' +
         '  <div class="fs-feed-location">' +
         '    <img src="assets/icons/location.svg" class="fs-feed-loc-icon" />' +
-        '    <div>' +
-        '      <div>' + origin + '</div>' +
+        "    <div>" +
+        "      <div>" +
+        origin +
+        "</div>" +
         '      <div class="fs-feed-arrow">↓</div>' +
-        '      <div>' + destination + '</div>' +
-        '    </div>' +
-        '  </div>' +
+        "      <div>" +
+        destination +
+        "</div>" +
+        "    </div>" +
+        "  </div>" +
         '  <div class="fs-feed-meta">' +
-        '    <span>' + weightText + '</span>' +
-        '    <span>' + date + '</span>' +
-        '  </div>' +
-        '</div>';
+        "    <span>" +
+        weightText +
+        "</span>" +
+        "    <span>" +
+        date +
+        "</span>" +
+        "  </div>" +
+        "</div>";
 
       list.appendChild(item);
     });
@@ -179,10 +191,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       let spaces = Array.isArray(data.spaces) ? data.spaces : [];
-const listingsEl = document.getElementById("fsStatListingsCount");
-if (listingsEl) {
-  listingsEl.textContent = String(spaces.length);
-}
+      const listingsEl = document.getElementById("fsStatListingsCount");
+      if (listingsEl) {
+        listingsEl.textContent = String(spaces.length);
+      }
 
       spaces = sortByLatestDateTime(spaces).slice(0, 4);
 

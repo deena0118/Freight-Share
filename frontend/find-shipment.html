@@ -1,255 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FreightShare – Find Shipment</title>
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>FreightShare – Find Shipment</title>
-  <link rel="stylesheet" href="css/global.css" />
-</head>
-
-<body>
-  <div class="fs-root">
-    <header class="fs-header" style>
-      <div class="fs-header-left">
-        <div class="ww">
-          <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
+  <body>
+    <div class="fs-root">
+      <header class="fs-header" style>
+        <div class="fs-header-left">
+          <div class="ww">
+            <img src="assets/images/logoWhite.png" class="fs-logo-icon3" />
+          </div>
+          <div class="fs-logo-text">
+            <div class="fs-logo-title">FreightShare</div>
+            <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
+          </div>
         </div>
-        <div class="fs-logo-text">
-          <div class="fs-logo-title">FreightShare</div>
-          <div class="fs-logo-subtitle">B2B Logistics Marketplace</div>
-        </div>
-      </div>
 
-      <div class="fs-header-right">
-        Connecting freight space worldwide
-      </div>
-    </header>
+        <div class="fs-header-right">Connecting freight space worldwide</div>
+      </header>
 
-    <div id="nav-placeholder"></div>
+      <div id="nav-placeholder"></div>
 
-    <main class="fs-page-wrapper">
-      <div class="fs-page">
-        <section class="fs-filter-bar">
-          <div class="fs-filter-group">
-            <label class="fs-field">
-              <span class="fs-field-label">Origin</span>
-              <input id="filterOrigin" class="fs-input" placeholder="From..." />
-            </label>
+      <main class="fs-page-wrapper">
+        <div class="fs-page">
+          <section class="fs-filter-bar">
+            <div class="fs-filter-group">
+              <label class="fs-field">
+                <span class="fs-field-label">Origin</span>
+                <input
+                  id="filterOrigin"
+                  class="fs-input"
+                  placeholder="From..."
+                />
+              </label>
 
-            <label class="fs-field">
-              <span class="fs-field-label">Destination</span>
-              <input id="filterDestination" class="fs-input" placeholder="To..." />
-            </label>
+              <label class="fs-field">
+                <span class="fs-field-label">Destination</span>
+                <input
+                  id="filterDestination"
+                  class="fs-input"
+                  placeholder="To..."
+                />
+              </label>
 
-            <label class="fs-field">
-              <span class="fs-field-label">Freight Type</span>
-              <select id="filterType" class="fs-input">
-                <option value="all">All Types</option>
-                <option value="Truck">Truck</option>
-                <option value="Ship">Ship</option>
-                <option value="Plane">Plane</option>
+              <label class="fs-field">
+                <span class="fs-field-label">Freight Type</span>
+                <select id="filterType" class="fs-input">
+                  <option value="all">All Types</option>
+                  <option value="Truck">Truck</option>
+                  <option value="Ship">Ship</option>
+                  <option value="Plane">Plane</option>
+                </select>
+              </label>
+
+              <button
+                id="applyFilters"
+                class="fs-btn fs-btn--primary"
+                type="button"
+                style="
+                  background: #1e3a5f;
+                  align-self: self-end;
+                  width: 250px;
+                  justify-content: space-around;
+                "
+              >
+                Filters
+              </button>
+            </div>
+          </section>
+
+          <section class="fs-results-header">
+            <div class="fs-results-left" style="margin-bottom: 3%">
+              <h2>Search Results</h2>
+              <p id="resultsCount">Loading shipments…</p>
+            </div>
+
+            <div class="fs-filter-sort">
+              <span>Sort by:</span>
+              <select id="sortSelect" class="fs-input fs-input--compact">
+                <option value="priceLow">Price: Low to High</option>
+                <option value="priceHigh">Price: High to Low</option>
+                <option value="date">Earliest Departure</option>
               </select>
-            </label>
-
-            <button id="applyFilters" class="fs-btn fs-btn--primary" type="button"
-              style="background: #1e3a5f; align-self: self-end; width:250px;    justify-content: space-around;">
-              Filters
-            </button>
-          </div>
-        </section>
-
-        <section class="fs-results-header">
-          <div class="fs-results-left" style="margin-bottom:3%;">
-            <h2>Search Results</h2>
-            <p id="resultsCount">Loading shipments…</p>
-          </div>
-
-          <div class="fs-filter-sort">
-            <span>Sort by:</span>
-            <select id="sortSelect" class="fs-input fs-input--compact">
-              <option value="priceLow">Price: Low to High</option>
-              <option value="priceHigh">Price: High to Low</option>
-              <option value="date">Earliest Departure</option>
-            </select>
-          </div>
-        </section>
-
-        <section id="fsResultsGrid" class="fs-results-grid">
-        </section>
-      </div>
-    </main>
-
-    <!-- Shipment Details Modal -->
-    <div id="fsShipmentModal" class="fs-modal fs-modal--hidden">
-      <div class="fs-modal-backdrop"></div>
-      <div class="fs-modal-dialog">
-        <button id="fsModalClose" class="fs-modal-close" type="button">&times;</button>
-
-        <div class="fs-modal-header">
-          <div>
-            <h2>Shipment Details</h2>
-            <p class="fs-modal-subtitle">Review listing details and book space</p>
-          </div>
-          <span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px;">Ship</span>
-        </div>
-
-        <div class="fs-modal-section">
-          <h3 class="fs-modal-section-title">Route</h3>
-          <div class="fs-modal-route">
-            <div class="fs-modal-route-point">
-              <div class="fs-modal-dot fs-modal-dot--origin"></div>
-              <div>
-                <div id="fsModalOrigin" class="fs-modal-city">—</div>
-                <div class="fs-modal-muted">Origin</div>
-              </div>
             </div>
+          </section>
 
-            <div class="fs-modal-route-line"></div>
+          <section id="fsResultsGrid" class="fs-results-grid"></section>
+        </div>
+      </main>
 
-            <div class="fs-modal-route-point">
-              <div class="fs-modal-dot fs-modal-dot--dest"></div>
-              <div>
-                <div id="fsModalDestination" class="fs-modal-city">—</div>
-                <div class="fs-modal-muted">Destination</div>
-              </div>
+      <!-- Shipment Details Modal -->
+      <div id="fsShipmentModal" class="fs-modal fs-modal--hidden">
+        <div class="fs-modal-backdrop"></div>
+        <div class="fs-modal-dialog">
+          <button id="fsModalClose" class="fs-modal-close" type="button">
+            &times;
+          </button>
+
+          <div class="fs-modal-header">
+            <div>
+              <h2>Shipment Details</h2>
+              <p class="fs-modal-subtitle">
+                Review listing details and book space
+              </p>
             </div>
-          </div>
-        </div>
-
-        <div class="fs-modal-section fs-modal-section--two-cols">
-          <div class="fs-modal-card">
-            <div class="fs-modal-card-label">Available Space</div>
-            <div id="fsModalAvailableSpace" class="fs-modal-card-value">—</div>
+            <span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px"
+              >Ship</span
+            >
           </div>
 
-          <div class="fs-modal-card">
-            <div class="fs-modal-card-label">Departure Date</div>
-            <div id="fsModalDepartureDate" class="fs-modal-card-value">—</div>
-          </div>
-        </div>
-
-        <div class="fs-modal-section">
-          <div class="fs-modal-card">
-            <div class="fs-modal-card-label">Allowed Cargo Types</div>
-            <div id="fsModalCargo" class="fs-modal-pill">All containerized goods</div>
-          </div>
-        </div>
-
-        <div class="fs-modal-section">
-          <h3 class="fs-modal-section-title">Seller Information</h3>
-          <div class="fs-modal-seller">
-            <div class="fs-modal-seller-left">
-              <div class="fs-modal-seller-avatar">
-                <img src="assets/icons/profile.svg" alt="" />
+          <div class="fs-modal-section">
+            <h3 class="fs-modal-section-title">Route</h3>
+            <div class="fs-modal-route">
+              <div class="fs-modal-route-point">
+                <div class="fs-modal-dot fs-modal-dot--origin"></div>
+                <div>
+                  <div id="fsModalOrigin" class="fs-modal-city">—</div>
+                  <div class="fs-modal-muted">Origin</div>
+                </div>
               </div>
-              <div>
-                <div id="fsModalCompanyName" class="fs-modal-company">—</div>
-                <div class="fs-modal-muted">
-                  <span class="fs-modal-star">★</span> 4.9 · Verified Seller
+
+              <div class="fs-modal-route-line"></div>
+
+              <div class="fs-modal-route-point">
+                <div class="fs-modal-dot fs-modal-dot--dest"></div>
+                <div>
+                  <div id="fsModalDestination" class="fs-modal-city">—</div>
+                  <div class="fs-modal-muted">Destination</div>
                 </div>
               </div>
             </div>
-            <div id="fsModalCompanyDesc" class="fs-modal-muted fs-modal-seller-text">—</div>
-
           </div>
-        </div>
 
-        <div class="fs-modal-section">
-          <div class="fs-modal-price-row">
-            <div>
-
-              <div id="fsModalFixedBlock">
-                <div class="fs-modal-card-label">Total Price</div>
-                <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
-
-               <div class="fs-modal-fee-lines">
-  <div class="fs-modal-fee-line">
-    <span>Seller Revenue:</span>
-    <span id="fsModalSellerRevenue">—</span>
-  </div>
-  <div class="fs-modal-fee-line">
-    <span>Service Fee (5%):</span>
-    <span id="fsModalServiceFee">—</span>
-  </div>
-
-  <button id="fsPartialToggle" type="button" class="fs-link-btn">
-    Request Partial Space
-  </button>
-
-  <div id="fsPartialBox" style="display:none; margin-top:10px;">
-    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-      <label class="fs-field" style="margin:0;">
-        <span class="fs-field-label">Partial amount required</span>
-      </label>
-
-      <div style="display:flex; align-items:center; gap:8px;">
-        <input id="fsPartialPercent" class="fs-input" type="number" min="1" max="99" step="1"
-               placeholder="1-99" style="width:130px;" />
-        <span style="font-weight:600; color:#6b7280;">%</span>
-      </div>
-    </div>
-
-    <div id="fsPartialError" style="display:none; margin-top:6px; font-size:13px; color:#ef4444;">
-      Percentage must be between 1 and 99.
-    </div>
-  </div>
-</div>
-
+          <div class="fs-modal-section fs-modal-section--two-cols">
+            <div class="fs-modal-card">
+              <div class="fs-modal-card-label">Available Space</div>
+              <div id="fsModalAvailableSpace" class="fs-modal-card-value">
+                —
               </div>
-
-             <div id="fsModalBidBlock" style="display:none; margin-top:10px;">
-  <div class="fs-card-price fs-card-price--bid" style="display:inline-block; margin-top:6px;">Bid</div>
-
-  <label class="fs-field" style="margin-top:10px; display:block; max-width:360px;">
-    <span class="fs-field-label">Enter your bid amount</span>
-    <input id="fsModalBidAmount" class="fs-input" type="number" min="0" step="0.01" placeholder="e.g., 1200" /> $
-  </label>
-
-
-
-
-
-  <!-- Totals (hidden until bid amount is filled) -->
-<div id="fsBidTotals" style="display:block; margin-top:14px;">
-    <div class="fs-modal-card-label">Total Price</div>
-    <div id="fsBidTotalPrice" class="fs-modal-price">—</div>
-
-    <div class="fs-modal-fee-lines">
-      <div class="fs-modal-fee-line">
-        <span>Seller Revenue:</span>
-        <span id="fsBidSellerRevenue">—</span>
-      </div>
-      <div class="fs-modal-fee-line">
-        <span>Service Fee (5%):</span>
-        <span id="fsBidServiceFee">—</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
             </div>
-            <span id="fsModalStatusBadge" class="fs-modal-status-badge">Available Now</span>
-          </div>
-        </div>
 
-        <div class="fs-modal-section fs-modal-section--footer">
-          <button type="button" id="fsModalBookBtn" class="fs-btn fs-btn--primary fs-modal-book-btn">
-            ✓ Book Now
-          </button>
-          <!-- <p class="fs-modal-disclaimer">
+            <div class="fs-modal-card">
+              <div class="fs-modal-card-label">Departure Date</div>
+              <div id="fsModalDepartureDate" class="fs-modal-card-value">—</div>
+            </div>
+          </div>
+
+          <div class="fs-modal-section">
+            <div class="fs-modal-card">
+              <div class="fs-modal-card-label">Allowed Cargo Types</div>
+              <div id="fsModalCargo" class="fs-modal-pill">
+                All containerized goods
+              </div>
+            </div>
+          </div>
+
+          <div class="fs-modal-section">
+            <h3 class="fs-modal-section-title">Seller Information</h3>
+            <div class="fs-modal-seller">
+              <div class="fs-modal-seller-left">
+                <div class="fs-modal-seller-avatar">
+                  <img src="assets/icons/profile.svg" alt="" />
+                </div>
+                <div>
+                  <div id="fsModalCompanyName" class="fs-modal-company">—</div>
+                  <div class="fs-modal-muted">
+                    <span class="fs-modal-star">★</span> 4.9 · Verified Seller
+                  </div>
+                </div>
+              </div>
+              <div
+                id="fsModalCompanyDesc"
+                class="fs-modal-muted fs-modal-seller-text"
+              >
+                —
+              </div>
+            </div>
+          </div>
+
+          <div class="fs-modal-section">
+            <div class="fs-modal-price-row">
+              <div>
+                <div id="fsModalFixedBlock">
+                  <div class="fs-modal-card-label">Total Price</div>
+                  <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
+
+                  <div class="fs-modal-fee-lines">
+                    <div class="fs-modal-fee-line">
+                      <span>Seller Revenue:</span>
+                      <span id="fsModalSellerRevenue">—</span>
+                    </div>
+                    <div class="fs-modal-fee-line">
+                      <span>Service Fee (5%):</span>
+                      <span id="fsModalServiceFee">—</span>
+                    </div>
+
+                    <button
+                      id="fsPartialToggle"
+                      type="button"
+                      class="fs-link-btn"
+                    >
+                      Request Partial Space
+                    </button>
+
+                    <div
+                      id="fsPartialBox"
+                      style="display: none; margin-top: 10px"
+                    >
+                      <div
+                        style="
+                          display: flex;
+                          align-items: center;
+                          gap: 10px;
+                          flex-wrap: wrap;
+                        "
+                      >
+                        <label class="fs-field" style="margin: 0">
+                          <span class="fs-field-label"
+                            >Partial amount required</span
+                          >
+                        </label>
+
+                        <div
+                          style="display: flex; align-items: center; gap: 8px"
+                        >
+                          <input
+                            id="fsPartialPercent"
+                            class="fs-input"
+                            type="number"
+                            min="1"
+                            max="99"
+                            step="1"
+                            placeholder="1-99"
+                            style="width: 130px"
+                          />
+                          <span style="font-weight: 600; color: #6b7280"
+                            >%</span
+                          >
+                        </div>
+                      </div>
+
+                      <div
+                        id="fsPartialError"
+                        style="
+                          display: none;
+                          margin-top: 6px;
+                          font-size: 13px;
+                          color: #ef4444;
+                        "
+                      >
+                        Percentage must be between 1 and 99.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  id="fsModalBidBlock"
+                  style="display: none; margin-top: 10px"
+                >
+                  <div
+                    class="fs-card-price fs-card-price--bid"
+                    style="display: inline-block; margin-top: 6px"
+                  >
+                    Bid
+                  </div>
+
+                  <label
+                    class="fs-field"
+                    style="margin-top: 10px; display: block; max-width: 360px"
+                  >
+                    <span class="fs-field-label">Enter your bid amount</span>
+                    <input
+                      id="fsModalBidAmount"
+                      class="fs-input"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="e.g., 1200"
+                    />
+                    $
+                  </label>
+
+                  <!-- Totals (hidden until bid amount is filled) -->
+                  <div
+                    id="fsBidTotals"
+                    style="display: block; margin-top: 14px"
+                  >
+                    <div class="fs-modal-card-label">Total Price</div>
+                    <div id="fsBidTotalPrice" class="fs-modal-price">—</div>
+
+                    <div class="fs-modal-fee-lines">
+                      <div class="fs-modal-fee-line">
+                        <span>Seller Revenue:</span>
+                        <span id="fsBidSellerRevenue">—</span>
+                      </div>
+                      <div class="fs-modal-fee-line">
+                        <span>Service Fee (5%):</span>
+                        <span id="fsBidServiceFee">—</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span id="fsModalStatusBadge" class="fs-modal-status-badge"
+                >Available Now</span
+              >
+            </div>
+          </div>
+
+          <div class="fs-modal-section fs-modal-section--footer">
+            <button
+              type="button"
+              id="fsModalBookBtn"
+              class="fs-btn fs-btn--primary fs-modal-book-btn"
+            >
+              ✓ Book Now
+            </button>
+            <!-- <p class="fs-modal-disclaimer">
             By booking, you agree to the terms and conditions
           </p> -->
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
-
-  <script src="js/find-shipment.js"></script>
-  <script src="js/main.js"></script>
-</body>
-
+    <script src="js/find-shipment.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

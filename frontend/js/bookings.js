@@ -24,108 +24,114 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const currentUserId = (currentUser && currentUser.id) || currentUser.ID || "";
 
-loadBookings(currentUserId, "all");
-wireTabs(currentUserId);
+  loadBookings(currentUserId, "all");
+  wireTabs(currentUserId);
 
- async function loadBookings(userId, scope) {
-  try {
-    // This logic is correct: for scope='all', it omits userId
-    const url =
-      scope === "all"
-        ? `/bookings?scope=all`
-        : `/bookings?userId=${encodeURIComponent(userId)}&scope=${encodeURIComponent(scope)}`;
+  async function loadBookings(userId, scope) {
+    try {
+      // This logic is correct: for scope='all', it omits userId
+      const url =
+        scope === "all"
+          ? `/bookings?scope=all`
+          : `/bookings?userId=${encodeURIComponent(
+              userId
+            )}&scope=${encodeURIComponent(scope)}`;
 
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to load bookings");
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to load bookings");
 
-    const data = await res.json();
-    const list = data.bookings || [];
-    renderBookings(list);
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
-  }
-}
-
-function wireTabs(userId) {
-  const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
-  if (tabs.length < 3) return;
-
-const scopes = ["all", "buyer", "seller"];
-
-  tabs.forEach((btn, idx) => {
-    btn.addEventListener("click", () => {
-      tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
-      btn.classList.add("fs-toggle-tab--active");
-      loadBookings(userId, scopes[idx] || "all");
-    });
-  });
-}
-
-
-
-function renderBookings(list) {
-
-  if (list && list.length) {
-    list.forEach((b) => {
-      grid.appendChild(buildBookingCard(b));
-    });
-  } else {
+      const data = await res.json();
+      const list = data.bookings || [];
+      renderBookings(list);
+    } catch (err) {
+      console.error(err);
+      grid.innerHTML =
+        '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
+    }
   }
 
-  const stats = calculateBookingStats(list);
-  updateStatsDisplay(stats);
-}
+  function wireTabs(userId) {
+    const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
+    if (tabs.length < 3) return;
 
-function calculateBookingStats(bookings) {
-  const stats = {
-    total: 0,
-    pending: 0,
-    confirmed: 0,
-    completed: 0,
-    buyer: 0, 
-    seller: 0,
-  };
+    const scopes = ["all", "buyer", "seller"];
 
-  if (!bookings || bookings.length === 0) {
+    tabs.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
+        btn.classList.add("fs-toggle-tab--active");
+        loadBookings(userId, scopes[idx] || "all");
+      });
+    });
+  }
+
+  function renderBookings(list) {
+    if (list && list.length) {
+      list.forEach((b) => {
+        grid.appendChild(buildBookingCard(b));
+      });
+    } else {
+    }
+
+    const stats = calculateBookingStats(list);
+    updateStatsDisplay(stats);
+  }
+
+  function calculateBookingStats(bookings) {
+    const stats = {
+      total: 0,
+      pending: 0,
+      confirmed: 0,
+      completed: 0,
+      buyer: 0,
+      seller: 0,
+    };
+
+    if (!bookings || bookings.length === 0) {
+      return stats;
+    }
+
+    stats.total = bookings.length;
+
+    bookings.forEach((b) => {
+      const status = (b.Status || "").toLowerCase().trim();
+
+      if (status === "pending" || status === "pending admin approval") {
+        stats.pending++;
+      } else if (status === "confirmed") {
+        stats.confirmed++;
+      } else if (status === "completed") {
+        stats.completed++;
+      }
+    });
+
     return stats;
   }
 
-  stats.total = bookings.length;
+  function updateStatsDisplay(stats) {
+    const totalEl =
+      document.querySelector(".fs-stat-card .fs-stat-value") ||
+      document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
+    const pendingEl = document.querySelector(
+      ".fs-stat-card:nth-child(2) .fs-stat-value"
+    );
+    const confirmedEl = document.querySelector(
+      ".fs-stat-card:nth-child(3) .fs-stat-value"
+    );
+    const completedEl = document.querySelector(
+      ".fs-stat-card:nth-child(4) .fs-stat-value"
+    );
 
-  bookings.forEach(b => {
-    const status = (b.Status || "").toLowerCase().trim();
+    if (totalEl) totalEl.textContent = stats.total;
+    if (pendingEl) pendingEl.textContent = stats.pending;
+    if (confirmedEl) confirmedEl.textContent = stats.confirmed;
+    if (completedEl) completedEl.textContent = stats.completed;
 
-    if (status === "pending" || status === "pending admin approval") {
-      stats.pending++;
-    } else if (status === "confirmed") {
-      stats.confirmed++;
-    } else if (status === "completed") {
-      stats.completed++;
-    }
-    
- 
-  });
-
-  return stats;
-}
-
-function updateStatsDisplay(stats) {
-  const totalEl = document.querySelector(".fs-stat-card .fs-stat-value") || document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
-  const pendingEl = document.querySelector(".fs-stat-card:nth-child(2) .fs-stat-value");
-  const confirmedEl = document.querySelector(".fs-stat-card:nth-child(3) .fs-stat-value");
-  const completedEl = document.querySelector(".fs-stat-card:nth-child(4) .fs-stat-value");
-
-  if (totalEl) totalEl.textContent = stats.total;
-  if (pendingEl) pendingEl.textContent = stats.pending;
-  if (confirmedEl) confirmedEl.textContent = stats.confirmed;
-  if (completedEl) completedEl.textContent = stats.completed;
-  
-  const allTab = document.querySelector(".fs-toggle-tab:first-child");
-  if (allTab) {
+    const allTab = document.querySelector(".fs-toggle-tab:first-child");
+    if (allTab) {
       allTab.textContent = `All Bookings (${stats.total})`;
+    }
   }
-}
 
   function buildBookingCard(b) {
     const rawType = (b.Type || "truck").toString();
@@ -133,7 +139,8 @@ function updateStatsDisplay(stats) {
 
     let typeClass = "fs-badge--type-truck";
     if (typeLower === "ship") typeClass = "fs-badge--type-ship";
-    else if (typeLower === "plane" || typeLower === "air") typeClass = "fs-badge--type-plane";
+    else if (typeLower === "plane" || typeLower === "air")
+      typeClass = "fs-badge--type-plane";
 
     const statusText = (b.Status || "Pending").toString().trim();
     const statusLower = statusText.toLowerCase();
@@ -141,11 +148,16 @@ function updateStatsDisplay(stats) {
     let statusClass = "fs-badge--status-generic";
 
     if (statusLower === "confirmed") statusClass = "fs-badge--status-confirmed";
-    else if (statusLower === "completed") statusClass = "fs-badge--status-completed";
-    else if (statusLower === "rejected") statusClass = "fs-badge--status-rejected";
-    else if (statusLower === "canceled" || statusLower === "cancelled") statusClass = "fs-badge--status-cancelled";
-    else if (statusLower === "pending admin approval") statusClass = "fs-badge--status-approval";
-    else if (statusLower === "pending") statusClass = "fs-badge--status-pending";
+    else if (statusLower === "completed")
+      statusClass = "fs-badge--status-completed";
+    else if (statusLower === "rejected")
+      statusClass = "fs-badge--status-rejected";
+    else if (statusLower === "canceled" || statusLower === "cancelled")
+      statusClass = "fs-badge--status-cancelled";
+    else if (statusLower === "pending admin approval")
+      statusClass = "fs-badge--status-approval";
+    else if (statusLower === "pending")
+      statusClass = "fs-badge--status-pending";
 
     const origin = b.Origin || "";
     const destination = b.Destination || "";
@@ -154,14 +166,14 @@ function updateStatsDisplay(stats) {
     const aLine = formatSpaceLine(b.EmptySpaceA, b.UnitA);
 
     // Assuming DepDate comes from the Space table, which is joined in the backend.
-    const deptDate = b.DepDate || ""; 
+    const deptDate = b.DepDate || "";
 
     const price = pickPrice(b.SpacePrice, b.BidPrice);
     const priceText = price ? `$${price}` : "—";
 
     const bookId = b.BookID || "—";
     // This will now use the CompName alias from the backend query
-    const compName = b.CompName || "—"; 
+    const compName = b.CompName || "—";
 
     const card = document.createElement("article");
     card.className = "fs-result-card fs-booking-card";
@@ -170,7 +182,9 @@ function updateStatsDisplay(stats) {
       <div class="fs-booking-top">
         <div class="fs-card-badges">
           <span class="fs-badge ${typeClass}">${escapeHtml(rawType)}</span>
-          <span class="fs-badge fs-badge--booking-status ${statusClass}">${escapeHtml(statusText)}</span>
+          <span class="fs-badge fs-badge--booking-status ${statusClass}">${escapeHtml(
+      statusText
+    )}</span>
         </div>
 
         <div class="fs-booking-id">
@@ -241,7 +255,7 @@ function updateStatsDisplay(stats) {
     return card;
   }
 
-   function pickPrice(spacePrice, bidPrice) {
+  function pickPrice(spacePrice, bidPrice) {
     // Treat 0 / 0.00 / "0" as empty, so we can fall back to BidPrice
     const s = normalizeNullable(spacePrice, true);
     if (s !== "") return s;
@@ -268,7 +282,6 @@ function updateStatsDisplay(stats) {
 
     return t;
   }
-
 
   function formatSpaceLine(val, unit) {
     const v = normalizeNullable(val);
