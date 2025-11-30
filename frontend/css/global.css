@@ -205,6 +205,13 @@ body {
   margin-bottom: 28px;
 }
 
+.fs-stats-row2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
 .fs-stat-card {
   background: #ffffff;
   border-radius: var(--fs-radius-lg);
