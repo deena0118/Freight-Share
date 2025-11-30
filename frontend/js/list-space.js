@@ -28,15 +28,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var priceInput = document.getElementById("price");
 
-    var hiddenFreight = document.getElementById("freightType");
-    var freightCards = document.querySelectorAll(".fs-freight-card");
+   var hiddenFreight = document.getElementById("freightType");
+var freightCards = document.querySelectorAll(".fs-freight-card");
+var freightChosenByUser = false;
 
-    var pricingOptions = document.querySelectorAll('.fs-pricing-option');
-    var infoBanner = document.getElementById("infoBanner");
-    var priceInputContainer = document.getElementById("priceInputContainer");
+var pricingOptions = document.querySelectorAll('.fs-pricing-option');
+var infoBanner = document.getElementById("infoBanner");
+var priceInputContainer = document.getElementById("priceInputContainer");
 
+var originInput = document.getElementById("origin");
+var destinationInput = document.getElementById("destination");
+var originDropdown = document.getElementById("originDropdown");
+var destinationDropdown = document.getElementById("destinationDropdown");
+var allLocations = [];
 
-
+freightCards.forEach(function (card) {
+    card.classList.remove("fs-freight-card--active");
+});
+if (hiddenFreight) {
+    hiddenFreight.value = "";
+}
 
 
 
@@ -50,9 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function validateStep(step) {
-        if (step === 1) {
-            return inputsStep1.every(isFilled);
-        }
+       if (step === 1) {
+    var hasFreight = freightChosenByUser;
+    return hasFreight && inputsStep1.every(isFilled);
+}
+
         if (step === 2) {
             return inputsStep2.every(isFilled);
         }
@@ -233,7 +246,83 @@ if (sPrice) sPrice.textContent = priceText;
         }
     }
 
-    
+  function setupSearchableDropdown(inputEl, dropdownEl) {
+    if (!inputEl || !dropdownEl) return;
+
+    function renderOptions(filterText) {
+        dropdownEl.innerHTML = "";
+        var text = (filterText || "").toLowerCase();
+
+        var matches = allLocations.filter(function (loc) {
+            return !text || loc.toLowerCase().indexOf(text) !== -1;
+        });
+
+        matches.slice(0, 50).forEach(function (loc) {
+            var opt = document.createElement("div");
+            opt.className = "fs-select-option";
+            opt.textContent = loc;
+            opt.addEventListener("mousedown", function (e) {
+                e.preventDefault();
+                inputEl.value = loc;
+                dropdownEl.classList.remove("fs-open");
+                updateSummary();
+                updateButtons();
+            });
+            dropdownEl.appendChild(opt);
+        });
+
+        if (matches.length > 0) {
+            dropdownEl.classList.add("fs-open");
+        } else {
+            dropdownEl.classList.remove("fs-open");
+        }
+    }
+
+    inputEl.addEventListener("focus", function () {
+        renderOptions(inputEl.value);
+    });
+
+    inputEl.addEventListener("input", function () {
+        renderOptions(inputEl.value);
+    });
+
+    inputEl.addEventListener("click", function () {
+        renderOptions(inputEl.value);
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!dropdownEl.contains(e.target) && e.target !== inputEl) {
+            dropdownEl.classList.remove("fs-open");
+        }
+    });
+}
+
+async function loadPorts() {
+    try {
+        const res = await fetch("/ports");
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to load ports");
+        }
+
+        var ports = data.ports || [];
+        var seen = {};
+
+        allLocations = ports
+            .map(function (p) { return p.Location; })
+            .filter(function (loc) {
+                if (!loc) return false;
+                if (seen[loc]) return false;
+                seen[loc] = true;
+                return true;
+            });
+
+        setupSearchableDropdown(originInput, originDropdown);
+        setupSearchableDropdown(destinationInput, destinationDropdown);
+    } catch (err) {
+        console.error("Error loading ports:", err);
+    }
+}
 
 
 
@@ -344,15 +433,28 @@ if (sPrice) sPrice.textContent = priceText;
         }
     }
 
-    function setFreight(type) {
-        freightCards.forEach(function (card) {
-            var cardType = card.getAttribute("data-freight");
-            card.classList.toggle("fs-freight-card--active", cardType === type);
-        });
-        if (hiddenFreight) hiddenFreight.value = type;
-        updateSummary();
-        updateButtons();
+    function setFreight(type, markChosen) {
+    var normalized = type ? type.toLowerCase() : "";
+    freightCards.forEach(function (card) {
+        var cardType = (card.getAttribute("data-freight") || "").toLowerCase();
+        card.classList.toggle("fs-freight-card--active", cardType === normalized);
+    });
+    if (hiddenFreight) hiddenFreight.value = normalized;
+    if (markChosen) {
+        freightChosenByUser = true;
     }
+    updateSummary();
+    updateButtons();
+}
+
+freightCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+        var type = card.getAttribute("data-freight");
+        if (!type) return;
+        setFreight(type, true);
+    });
+});
+
 
     freightCards.forEach(function (card) {
         card.addEventListener("click", function () {
@@ -421,22 +523,45 @@ if (sPrice) sPrice.textContent = priceText;
         updateButtons();
     });
 
-    nextBtn.addEventListener("click", function () {
-        if (!validateStep(currentStep)) return;
-
-        if (currentStep < totalSteps) {
-            currentStep += 1;
-            updateStepVisibility();
-            updateStepper();
-            updateButtons();
-        } else {
-            createListing();
+ nextBtn.addEventListener("click", function () {
+    if (currentStep === 1) {
+        if (!freightChosenByUser) {
+            alert("Please select a freight type.");
+            return;
         }
-    });
+
+        var originVal = originInput ? originInput.value.trim() : "";
+        var destVal = destinationInput ? destinationInput.value.trim() : "";
+
+        if (!originVal || !destVal) {
+            if (!validateStep(currentStep)) return;
+        }
+
+        if (allLocations && allLocations.length > 0) {
+            var hasOrigin = allLocations.indexOf(originVal) !== -1;
+            var hasDest = allLocations.indexOf(destVal) !== -1;
+
+            if (!hasOrigin || !hasDest) {
+                alert("Please select a valid origin/destination");
+                return;
+            }
+        }
+    }
+
+    if (!validateStep(currentStep)) return;
+
+    if (currentStep < totalSteps) {
+        currentStep += 1;
+        updateStepVisibility();
+        updateStepper();
+        updateButtons();
+    } else {
+        createListing();
+    }
+});
 
 
-    var initialType = hiddenFreight ? hiddenFreight.value || "truck" : "truck";
-    setFreight(initialType);
+
     
     var initialPricingType = document.querySelector('input[name="pricingType"]:checked');
     if (initialPricingType) {
@@ -444,6 +569,7 @@ if (sPrice) sPrice.textContent = priceText;
     }
     
     initializeProfileCard();
+loadPorts();
 
     updateSummary();
     updateStepVisibility();

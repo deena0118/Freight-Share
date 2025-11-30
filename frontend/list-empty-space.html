@@ -85,7 +85,7 @@
                 <div class="fs-field-group">
                   <span class="fs-field-label" >Freight Type</span>
                   <div class="fs-freight-type-grid" style="margin-top: 8px;" role="radiogroup" aria-label="Freight type">
-                    <button type="button" class="fs-freight-card fs-freight-card--active" data-freight="truck">
+                    <button type="button" class="fs-freight-card fs-freight-card--active" data-freight="Truck">
                       <div class="fs-freight-icon">
                         <img src="assets/icons/truck.svg" class="fs-icon" />
                       </div>
@@ -109,17 +109,38 @@
                   <input type="hidden" name="freightType" id="freightType" value="Truck" />
                 </div>
 
-                <div class="fs-form-grid">
-                  <label class="fs-field">
-                    <span class="fs-field-label">From (Origin)</span>
-                    <input id="origin" name="origin" class="fs-input" placeholder="e.g., Los Angeles, CA" />
-                  </label>
+<div class="fs-form-grid">
+  <label class="fs-field">
+    <span class="fs-field-label">From (Origin)</span>
+    <div class="fs-select-wrapper fs-select-wrapper--search">
+      <input
+        id="origin"
+        name="origin"
+        class="fs-input fs-select-input"
+        placeholder="Select origin"
+        autocomplete="off"
+      />
+      <div class="fs-select-dropdown" id="originDropdown"></div>
+    </div>
+  </label>
 
-                  <label class="fs-field">
-                    <span class="fs-field-label">To (Destination)</span>
-                    <input id="destination" name="destination" class="fs-input" placeholder="e.g., Phoenix, AZ" />
-                  </label>
-                </div>
+  <label class="fs-field">
+    <span class="fs-field-label">To (Destination)</span>
+    <div class="fs-select-wrapper fs-select-wrapper--search">
+      <input
+        id="destination"
+        name="destination"
+        class="fs-input fs-select-input"
+        placeholder="Select destination"
+        autocomplete="off"
+      />
+      <div class="fs-select-dropdown" id="destinationDropdown"></div>
+    </div>
+  </label>
+</div>
+
+
+
 
                 <div class="fs-form-grid">
                   <label class="fs-field">

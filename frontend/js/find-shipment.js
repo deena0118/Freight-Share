@@ -520,8 +520,8 @@ function getCurrentUserId() {
 }
 
 function makeId() {
-  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return "B" + Date.now() + "_" + Math.random().toString(16).slice(2);
+  const now = Date.now().toString();
+  return "B" + now.slice(-9);
 }
 
 function num2(val) {
