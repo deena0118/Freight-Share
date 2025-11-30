@@ -206,12 +206,27 @@ var sServiceFee = document.getElementById("summaryServiceFee");
             spaceTextW = availableSpaceW.value + " " + unitLabelW.toLowerCase();
         }
 
-        var spaceTextA= "—";
+      var spaceTextA = "—";
 
-if (isFilled(availableSpaceA) && isFilled(spaceUnitA)) {
-            var unitLabelA = spaceUnitA.options[spaceUnitA.selectedIndex].text;
-            spaceTextA = availableSpaceA.value + " " + unitLabelA.toLowerCase();
+if (isFilled(availableSpaceA)) {
+    var unitLabelA = "cbm"; 
+
+    if (spaceUnitA) {
+        if (spaceUnitA.tagName === "SELECT") {
+            var selectedA = spaceUnitA.options[spaceUnitA.selectedIndex];
+            if (selectedA && selectedA.text) {
+                unitLabelA = selectedA.text.toLowerCase();
+            }
+        } else {
+         
+            var rawUnitA = (spaceUnitA.value || "CBM");
+            unitLabelA = rawUnitA.toLowerCase();
         }
+    }
+
+    spaceTextA = availableSpaceA.value + " " + unitLabelA;
+}
+
 
        var priceText = "—";
 var pricingType = document.querySelector('input[name="pricingType"]:checked');

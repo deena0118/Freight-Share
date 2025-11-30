@@ -51,7 +51,6 @@ function wireTabs(userId) {
   const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
   if (tabs.length < 3) return;
 
-  // The scopes match the backend logic
 const scopes = ["all", "buyer", "seller"];
 
   tabs.forEach((btn, idx) => {
@@ -64,18 +63,69 @@ const scopes = ["all", "buyer", "seller"];
 }
 
 
-  function renderBookings(list) {
-    grid.innerHTML = "";
 
-    if (!list || list.length === 0) {
-      grid.innerHTML = '<p class="fs-empty-state">No bookings found.</p>';
-      return;
-    }
+function renderBookings(list) {
 
+  if (list && list.length) {
     list.forEach((b) => {
       grid.appendChild(buildBookingCard(b));
     });
+  } else {
   }
+
+  const stats = calculateBookingStats(list);
+  updateStatsDisplay(stats);
+}
+
+function calculateBookingStats(bookings) {
+  const stats = {
+    total: 0,
+    pending: 0,
+    confirmed: 0,
+    completed: 0,
+    buyer: 0, 
+    seller: 0,
+  };
+
+  if (!bookings || bookings.length === 0) {
+    return stats;
+  }
+
+  stats.total = bookings.length;
+
+  bookings.forEach(b => {
+    const status = (b.Status || "").toLowerCase().trim();
+
+    if (status === "pending" || status === "pending admin approval") {
+      stats.pending++;
+    } else if (status === "confirmed") {
+      stats.confirmed++;
+    } else if (status === "completed") {
+      stats.completed++;
+    }
+    
+ 
+  });
+
+  return stats;
+}
+
+function updateStatsDisplay(stats) {
+  const totalEl = document.querySelector(".fs-stat-card .fs-stat-value") || document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
+  const pendingEl = document.querySelector(".fs-stat-card:nth-child(2) .fs-stat-value");
+  const confirmedEl = document.querySelector(".fs-stat-card:nth-child(3) .fs-stat-value");
+  const completedEl = document.querySelector(".fs-stat-card:nth-child(4) .fs-stat-value");
+
+  if (totalEl) totalEl.textContent = stats.total;
+  if (pendingEl) pendingEl.textContent = stats.pending;
+  if (confirmedEl) confirmedEl.textContent = stats.confirmed;
+  if (completedEl) completedEl.textContent = stats.completed;
+  
+  const allTab = document.querySelector(".fs-toggle-tab:first-child");
+  if (allTab) {
+      allTab.textContent = `All Bookings (${stats.total})`;
+  }
+}
 
   function buildBookingCard(b) {
     const rawType = (b.Type || "truck").toString();

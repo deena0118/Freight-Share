@@ -112,7 +112,7 @@
                   <input type="hidden" name="freightType" id="freightType" value="Truck" />
                 </div>
 
-<div class="fs-form-grid">
+<div class="fs-form-grid" style="gap:10px">
   <label class="fs-field">
     <span class="fs-field-label">From (Origin)</span>
     <div class="fs-select-wrapper fs-select-wrapper--search">
@@ -142,7 +142,7 @@
   </label>
 </div>
 
-                <div class="fs-form-grid">
+                <div class="fs-form-grid" style="gap:10px">
                   <label class="fs-field">
                     <span class="fs-field-label">Departure Date</span>
                     <input
@@ -174,51 +174,49 @@
                 <p>Specify available space and goods allowed</p>
               </header>
 
-              <div class="fs-card fs-card--padded">
-                <div class="fs-form-grid fs-form-grid--align-top">
-                  <label class="fs-field">
-  <span class="fs-field-label">Available Weight</span>
-  <input id="availableSpaceW" name="availableSpaceW" class="fs-input" placeholder="e.g., 5" />
-  <span class="fs-help-text">Enter the weight of the space available for cargo</span>
-</label>
+            <div class="fs-card fs-card--padded">
+  <div class="fs-form-grid fs-form-grid--align-top fs-form-grid--units">
 
+                  <label class="fs-field">
+                    <span class="fs-field-label">Available Weight</span>
+                    <input id="availableSpaceW" name="availableSpaceW" class="fs-input" placeholder="e.g., 5" />
+                    <span class="fs-help-text">Enter the weight of the space available for cargo</span>
+                  </label>
+              
                   <label class="fs-field fs-field--shrink">
                     <span class="fs-field-label">Unit</span>
                     <div class="fs-select-wrapper">
-                      <select id="spaceUnitW" name="spaceUnit" class="fs-input fs-select">
+                      <select id="spaceUnitW" name="spaceUnit" class="fs-input fs-select" style="width:100%">
                         <option value="Tons">Tons</option>
                         <option value="Kg">Kg</option>
                       </select>
                     </div>
                   </label>
-                 <label class="fs-field">
-  <span class="fs-field-label">Available Volume</span>
-  <input id="availableSpaceA" name="availableSpaceA" class="fs-input" placeholder="e.g., 10" />
-  <span class="fs-help-text">Enter the area of the space available for cargo</span>
-</label>
-                    <label class="fs-field fs-field--shrink">
-                    <span class="fs-field-label">Unit</span>
-                    <div class="fs-select-wrapper">
-                      <select id="spaceUnitA" name="spaceUnit2" class="fs-input fs-select">
-                        <option value="cbm" selected>CBM</option>
-
-                      </select>
-                    </div>
+                  <label class="fs-field">
+                    <span class="fs-field-label">Available Volume</span>
+                    <input id="availableSpaceA" name="availableSpaceA" class="fs-input" placeholder="e.g., 10" />
+                    <span class="fs-help-text">Enter the area of the space available for cargo</span>
                   </label>
-                </div>
+                  <label class="fs-field fs-field--shrink">
+  <span class="fs-field-label">Unit</span>
+  <input
+    id="spaceUnitA"
+    name="spaceUnit2"
+    class="fs-input"
+    value="CBM"
+    readonly
+  />
+</label>
 
+                </div>
+              
                 <label class="fs-field fs-field--stacked">
                   <span class="fs-field-label">Types of Goods Allowed</span>
-                  <textarea
-                    id="goodsAllowed"
-                    name="goodsAllowed"
-                    rows="3"
-                    class="fs-input fs-textarea"
-                    placeholder="e.g., General cargo, Electronics, Non-hazardous materials"
-                  ></textarea>
+                  <textarea id="goodsAllowed" name="goodsAllowed" rows="3" class="fs-input fs-textarea"
+                    placeholder="e.g., General cargo, Electronics, Non-hazardous materials"></textarea>
                   <span class="fs-help-text">Specify what types of cargo you can transport</span>
                 </label>
-
+              
                 <div class="fs-quick-ref">
                   <div class="fs-quick-ref-label">Quick Reference</div>
                   <div class="fs-chip-row">
@@ -231,7 +229,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
 
             <div class="fs-step-content" data-step="3">
               <header class="fs-panel-header">
