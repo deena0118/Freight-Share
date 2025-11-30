@@ -127,6 +127,7 @@ body {
 .fs-main-nav {
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  margin-bottom:20px;
   height: 60px;
   padding-left: 10%;
   padding-right: 10%;

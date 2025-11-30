@@ -1,4 +1,3 @@
-// frontend/js/bookings.js
 document.addEventListener("DOMContentLoaded", function () {
   const grid =
     document.getElementById("fsBookingsGrid") ||
@@ -6,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!grid) return;
 
-  // Optional: keep the page consistent with the rest of your app login flow
   let raw = localStorage.getItem("user");
   if (!raw) {
     window.location.href = "index.html";
@@ -22,48 +20,61 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  const currentUserId = (currentUser && currentUser.id) || currentUser.ID || "";
+   const currentUserId =
+    (currentUser && currentUser.id) || currentUser.ID || "";
 
-  loadBookings(currentUserId, "all");
-  wireTabs(currentUserId);
+const currentUserCompID = (currentUser && currentUser.companyId) || "";
 
-  async function loadBookings(userId, scope) {
-    try {
-      // This logic is correct: for scope='all', it omits userId
-      const url =
-        scope === "all"
-          ? `/bookings?scope=all`
-          : `/bookings?userId=${encodeURIComponent(
-              userId
-            )}&scope=${encodeURIComponent(scope)}`;
+loadBookings(currentUserId, currentUserCompID, "all"); 
+wireTabs(currentUserId, currentUserCompID);         
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Failed to load bookings");
+async function loadBookings(userId, compId, scope) {   
+  try {
+    let url;
 
-      const data = await res.json();
-      const list = data.bookings || [];
-      renderBookings(list);
-    } catch (err) {
-      console.error(err);
-      grid.innerHTML =
-        '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
+    if (!compId || (!userId && scope !== "all")) {
+        console.error(`Missing User/Company ID for scope: ${scope}`);
+        grid.innerHTML = '<p class="fs-empty-state">Authentication error: Missing required Company/User ID.</p>';
+        return; 
     }
+
+    if (scope === "all") {
+        url = `/bookings?scope=all&compId=${encodeURIComponent(compId)}`;
+    } else {
+        url = `/bookings?userId=${encodeURIComponent(userId)}&scope=${encodeURIComponent(scope)}&compId=${encodeURIComponent(compId)}`;
+    }
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to load bookings");
+
+    const data = await res.json();
+    const list = data.bookings || [];
+    renderBookings(list);
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
+  }
   }
 
-  function wireTabs(userId) {
-    const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
-    if (tabs.length < 3) return;
+ // frontend/js/bookings.js (~ Line 56)
 
-    const scopes = ["all", "buyer", "seller"];
+// New signature
+function wireTabs(userId, compId) {
+  const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
+  if (tabs.length < 3) return;
 
-    tabs.forEach((btn, idx) => {
-      btn.addEventListener("click", () => {
-        tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
-        btn.classList.add("fs-toggle-tab--active");
-        loadBookings(userId, scopes[idx] || "all");
-      });
+  const scopes = ["all", "buyer", "seller"];
+
+  tabs.forEach((btn, idx) => {
+    btn.addEventListener("click", () => {
+      tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
+      btn.classList.add("fs-toggle-tab--active");
+      
+      // Pass the compId
+      loadBookings(userId, compId, scopes[idx] || "all"); 
     });
-  }
+  });
+}
 
   function renderBookings(list) {
     if (list && list.length) {
