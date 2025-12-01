@@ -516,20 +516,35 @@ document.addEventListener("DOMContentLoaded", function () {
     bidPartialPercentInput.__wired = true;
     bidPartialPercentInput.addEventListener("input", recomputeBidTotals);
   }
+function getCurrentUser() {
+  const raw = localStorage.getItem("user");
+  if (!raw) return null;
 
-  function getCurrentUserId() {
-    // You already store user in localStorage in other pages; reuse that pattern.
-    const raw = localStorage.getItem("user");
-    if (!raw) return null;
-
-    try {
-      const u = JSON.parse(raw);
-      return u.ID || u.Id || u.id || null;
-    } catch (e) {
-      return null;
-    }
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
   }
+}
 
+function getCurrentUserId() {
+  const u = getCurrentUser();
+  if (!u) return null;
+  return u.ID || u.Id || u.id || null;
+}
+
+function getCurrentUserType() {
+  const u = getCurrentUser();
+  const t = u && (u.Type || u.type);
+  return t ? String(t).trim() : "";
+}
+
+function isAdminOrSubType(t) {
+  const x = String(t || "").toLowerCase().trim();
+  return x === "admin" || x === "subadmin";
+}
+
+ 
   function makeId() {
     const now = Date.now().toString();
     return "B" + now.slice(-9);
@@ -713,7 +728,7 @@ function resolveBookingStatus() {
         BookID: makeId(),
         RefID: String(refId),
         ID: String(userId),
-        Status: resolveBookingStatus(),
+Status: isAdminOrSubType(getCurrentUserType()) ? "Pending" : "Pending Admin Approval",
         SpacePrice: pricing.SpacePrice,
         BidPrice: pricing.BidPrice,
         Partial: pricing.Partial,

@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const modalActionsWrap = document.getElementById("fsModalActions");
   const approveBtn = document.getElementById("fsModalApproveBtn");
-  const cancelBtn = document.getElementById("fsModalCancelBtn");
   const rejectBtn = document.getElementById("fsModalRejectBtn");
 
   const modalFixedBlock = document.getElementById("fsModalFixedBlock");
   const modalBidBlock = document.getElementById("fsModalBidBlock");
   const partialToggle = document.getElementById("fsPartialToggle");
   const partialBox = document.getElementById("fsPartialBox");
+const reqTotalEl = document.getElementById("fsReqTotal");
 
   if (!grid) return;
 
@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentUserType = String((currentUser && (currentUser.type || currentUser.Type)) || "").trim();
   let allBookings = [];
-  let activeScope = "all";
   let activeBooking = null;
 
   bindModalBaseEvents();
@@ -64,8 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   (async function init() {
     await hydrateUserType();
-    wireTabs();
-    await loadAllBookings();
+    await loadRequests();
   })();
 
   async function hydrateUserType() {
@@ -84,102 +82,36 @@ document.addEventListener("DOMContentLoaded", function () {
     return t === "admin" || t === "subadmin";
   }
 
-  async function loadAllBookings() {
-    try {
-      const url = `/bookings?scope=all&compId=${encodeURIComponent(currentUserCompID)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Failed to load bookings");
-      const data = await res.json();
-      allBookings = data.bookings || [];
-      updateTabCounts(calculateRoleCounts(allBookings));
-      applyScope(activeScope);
-    } catch (err) {
-      console.error(err);
-      grid.innerHTML = '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
-    }
+ async function loadRequests() {
+  try {
+    const url = `/booking-requests?compId=${encodeURIComponent(currentUserCompID)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to load requests");
+
+    const data = await res.json();
+
+    // Update Total Requests = Space(Pending Admin Approval) + Booking(Pending Admin Approval)
+    const total =
+      data && data.counts && typeof data.counts.totalRequests === "number"
+        ? data.counts.totalRequests
+        : 0;
+
+    if (reqTotalEl) reqTotalEl.textContent = String(total);
+
+    allBookings = (data && data.bookings) || [];
+    renderBookings(allBookings);
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<p class="fs-empty-state">Could not load requests. Please try again.</p>';
+    if (reqTotalEl) reqTotalEl.textContent = "0";
   }
+}
 
-  function wireTabs() {
-    const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
-    if (tabs.length < 3) return;
-
-    const scopes = ["all", "buyer", "seller"];
-
-    tabs.forEach((btn, idx) => {
-      btn.addEventListener("click", () => {
-        tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
-        btn.classList.add("fs-toggle-tab--active");
-        activeScope = scopes[idx] || "all";
-        applyScope(activeScope);
-      });
-    });
-  }
-
-  function applyScope(scope) {
-    const filtered = filterBookingsByScope(scope, allBookings);
-    renderBookings(filtered);
-    updateSummaryStats(calculateStatusStats(filtered));
-  }
-
-  function filterBookingsByScope(scope, list) {
-    const myComp = currentUserCompID;
-    const arr = list || [];
-    if (scope === "seller") return arr.filter((b) => String(b.CompID || "") === myComp);
-    if (scope === "buyer") return arr.filter((b) => String(b.CompID || "") !== myComp);
-    return arr;
-  }
-
-  function calculateRoleCounts(bookings) {
-    const myComp = currentUserCompID;
-    const list = bookings || [];
-    let buyer = 0;
-    let seller = 0;
-    list.forEach((b) => {
-      if (String(b.CompID || "") === myComp) seller++;
-      else buyer++;
-    });
-    return { total: list.length, buyer, seller };
-  }
-
-  function updateTabCounts(stats) {
-    const allTab = document.querySelector(".fs-toggle-tab:first-child");
-    const buyerTab = document.querySelector(".fs-toggle-tab:nth-child(2)");
-    const sellerTab = document.querySelector(".fs-toggle-tab:nth-child(3)");
-    if (allTab) allTab.textContent = `All Bookings (${stats.total})`;
-    if (buyerTab) buyerTab.textContent = `As Buyer (${stats.buyer})`;
-    if (sellerTab) sellerTab.textContent = `As Seller (${stats.seller})`;
-  }
-
-  function calculateStatusStats(bookings) {
-    const stats = { total: 0, pending: 0, confirmed: 0, completed: 0 };
-    const list = bookings || [];
-    stats.total = list.length;
-
-    list.forEach((b) => {
-      const status = String(b.Status || "").toLowerCase().trim();
-      if (status === "pending") stats.pending++;
-      else if (status === "confirmed") stats.confirmed++;
-      else if (status === "completed") stats.completed++;
-    });
-
-    return stats;
-  }
-
-  function updateSummaryStats(stats) {
-    const totalEl = document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
-    const pendingEl = document.querySelector(".fs-stat-card:nth-child(2) .fs-stat-value");
-    const confirmedEl = document.querySelector(".fs-stat-card:nth-child(3) .fs-stat-value");
-    const completedEl = document.querySelector(".fs-stat-card:nth-child(4) .fs-stat-value");
-    if (totalEl) totalEl.textContent = stats.total;
-    if (pendingEl) pendingEl.textContent = stats.pending;
-    if (confirmedEl) confirmedEl.textContent = stats.confirmed;
-    if (completedEl) completedEl.textContent = stats.completed;
-  }
 
   function renderBookings(list) {
     grid.innerHTML = "";
     if (!list || list.length === 0) {
-      grid.innerHTML = '<p class="fs-empty-state">No bookings found.</p>';
+      grid.innerHTML = '<p class="fs-empty-state">No requests found.</p>';
       return;
     }
     list.forEach((b) => grid.appendChild(buildBookingCard(b)));
@@ -193,21 +125,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeLower === "ship") typeClass = "fs-badge--type-ship";
     else if (typeLower === "plane" || typeLower === "air") typeClass = "fs-badge--type-plane";
 
-    const statusText = String(b.Status || "Pending").trim();
-    const statusLower = statusText.toLowerCase();
+    const statusText = String(b.Status || "Pending Admin Approval").trim();
+    const statusLower = statusText.toLowerCase().trim();
 
     let statusClass = "fs-badge--status-generic";
-    if (statusLower === "confirmed") statusClass = "fs-badge--status-confirmed";
-    else if (statusLower === "completed") statusClass = "fs-badge--status-completed";
-    else if (statusLower === "rejected") statusClass = "fs-badge--status-rejected";
-    else if (statusLower === "canceled" || statusLower === "cancelled") statusClass = "fs-badge--status-cancelled";
+    if (statusLower === "pending admin approval") statusClass = "fs-badge--status-approval";
     else if (statusLower === "pending") statusClass = "fs-badge--status-pending";
-
-    const myComp = currentUserCompID;
-    const roleIsSeller = String(b.CompID || "") === myComp;
-
-    const roleText = roleIsSeller ? "As Seller" : "As Buyer";
-    const roleClass = roleIsSeller ? "fs-badge--role-seller" : "fs-badge--role-buyer";
+    else if (statusLower === "rejected") statusClass = "fs-badge--status-rejected";
+    else if (statusLower === "confirmed") statusClass = "fs-badge--status-confirmed";
+    else if (statusLower === "completed") statusClass = "fs-badge--status-completed";
+    else if (statusLower === "canceled" || statusLower === "cancelled") statusClass = "fs-badge--status-cancelled";
 
     const origin = b.Origin || "";
     const destination = b.Destination || "";
@@ -274,9 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <div class="fs-booking-meta-item">
-          <div class="fs-booking-meta-label">
-            <span>Price</span>
-          </div>
+          <div class="fs-booking-meta-label"><span>Price</span></div>
           <div class="fs-booking-meta-value">
             <span class="fs-card-price">${escapeHtml(priceText)}</span>
           </div>
@@ -348,7 +273,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (modalStatusBadge) modalStatusBadge.textContent = String(b.Status || "—");
 
     const buyerCompId = String(b.BuyerCompID || "");
-    const spaceCompId = String(b.SpaceCompID || b.CompID || "");
     const isBuyer = buyerCompId && buyerCompId === currentUserCompID;
 
     const companyName = isBuyer ? (b.SpaceCompName || b.CompName || "—") : (b.BuyerCompName || "—");
@@ -370,7 +294,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function hideAllModalButtons() {
     if (modalActionsWrap) modalActionsWrap.style.display = "none";
     if (approveBtn) approveBtn.style.display = "none";
-    if (cancelBtn) cancelBtn.style.display = "none";
     if (rejectBtn) rejectBtn.style.display = "none";
   }
 
@@ -378,36 +301,12 @@ document.addEventListener("DOMContentLoaded", function () {
     hideAllModalButtons();
 
     const statusLower = String(b.Status || "").toLowerCase().trim();
-    if (statusLower !== "pending") return;
+    if (statusLower !== "pending admin approval") return;
 
-    const adminSub = isAdminOrSub();
+    if (!isAdminOrSub()) return;
 
-    const myComp = currentUserCompID;
-    const roleIsSeller = String(b.SpaceCompID || b.CompID || "") === myComp;
-
-    const buyerId = String(b.BuyerID || "");
-    const buyerCompId = String(b.BuyerCompID || "");
-
-    const spaceUserId = String(b.SpaceUserID || "");
     const spaceCompId = String(b.SpaceCompID || b.CompID || "");
-
-    if (!roleIsSeller) {
-      const canCancel =
-        (adminSub && buyerCompId === myComp) ||
-        (buyerId && buyerId === currentUserId);
-
-      if (!canCancel) return;
-
-      if (modalActionsWrap) modalActionsWrap.style.display = "flex";
-      if (cancelBtn) cancelBtn.style.display = "inline-flex";
-      return;
-    }
-
-    const canSellerAct =
-      (adminSub && spaceCompId === myComp) ||
-      (spaceUserId && spaceUserId === currentUserId);
-
-    if (!canSellerAct) return;
+    if (spaceCompId !== currentUserCompID) return;
 
     if (modalActionsWrap) modalActionsWrap.style.display = "flex";
     if (approveBtn) approveBtn.style.display = "inline-flex";
@@ -421,9 +320,9 @@ document.addEventListener("DOMContentLoaded", function () {
         e.stopPropagation();
         if (!activeBooking) return;
         const id = String(activeBooking.BookID || "");
-        const ok = window.confirm(`Are you sure you want to accept Booking ID: ${id}`);
+        const ok = window.confirm(`Are you sure you want to approve Booking ID: ${id}`);
         if (!ok) return;
-        await setBookingStatus(id, "Confirmed");
+        await setRequestStatus(id, "Pending");
       });
     }
 
@@ -435,26 +334,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const id = String(activeBooking.BookID || "");
         const ok = window.confirm(`Are you sure you want to reject Booking ID: ${id}`);
         if (!ok) return;
-        await setBookingStatus(id, "Rejected");
-      });
-    }
-
-    if (cancelBtn) {
-      cancelBtn.addEventListener("click", async function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!activeBooking) return;
-        const id = String(activeBooking.BookID || "");
-        const ok = window.confirm(`Are you sure you want to cancel Booking ID: ${id}`);
-        if (!ok) return;
-        await setBookingStatus(id, "Canceled");
+        await setRequestStatus(id, "Rejected");
       });
     }
   }
 
-  async function setBookingStatus(bookId, status) {
+  async function setRequestStatus(bookId, status) {
     try {
-      const res = await fetch(`/bookings/${encodeURIComponent(bookId)}/status`, {
+      const res = await fetch(`/booking-requests/${encodeURIComponent(bookId)}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -466,18 +353,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        alert((data && data.error) || "Failed to update booking.");
+        alert((data && data.error) || "Failed to update request.");
         return;
       }
 
       const keepId = bookId;
-      await loadAllBookings();
+      await loadRequests();
 
       const updated = (allBookings || []).find((x) => String(x.BookID || "") === String(keepId));
       if (updated) openBookingModal(updated);
+      else {
+        if (modal) modal.classList.add("fs-modal--hidden");
+        activeBooking = null;
+        hideAllModalButtons();
+      }
     } catch (err) {
       console.error(err);
-      alert("Failed to update booking.");
+      alert("Failed to update request.");
     }
   }
 

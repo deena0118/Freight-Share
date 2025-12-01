@@ -2,10 +2,16 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/database");
 
+/**
+ * GET /bookings?compId=Comp001&scope=all|buyer|seller
+ * NOTE: This endpoint is for "My Bookings" (and admin overview if you want),
+ * so it MUST EXCLUDE "Pending Admin Approval".
+ */
 router.get("/", (req, res) => {
-  const scope = String(req.query.scope || "all").toLowerCase();
-  const userId = (req.query.userId && String(req.query.userId).trim()) || "";
   const compId = (req.query.compId && String(req.query.compId).trim()) || "";
+  const scope = String(req.query.scope || "all").toLowerCase().trim();
+
+  if (!compId) return res.status(400).json({ error: "compId is required" });
 
   const baseSql = `
     SELECT
@@ -48,47 +54,116 @@ router.get("/", (req, res) => {
     LEFT JOIN "Company" bc ON bc.CompID = u.CompID
   `;
 
-  function run(whereClause, params) {
-    let sql = baseSql;
-    if (whereClause && whereClause.trim()) sql += " WHERE " + whereClause;
-    sql += " ORDER BY datetime(b.CreatedAt) DESC";
+  // "My Bookings" must NOT show approval-pending items.
+  const where = [];
+  const params = [];
 
-    db.all(sql, params || [], (err, rows) => {
-      if (err) {
-        console.error("Select bookings error:", err);
-        return res.status(500).json({ error: "Failed to load bookings" });
-      }
-
-      const mappedRows = (rows || []).map((row) => {
-        if (row.DepDate) {
-          const dt = String(row.DepDate);
-          const parts = dt.split(" ");
-          row.DepDate = parts[0] || "";
-          row.DepTime = (parts[1] || "").slice(0, 5);
-        } else {
-          row.DepTime = "";
-        }
-        return row;
-      });
-
-      return res.json({ bookings: mappedRows });
-    });
+  // Only bookings relevant to this company (as buyer or seller)
+  if (scope === "seller") {
+    where.push(`s.CompID = ?`);
+    params.push(compId);
+  } else if (scope === "buyer") {
+    where.push(`u.CompID = ?`);
+    params.push(compId);
+  } else {
+    where.push(`(s.CompID = ? OR u.CompID = ?)`);
+    params.push(compId, compId);
   }
 
-  if (scope === "all") {
-    if (!compId) return res.status(400).json({ error: "compId is required for scope=all" });
-    return run("(s.CompID = ? OR u.CompID = ?)", [compId, compId]);
-  }
+  where.push(`lower(trim(b.Status)) <> 'pending admin approval'`);
 
-  if (!userId) return res.status(400).json({ error: "userId is required for this scope" });
-  if (!compId) return res.status(400).json({ error: "compId is required for this scope" });
+  const sql = `${baseSql} WHERE ${where.join(" AND ")} ORDER BY datetime(b.CreatedAt) DESC`;
 
-  if (scope === "buyer") return run("b.ID = ?", [userId]);
-  if (scope === "seller") return run("s.CompID = ?", [compId]);
-
-  return res.status(400).json({ error: "Invalid scope. Use scope=all|buyer|seller" });
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      console.error("Select bookings error:", err);
+      return res.status(500).json({ error: "Failed to load bookings" });
+    }
+    return res.json({ bookings: rows || [] });
+  });
 });
 
+/**
+ * POST /bookings
+ * Rule:
+ * - Normal User -> always "Pending Admin Approval"
+ * - Admin/SubAdmin -> may create as "Pending" (or request Pending Admin Approval if you want)
+ */
+router.post("/", (req, res) => {
+  const {
+    BookID,
+    RefID,
+    ID,
+    Status,
+    SpacePrice,
+    BidPrice,
+    Partial,
+    PartialAmt,
+    CreatedAt
+  } = req.body || {};
+
+  if (!BookID || !RefID || !ID) {
+    return res.status(400).json({ error: "Missing BookID, RefID or ID" });
+  }
+
+  const requested = String(Status || "").trim().toLowerCase();
+  let requestedStatus = "";
+  if (requested) {
+    if (requested === "pending") requestedStatus = "Pending";
+    else if (requested === "pending admin approval") requestedStatus = "Pending Admin Approval";
+    else return res.status(400).json({ error: "Invalid status for create. Use Pending or Pending Admin Approval" });
+  }
+
+  db.get(`SELECT Type FROM "User" WHERE ID = ? LIMIT 1`, [ID], (uErr, uRow) => {
+    if (uErr) {
+      console.error("Lookup booking user type error:", uErr);
+      return res.status(500).json({ error: "Failed to create booking" });
+    }
+    if (!uRow) return res.status(404).json({ error: "User not found" });
+
+    const actorType = String(uRow.Type || "").toLowerCase().trim();
+    const isAdminOrSub = actorType === "admin" || actorType === "subadmin";
+
+    // Enforce rule:
+    // - User MUST be Pending Admin Approval
+    // - Admin/SubAdmin can be Pending (default) unless explicitly requested
+    let statusToSave = requestedStatus || (isAdminOrSub ? "Pending" : "Pending Admin Approval");
+    if (!isAdminOrSub) statusToSave = "Pending Admin Approval";
+
+    const sql = `
+      INSERT INTO Booking
+        (BookID, RefID, ID, Status, SpacePrice, BidPrice, Partial, PartialAmt, CreatedAt)
+      VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const params = [
+      String(BookID).trim(),
+      String(RefID).trim(),
+      String(ID).trim(),
+      statusToSave,
+      SpacePrice || "0",
+      BidPrice || "0",
+      Partial || "N",
+      PartialAmt || "0",
+      CreatedAt || new Date().toISOString()
+    ];
+
+    db.run(sql, params, function (err) {
+      if (err) {
+        console.error("Insert Booking error:", err);
+        return res.status(500).json({ error: "Failed to create booking" });
+      }
+      return res.json({ ok: true, BookID, Status: statusToSave, rowsAffected: this.changes });
+    });
+  });
+});
+
+/**
+ * PUT /bookings/:bookId/status
+ * This is NOT the admin-approval route.
+ * This route only works after approval (i.e. status is already "Pending").
+ */
 router.put("/:bookId/status", (req, res) => {
   const bookId = String(req.params.bookId || "").trim();
   const statusIn = (req.body && String(req.body.status || "").trim()) || "";
@@ -133,7 +208,9 @@ router.put("/:bookId/status", (req, res) => {
     if (!bk) return res.status(404).json({ error: "Booking not found" });
 
     const cur = String(bk.BookingStatus || "").toLowerCase().trim();
-    if (cur !== "pending") return res.status(400).json({ error: "Only pending bookings can be updated" });
+    if (cur !== "pending") {
+      return res.status(400).json({ error: "Only pending bookings can be updated" });
+    }
 
     db.get(actorSql, [actorUserId], (err2, au) => {
       if (err2) {
@@ -190,52 +267,6 @@ router.put("/:bookId/status", (req, res) => {
         });
       });
     });
-  });
-});
-
-router.post("/", (req, res) => {
-  const {
-    BookID,
-    RefID,
-    ID,
-    Status,
-    SpacePrice,
-    BidPrice,
-    Partial,
-    PartialAmt,
-    CreatedAt
-  } = req.body || {};
-
-  if (!BookID || !RefID || !ID) {
-    return res.status(400).json({ error: "Missing BookID, RefID or ID" });
-  }
-
-  const sql = `
-    INSERT INTO Booking
-      (BookID, RefID, ID, Status, SpacePrice, BidPrice, Partial, PartialAmt, CreatedAt)
-    VALUES
-      (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  const params = [
-    BookID,
-    RefID,
-    ID,
-    Status || "Pending",
-    SpacePrice || "0",
-    BidPrice || "0",
-    Partial || "N",
-    PartialAmt || "0",
-    CreatedAt || new Date().toISOString()
-  ];
-
-  db.run(sql, params, function (err) {
-    if (err) {
-      console.error("Insert Booking error:", err);
-      return res.status(500).json({ error: "Failed to create booking" });
-    }
-
-    return res.json({ ok: true, BookID, rowsAffected: this.changes });
   });
 });
 

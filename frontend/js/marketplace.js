@@ -175,7 +175,88 @@ document.addEventListener("DOMContentLoaded", function () {
       list.appendChild(item);
     });
   }
+// marketplace.js (inside DOMContentLoaded)
 
+// ... existing code ...
+
+// ----------------- STATS -----------------
+
+// Helper function to safely parse and sum EmptySpaceA from available spaces
+function calculateTotalAvailableSpace(spaces) {
+    let totalCBM = 0;
+    // 1. Filter: Status must be 'Available' (assuming only available spaces are returned by the /shipments endpoint, but good practice to filter)
+    const availableSpaces = spaces.filter(s => (s.Status || '').toLowerCase() === 'available');
+
+    // 2. Sum: Add up all values in EmptySpaceA
+    availableSpaces.forEach(function (space) {
+        // Use parseFloat to handle potential non-numeric values gracefully
+        const spaceA = parseFloat(space.EmptySpaceA);
+        if (!isNaN(spaceA)) {
+            totalCBM += spaceA;
+        }
+    });
+
+    return totalCBM;
+}
+
+// 💥 UPDATED: Helper function to simply count the number of Port rows
+function calculateTotalPorts(ports) {
+    // Simply return the total number of items in the 'ports' array
+    return ports ? ports.length : 0;
+}
+
+async function loadStats() {
+    // Select the stat elements
+    const availableSpaceEl = document.getElementById("fsStatAvailableSpace");
+    const countriesAvailableEl = document.getElementById("fsStatCountriesAvailable");
+
+    // --- 1. Total Available Space (from Space table) ---
+    try {
+        const res = await fetch("/shipments");
+        const data = await res.json();
+        
+        if (res.ok) {
+            const spaces = Array.isArray(data.spaces) ? data.spaces : [];
+            const totalCBM = calculateTotalAvailableSpace(spaces);
+            
+            if (availableSpaceEl) {
+                availableSpaceEl.textContent = `${totalCBM} CBM`;
+            }
+        } else {
+            console.error("Failed to load spaces for available space stat:", data.error);
+        }
+    } catch (err) {
+        console.error("Error loading total available space:", err);
+    }
+    
+    // --- 2. Total Ports Available (from Port table) ---
+    try {
+        // NOTE: Assumes you have a /ports endpoint that returns all Port table rows
+        const res = await fetch("/ports"); 
+        const data = await res.json();
+        
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to load port data.");
+        }
+        
+        const ports = Array.isArray(data.ports) ? data.ports : [];
+        
+        // 💥 UPDATED: Use the new function to get the total row count
+        const totalPortsCount = calculateTotalPorts(ports);
+        
+        if (countriesAvailableEl) {
+            // Update with the total row count
+            countriesAvailableEl.textContent = String(totalPortsCount);
+        }
+    } catch (err) {
+        console.error("Error loading total ports stat:", err);
+        if (countriesAvailableEl) {
+            countriesAvailableEl.textContent = "—"; 
+        }
+    }
+}
+
+// ... existing code ...
   async function loadLiveFeed() {
     const list = document.querySelector(FEED_SELECTOR);
     if (!list) return;
@@ -207,4 +288,5 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   loadLiveFeed();
+  loadStats(); // <--- ADD THIS LINE HERE
 });

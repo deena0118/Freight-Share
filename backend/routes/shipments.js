@@ -22,13 +22,11 @@ router.get("/", (req, res) => {
         .json({ error: "Failed to load shipments from database." });
     }
 
-    // ⬇️ NEW: split "YYYY-MM-DD HH:MM" into DepDate + DepTime for the API
     const mappedRows = (rows || []).map((row) => {
       if (row.DepDate) {
         const dt = String(row.DepDate);
         const [datePart, timePart] = dt.split(" ");
         row.DepDate = datePart || "";
-        // keep only HH:MM even if seconds exist
         row.DepTime = (timePart || "").slice(0, 5);
       } else {
         row.DepTime = "";

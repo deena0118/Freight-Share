@@ -21,6 +21,9 @@ app.use("/bookings", bookingsRoutes);
 const portsRouter = require("./routes/ports");
 app.use("/ports", portsRouter);
 
+const bookingRequestsRouter  = require("./routes/booking-requests");
+app.use("/booking-requests", bookingRequestsRouter );
+
 app.use("/users", require("./routes/users"));
 
 app.get("/", (req, res) => {

@@ -2,10 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>FreightShare – Find Shipment</title>
+    <title>FreightShare – Booking Requests</title>
     <link rel="stylesheet" href="css/global.css" />
   </head>
-
   <body>
     <div class="fs-root">
       <header class="fs-header">
@@ -20,9 +19,7 @@
         </div>
 
         <div class="fs-header-right">
-          <span class="fs-header-tagline"
-            >Connecting freight space worldwide</span
-          >
+          <span class="fs-header-tagline">Connecting freight space worldwide</span>
 
           <div class="fs-profile">
             <button type="button" class="fs-profile-icon">
@@ -31,27 +28,162 @@
 
             <div class="fs-profile-card">
               <div class="fs-profile-name" id="fsProfileName">User Name</div>
-              <div class="fs-profile-company" id="fsProfileCompany">
-                Company Name
-              </div>
-              <button
-                type="button"
-                class="fs-profile-logout"
-                id="fsProfileLogout"
-              >
-                Sign out
-              </button>
+              <div class="fs-profile-company" id="fsProfileCompany">Company Name</div>
+              <button type="button" class="fs-profile-logout" id="fsProfileLogout">Sign out</button>
             </div>
           </div>
         </div>
       </header>
 
       <div id="nav-placeholder"></div>
+      <script src="js/main.js"></script>
+
+      <main class="fs-page-wrapper">
+        <div class="fs-page">
+          <section class="fs-section-header">
+            <h1>Booking Requests</h1>
+            <p>Approve or reject booking requests that need admin approval</p>
+          </section>
+
+          <section class="fs-stats-row2" style="display:none;">
+  <div class="fs-stat-card fs-stat-card--compact">
+    <div class="fs-stat-label">Total Requests</div>
+    <div id="fsReqTotal" class="fs-stat-value">0</div>
+  </div>
+</section>
 
 
-      
+          <section id="fsBookingsGrid" class="fs-card-grid fs-card-grid--bookings"></section>
+        </div>
+      </main>
+    </div>
 
-    <script src="js/find-shipment.js"></script>
-    <script src="js/main.js"></script>
+    <div id="fsShipmentModal" class="fs-modal fs-modal--hidden">
+      <div class="fs-modal-backdrop"></div>
+      <div class="fs-modal-dialog">
+        <button id="fsModalClose" class="fs-modal-close" type="button">&times;</button>
+
+        <div class="fs-modal-header">
+          <div>
+            <h2>Shipment Details</h2>
+            <p class="fs-modal-subtitle">Review request details</p>
+          </div>
+          <span id="fsModalTypeChip" class="fs-badge" style="margin-top: 20px">Ship</span>
+        </div>
+
+        <div class="fs-modal-section">
+          <h3 class="fs-modal-section-title">Route</h3>
+          <div class="fs-modal-route">
+            <div class="fs-modal-route-point">
+              <div class="fs-modal-dot fs-modal-dot--origin"></div>
+              <div>
+                <div id="fsModalOrigin" class="fs-modal-city">—</div>
+                <div class="fs-modal-muted">Origin</div>
+              </div>
+            </div>
+
+            <div class="fs-modal-route-line"></div>
+
+            <div class="fs-modal-route-point">
+              <div class="fs-modal-dot fs-modal-dot--dest"></div>
+              <div>
+                <div id="fsModalDestination" class="fs-modal-city">—</div>
+                <div class="fs-modal-muted">Destination</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section fs-modal-section--two-cols">
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Available Space</div>
+            <div id="fsModalAvailableSpace" class="fs-modal-card-value">—</div>
+          </div>
+
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Departure Date</div>
+            <div id="fsModalDepartureDate" class="fs-modal-card-value">—</div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section">
+          <div class="fs-modal-card">
+            <div class="fs-modal-card-label">Allowed Cargo Types</div>
+            <div id="fsModalCargo" class="fs-modal-pill">—</div>
+          </div>
+        </div>
+
+        <div class="fs-modal-section">
+          <h3 class="fs-modal-section-title">Seller Information</h3>
+          <div class="fs-modal-seller">
+            <div class="fs-modal-seller-left">
+              <div class="fs-modal-seller-avatar">
+                <img src="assets/icons/profile.svg" alt="" />
+              </div>
+              <div>
+                <div id="fsModalCompanyName" class="fs-modal-company">—</div>
+                <div class="fs-modal-muted">
+                  <span class="fs-modal-star">★</span> 4.9 · Verified Seller
+                </div>
+                </div>
+                </div>
+                <div id="fsModalCompanyDesc" class="fs-modal-muted fs-modal-seller-text">—</div>
+                </div>
+                </div>
+                
+                <div class="fs-modal-section">
+  <div class="fs-modal-price-row">
+    <div>
+      <div id="fsModalFixedBlock">
+        <div class="fs-modal-card-label">Total Price</div>
+        <div id="fsModalTotalPrice" class="fs-modal-price">—</div>
+
+        <div class="fs-modal-fee-lines">
+          <div class="fs-modal-fee-line">
+            <span>Seller Revenue:</span>
+            <span id="fsModalSellerRevenue">—</span>
+          </div>
+
+          <div class="fs-modal-fee-line">
+            <span>Service Fee (5%):</span>
+            <span id="fsModalServiceFee">—</span>
+          </div>
+
+          <div
+            id="fsModalActions"
+            style="display: none; gap: 10px; margin-top: 12px; flex-wrap: wrap"
+          >
+            <button
+              id="fsModalApproveBtn"
+              type="button"
+              class="btn-primary"
+              style="display: none"
+            >
+              Approve
+            </button>
+
+            <button
+              id="fsModalRejectBtn"
+              type="button"
+              class="btn-primary btn-outline"
+              style="display: none"
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="fsModalBidBlock" style="display: none; margin-top: 10px"></div>
+    </div>
+
+    <span id="fsModalStatusBadge" class="fs-modal-status-badge">—</span>
+  </div>
+</div>
+
+                </div>
+                </div>
+
+    <script src="js/requests.js"></script>
   </body>
 </html>
