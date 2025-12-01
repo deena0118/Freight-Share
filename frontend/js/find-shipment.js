@@ -660,6 +660,28 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("You must be logged in to book.");
         return;
       }
+   function getCurrentUserType() {
+  // try a few common keys (keep "user" first)
+  const raw =
+    localStorage.getItem("user") ||
+    localStorage.getItem("currentUser") ||
+    localStorage.getItem("authUser");
+
+  if (!raw) return "";
+  try {
+    const u = JSON.parse(raw);
+    return String(u.Type || u.type || "").trim(); // "User" | "Admin" | "SubAdmin"
+  } catch (e) {
+    return "";
+  }
+}
+
+function resolveBookingStatus() {
+  const t = getCurrentUserType().toLowerCase();
+  return t === "User" ? "Pending Admin Approval" : "Pending";
+}
+
+
 
       const refId =
         activeSpace.RefID ||
@@ -691,7 +713,7 @@ document.addEventListener("DOMContentLoaded", function () {
         BookID: makeId(),
         RefID: String(refId),
         ID: String(userId),
-        Status: "Pending",
+        Status: resolveBookingStatus(),
         SpacePrice: pricing.SpacePrice,
         BidPrice: pricing.BidPrice,
         Partial: pricing.Partial,

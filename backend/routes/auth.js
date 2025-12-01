@@ -35,6 +35,7 @@ router.post("/login", (req, res) => {
         name: user.Name,
         email: user.Email,
         companyId: user.CompID,
+        currentUserType: user.Type,
         companyName: user.CompanyName,
       },
     });

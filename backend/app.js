@@ -21,6 +21,8 @@ app.use("/bookings", bookingsRoutes);
 const portsRouter = require("./routes/ports");
 app.use("/ports", portsRouter);
 
+app.use("/users", require("./routes/users"));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
 });

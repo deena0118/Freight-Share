@@ -3,6 +3,32 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("fsBookingsGrid") ||
     document.querySelector(".fs-card-grid--bookings");
 
+  const modal = document.getElementById("fsShipmentModal");
+  const modalClose = document.getElementById("fsModalClose");
+
+  const modalTypeChip = document.getElementById("fsModalTypeChip");
+  const modalOrigin = document.getElementById("fsModalOrigin");
+  const modalDestination = document.getElementById("fsModalDestination");
+  const modalAvailableSpace = document.getElementById("fsModalAvailableSpace");
+  const modalDepartureDate = document.getElementById("fsModalDepartureDate");
+  const modalCargo = document.getElementById("fsModalCargo");
+  const modalCompanyName = document.getElementById("fsModalCompanyName");
+  const modalCompanyDesc = document.getElementById("fsModalCompanyDesc");
+  const modalTotalPrice = document.getElementById("fsModalTotalPrice");
+  const modalStatusBadge = document.getElementById("fsModalStatusBadge");
+  const modalSellerRevenue = document.getElementById("fsModalSellerRevenue");
+  const modalServiceFee = document.getElementById("fsModalServiceFee");
+
+  const modalActionsWrap = document.getElementById("fsModalActions");
+  const approveBtn = document.getElementById("fsModalApproveBtn");
+  const cancelBtn = document.getElementById("fsModalCancelBtn");
+  const rejectBtn = document.getElementById("fsModalRejectBtn");
+
+  const modalFixedBlock = document.getElementById("fsModalFixedBlock");
+  const modalBidBlock = document.getElementById("fsModalBidBlock");
+  const partialToggle = document.getElementById("fsPartialToggle");
+  const partialBox = document.getElementById("fsPartialBox");
+
   if (!grid) return;
 
   let raw = localStorage.getItem("user");
@@ -20,155 +46,168 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-   const currentUserId =
-    (currentUser && currentUser.id) || currentUser.ID || "";
+  const currentUserId = String((currentUser && (currentUser.id || currentUser.ID)) || "").trim();
+  const currentUserCompID = String((currentUser && (currentUser.companyId || currentUser.CompID || currentUser.compId)) || "").trim();
 
-const currentUserCompID = (currentUser && currentUser.companyId) || "";
-
-loadBookings(currentUserId, currentUserCompID, "all"); 
-wireTabs(currentUserId, currentUserCompID);         
-
-async function loadBookings(userId, compId, scope) {   
-  try {
-    let url;
-
-    if (!compId || (!userId && scope !== "all")) {
-        console.error(`Missing User/Company ID for scope: ${scope}`);
-        grid.innerHTML = '<p class="fs-empty-state">Authentication error: Missing required Company/User ID.</p>';
-        return; 
-    }
-
-    if (scope === "all") {
-        url = `/bookings?scope=all&compId=${encodeURIComponent(compId)}`;
-    } else {
-        url = `/bookings?userId=${encodeURIComponent(userId)}&scope=${encodeURIComponent(scope)}&compId=${encodeURIComponent(compId)}`;
-    }
-
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to load bookings");
-
-    const data = await res.json();
-    const list = data.bookings || [];
-    renderBookings(list);
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
-  }
+  if (!currentUserId || !currentUserCompID) {
+    grid.innerHTML = '<p class="fs-empty-state">Authentication error: Missing user/company.</p>';
+    return;
   }
 
- // frontend/js/bookings.js (~ Line 56)
+  let currentUserType = String((currentUser && (currentUser.type || currentUser.Type)) || "").trim();
+  let allBookings = [];
+  let activeScope = "all";
+  let activeBooking = null;
 
-// New signature
-function wireTabs(userId, compId) {
-  const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
-  if (tabs.length < 3) return;
+  bindModalBaseEvents();
+  bindActionButtons();
 
-  const scopes = ["all", "buyer", "seller"];
+  (async function init() {
+    await hydrateUserType();
+    wireTabs();
+    await loadAllBookings();
+  })();
 
-  tabs.forEach((btn, idx) => {
-    btn.addEventListener("click", () => {
-      tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
-      btn.classList.add("fs-toggle-tab--active");
-      
-      // Pass the compId
-      loadBookings(userId, compId, scopes[idx] || "all"); 
-    });
-  });
-}
+  async function hydrateUserType() {
+    if (currentUserType) return;
+    try {
+      const res = await fetch(`/users/${encodeURIComponent(currentUserId)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const t = data && data.user && data.user.Type;
+      if (t) currentUserType = String(t).trim();
+    } catch (e) {}
+  }
 
-  function renderBookings(list) {
-    if (list && list.length) {
-      list.forEach((b) => {
-        grid.appendChild(buildBookingCard(b));
+  function isAdminOrSub() {
+    const t = String(currentUserType || "").toLowerCase().trim();
+    return t === "admin" || t === "subadmin";
+  }
+
+  async function loadAllBookings() {
+    try {
+      const url = `/bookings?scope=all&compId=${encodeURIComponent(currentUserCompID)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to load bookings");
+      const data = await res.json();
+      allBookings = data.bookings || [];
+      updateTabCounts(calculateRoleCounts(allBookings));
+      applyScope(activeScope);
+    } catch (err) {
+      console.error(err);
+      grid.innerHTML = '<p class="fs-empty-state">Could not load bookings. Please try again.</p>';
+    }
+  }
+
+  function wireTabs() {
+    const tabs = Array.from(document.querySelectorAll(".fs-toggle-tab"));
+    if (tabs.length < 3) return;
+
+    const scopes = ["all", "buyer", "seller"];
+
+    tabs.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        tabs.forEach((b) => b.classList.remove("fs-toggle-tab--active"));
+        btn.classList.add("fs-toggle-tab--active");
+        activeScope = scopes[idx] || "all";
+        applyScope(activeScope);
       });
-    } else {
-    }
-
-    const stats = calculateBookingStats(list);
-    updateStatsDisplay(stats);
+    });
   }
 
-  function calculateBookingStats(bookings) {
-    const stats = {
-      total: 0,
-      pending: 0,
-      confirmed: 0,
-      completed: 0,
-      buyer: 0,
-      seller: 0,
-    };
+  function applyScope(scope) {
+    const filtered = filterBookingsByScope(scope, allBookings);
+    renderBookings(filtered);
+    updateSummaryStats(calculateStatusStats(filtered));
+  }
 
-    if (!bookings || bookings.length === 0) {
-      return stats;
-    }
+  function filterBookingsByScope(scope, list) {
+    const myComp = currentUserCompID;
+    const arr = list || [];
+    if (scope === "seller") return arr.filter((b) => String(b.CompID || "") === myComp);
+    if (scope === "buyer") return arr.filter((b) => String(b.CompID || "") !== myComp);
+    return arr;
+  }
 
-    stats.total = bookings.length;
+  function calculateRoleCounts(bookings) {
+    const myComp = currentUserCompID;
+    const list = bookings || [];
+    let buyer = 0;
+    let seller = 0;
+    list.forEach((b) => {
+      if (String(b.CompID || "") === myComp) seller++;
+      else buyer++;
+    });
+    return { total: list.length, buyer, seller };
+  }
 
-    bookings.forEach((b) => {
-      const status = (b.Status || "").toLowerCase().trim();
+  function updateTabCounts(stats) {
+    const allTab = document.querySelector(".fs-toggle-tab:first-child");
+    const buyerTab = document.querySelector(".fs-toggle-tab:nth-child(2)");
+    const sellerTab = document.querySelector(".fs-toggle-tab:nth-child(3)");
+    if (allTab) allTab.textContent = `All Bookings (${stats.total})`;
+    if (buyerTab) buyerTab.textContent = `As Buyer (${stats.buyer})`;
+    if (sellerTab) sellerTab.textContent = `As Seller (${stats.seller})`;
+  }
 
-      if (status === "pending" || status === "pending admin approval") {
-        stats.pending++;
-      } else if (status === "confirmed") {
-        stats.confirmed++;
-      } else if (status === "completed") {
-        stats.completed++;
-      }
+  function calculateStatusStats(bookings) {
+    const stats = { total: 0, pending: 0, confirmed: 0, completed: 0 };
+    const list = bookings || [];
+    stats.total = list.length;
+
+    list.forEach((b) => {
+      const status = String(b.Status || "").toLowerCase().trim();
+      if (status === "pending") stats.pending++;
+      else if (status === "confirmed") stats.confirmed++;
+      else if (status === "completed") stats.completed++;
     });
 
     return stats;
   }
 
-  function updateStatsDisplay(stats) {
-    const totalEl =
-      document.querySelector(".fs-stat-card .fs-stat-value") ||
-      document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
-    const pendingEl = document.querySelector(
-      ".fs-stat-card:nth-child(2) .fs-stat-value"
-    );
-    const confirmedEl = document.querySelector(
-      ".fs-stat-card:nth-child(3) .fs-stat-value"
-    );
-    const completedEl = document.querySelector(
-      ".fs-stat-card:nth-child(4) .fs-stat-value"
-    );
-
+  function updateSummaryStats(stats) {
+    const totalEl = document.querySelector(".fs-stat-card:nth-child(1) .fs-stat-value");
+    const pendingEl = document.querySelector(".fs-stat-card:nth-child(2) .fs-stat-value");
+    const confirmedEl = document.querySelector(".fs-stat-card:nth-child(3) .fs-stat-value");
+    const completedEl = document.querySelector(".fs-stat-card:nth-child(4) .fs-stat-value");
     if (totalEl) totalEl.textContent = stats.total;
     if (pendingEl) pendingEl.textContent = stats.pending;
     if (confirmedEl) confirmedEl.textContent = stats.confirmed;
     if (completedEl) completedEl.textContent = stats.completed;
+  }
 
-    const allTab = document.querySelector(".fs-toggle-tab:first-child");
-    if (allTab) {
-      allTab.textContent = `All Bookings (${stats.total})`;
+  function renderBookings(list) {
+    grid.innerHTML = "";
+    if (!list || list.length === 0) {
+      grid.innerHTML = '<p class="fs-empty-state">No bookings found.</p>';
+      return;
     }
+    list.forEach((b) => grid.appendChild(buildBookingCard(b)));
   }
 
   function buildBookingCard(b) {
-    const rawType = (b.Type || "truck").toString();
+    const rawType = String(b.Type || "truck");
     const typeLower = rawType.toLowerCase();
 
     let typeClass = "fs-badge--type-truck";
     if (typeLower === "ship") typeClass = "fs-badge--type-ship";
-    else if (typeLower === "plane" || typeLower === "air")
-      typeClass = "fs-badge--type-plane";
+    else if (typeLower === "plane" || typeLower === "air") typeClass = "fs-badge--type-plane";
 
-    const statusText = (b.Status || "Pending").toString().trim();
+    const statusText = String(b.Status || "Pending").trim();
     const statusLower = statusText.toLowerCase();
 
     let statusClass = "fs-badge--status-generic";
-
     if (statusLower === "confirmed") statusClass = "fs-badge--status-confirmed";
-    else if (statusLower === "completed")
-      statusClass = "fs-badge--status-completed";
-    else if (statusLower === "rejected")
-      statusClass = "fs-badge--status-rejected";
-    else if (statusLower === "canceled" || statusLower === "cancelled")
-      statusClass = "fs-badge--status-cancelled";
-    else if (statusLower === "pending admin approval")
-      statusClass = "fs-badge--status-approval";
-    else if (statusLower === "pending")
-      statusClass = "fs-badge--status-pending";
+    else if (statusLower === "completed") statusClass = "fs-badge--status-completed";
+    else if (statusLower === "rejected") statusClass = "fs-badge--status-rejected";
+    else if (statusLower === "canceled" || statusLower === "cancelled") statusClass = "fs-badge--status-cancelled";
+    else if (statusLower === "pending") statusClass = "fs-badge--status-pending";
+
+    const myComp = currentUserCompID;
+    const roleIsSeller = String(b.CompID || "") === myComp;
+
+    const roleText = roleIsSeller ? "As Seller" : "As Buyer";
+    const roleClass = roleIsSeller ? "fs-badge--role-seller" : "fs-badge--role-buyer";
 
     const origin = b.Origin || "";
     const destination = b.Destination || "";
@@ -176,14 +215,12 @@ function wireTabs(userId, compId) {
     const wLine = formatSpaceLine(b.EmptySpaceW, b.UnitW);
     const aLine = formatSpaceLine(b.EmptySpaceA, b.UnitA);
 
-    // Assuming DepDate comes from the Space table, which is joined in the backend.
     const deptDate = b.DepDate || "";
 
     const price = pickPrice(b.SpacePrice, b.BidPrice);
     const priceText = price ? `$${price}` : "—";
 
     const bookId = b.BookID || "—";
-    // This will now use the CompName alias from the backend query
     const compName = b.CompName || "—";
 
     const card = document.createElement("article");
@@ -192,10 +229,9 @@ function wireTabs(userId, compId) {
     card.innerHTML = `
       <div class="fs-booking-top">
         <div class="fs-card-badges">
+          <span class="fs-badge fs-badge--role ${roleClass}">${escapeHtml(roleText)}</span>
           <span class="fs-badge ${typeClass}">${escapeHtml(rawType)}</span>
-          <span class="fs-badge fs-badge--booking-status ${statusClass}">${escapeHtml(
-      statusText
-    )}</span>
+          <span class="fs-badge fs-badge--booking-status ${statusClass}">${escapeHtml(statusText)}</span>
         </div>
 
         <div class="fs-booking-id">
@@ -254,43 +290,231 @@ function wireTabs(userId, compId) {
       </div>
     `;
 
-    // For now: button does nothing (as requested)
+    card.addEventListener("click", function () {
+      openBookingModal(b);
+    });
+
     const btn = card.querySelector(".fs-booking-view-btn");
     if (btn) {
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
+        openBookingModal(b);
       });
     }
 
     return card;
   }
 
+  function openBookingModal(b) {
+    if (!modal) return;
+    activeBooking = b;
+
+    const rawType = String(b.Type || "truck");
+    const origin = b.Origin || "";
+    const destination = b.Destination || "";
+
+    const wLine = formatSpaceLine(b.EmptySpaceW, b.UnitW);
+    const aLine = formatSpaceLine(b.EmptySpaceA, b.UnitA);
+    const availableText = `${wLine}, ${aLine}`.replace(/^—,\s*—$/, "—");
+
+    if (modalOrigin) modalOrigin.textContent = origin || "—";
+    if (modalDestination) modalDestination.textContent = destination || "—";
+    if (modalAvailableSpace) modalAvailableSpace.textContent = availableText;
+    if (modalDepartureDate) modalDepartureDate.textContent = b.DepDate || "—";
+    if (modalCargo) modalCargo.textContent = b.Restriction || "—";
+
+    if (modalTypeChip) {
+      modalTypeChip.className = "fs-badge";
+      const tl = rawType.toLowerCase();
+      if (tl === "truck") modalTypeChip.classList.add("fs-badge--type-truck");
+      else if (tl === "ship") modalTypeChip.classList.add("fs-badge--type-ship");
+      else if (tl === "plane" || tl === "air") modalTypeChip.classList.add("fs-badge--type-plane");
+      modalTypeChip.textContent = rawType;
+    }
+
+    const priceStr = pickPrice(b.SpacePrice, b.BidPrice);
+    const total = Number(priceStr);
+
+    if (!priceStr || isNaN(total) || total <= 0) {
+      if (modalTotalPrice) modalTotalPrice.textContent = "—";
+      if (modalSellerRevenue) modalSellerRevenue.textContent = "—";
+      if (modalServiceFee) modalServiceFee.textContent = "—";
+    } else {
+      if (modalTotalPrice) modalTotalPrice.textContent = `$${total.toFixed(2)}`;
+      if (modalSellerRevenue) modalSellerRevenue.textContent = `$${(total * 0.95).toFixed(2)}`;
+      if (modalServiceFee) modalServiceFee.textContent = `$${(total * 0.05).toFixed(2)}`;
+    }
+
+    if (modalStatusBadge) modalStatusBadge.textContent = String(b.Status || "—");
+
+    const buyerCompId = String(b.BuyerCompID || "");
+    const spaceCompId = String(b.SpaceCompID || b.CompID || "");
+    const isBuyer = buyerCompId && buyerCompId === currentUserCompID;
+
+    const companyName = isBuyer ? (b.SpaceCompName || b.CompName || "—") : (b.BuyerCompName || "—");
+    const companyDesc = isBuyer ? (b.SpaceCompDesc || "—") : (b.BuyerCompDesc || "—");
+
+    if (modalCompanyName) modalCompanyName.textContent = companyName;
+    if (modalCompanyDesc) modalCompanyDesc.textContent = companyDesc;
+
+    if (modalBidBlock) modalBidBlock.style.display = "none";
+    if (modalFixedBlock) modalFixedBlock.style.display = "block";
+    if (partialToggle) partialToggle.style.display = "none";
+    if (partialBox) partialBox.style.display = "none";
+
+    updateModalButtonsVisibility(b);
+
+    modal.classList.remove("fs-modal--hidden");
+  }
+
+  function hideAllModalButtons() {
+    if (modalActionsWrap) modalActionsWrap.style.display = "none";
+    if (approveBtn) approveBtn.style.display = "none";
+    if (cancelBtn) cancelBtn.style.display = "none";
+    if (rejectBtn) rejectBtn.style.display = "none";
+  }
+
+  function updateModalButtonsVisibility(b) {
+    hideAllModalButtons();
+
+    const statusLower = String(b.Status || "").toLowerCase().trim();
+    if (statusLower !== "pending") return;
+
+    const adminSub = isAdminOrSub();
+
+    const myComp = currentUserCompID;
+    const roleIsSeller = String(b.SpaceCompID || b.CompID || "") === myComp;
+
+    const buyerId = String(b.BuyerID || "");
+    const buyerCompId = String(b.BuyerCompID || "");
+
+    const spaceUserId = String(b.SpaceUserID || "");
+    const spaceCompId = String(b.SpaceCompID || b.CompID || "");
+
+    if (!roleIsSeller) {
+      const canCancel =
+        (adminSub && buyerCompId === myComp) ||
+        (buyerId && buyerId === currentUserId);
+
+      if (!canCancel) return;
+
+      if (modalActionsWrap) modalActionsWrap.style.display = "flex";
+      if (cancelBtn) cancelBtn.style.display = "inline-flex";
+      return;
+    }
+
+    const canSellerAct =
+      (adminSub && spaceCompId === myComp) ||
+      (spaceUserId && spaceUserId === currentUserId);
+
+    if (!canSellerAct) return;
+
+    if (modalActionsWrap) modalActionsWrap.style.display = "flex";
+    if (approveBtn) approveBtn.style.display = "inline-flex";
+    if (rejectBtn) rejectBtn.style.display = "inline-flex";
+  }
+
+  function bindActionButtons() {
+    if (approveBtn) {
+      approveBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!activeBooking) return;
+        const id = String(activeBooking.BookID || "");
+        const ok = window.confirm(`Are you sure you want to accept Booking ID: ${id}`);
+        if (!ok) return;
+        await setBookingStatus(id, "Confirmed");
+      });
+    }
+
+    if (rejectBtn) {
+      rejectBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!activeBooking) return;
+        const id = String(activeBooking.BookID || "");
+        const ok = window.confirm(`Are you sure you want to reject Booking ID: ${id}`);
+        if (!ok) return;
+        await setBookingStatus(id, "Rejected");
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!activeBooking) return;
+        const id = String(activeBooking.BookID || "");
+        const ok = window.confirm(`Are you sure you want to cancel Booking ID: ${id}`);
+        if (!ok) return;
+        await setBookingStatus(id, "Canceled");
+      });
+    }
+  }
+
+  async function setBookingStatus(bookId, status) {
+    try {
+      const res = await fetch(`/bookings/${encodeURIComponent(bookId)}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: status,
+          actorUserId: currentUserId,
+          actorCompId: currentUserCompID
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert((data && data.error) || "Failed to update booking.");
+        return;
+      }
+
+      const keepId = bookId;
+      await loadAllBookings();
+
+      const updated = (allBookings || []).find((x) => String(x.BookID || "") === String(keepId));
+      if (updated) openBookingModal(updated);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update booking.");
+    }
+  }
+
+  function bindModalBaseEvents() {
+    function closeModal() {
+      if (modal) modal.classList.add("fs-modal--hidden");
+      activeBooking = null;
+      hideAllModalButtons();
+    }
+
+    if (modalClose) modalClose.addEventListener("click", closeModal);
+
+    if (modal) {
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) closeModal();
+      });
+    }
+  }
+
   function pickPrice(spacePrice, bidPrice) {
-    // Treat 0 / 0.00 / "0" as empty, so we can fall back to BidPrice
     const s = normalizeNullable(spacePrice, true);
     if (s !== "") return s;
-
     const b = normalizeNullable(bidPrice, true);
     return b !== "" ? b : "";
   }
 
   function normalizeNullable(v, treatZeroAsEmpty) {
     treatZeroAsEmpty = !!treatZeroAsEmpty;
-
     if (v == null) return "";
     const t = String(v).trim();
     if (!t) return "";
     if (t.toLowerCase() === "null") return "";
-
     if (treatZeroAsEmpty) {
       const num = Number(t);
-      if (!isNaN(num) && num <= 0) {
-        // Consider 0, 0.0, 0.00, -1, etc. as "empty" for price logic
-        return "";
-      }
+      if (!isNaN(num) && num <= 0) return "";
     }
-
     return t;
   }
 
